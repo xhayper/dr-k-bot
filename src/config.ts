@@ -13,4 +13,8 @@ export default config as {
     moderator: string;
     intern: string;
   };
+  channel: {
+    audit: string;
+    verification: string;
+  };
 };
