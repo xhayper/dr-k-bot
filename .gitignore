@@ -167,3 +167,6 @@ dist
 
 # User defined
 config.json
+
+# Mac annoying thing
+.DS_Store
