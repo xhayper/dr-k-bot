@@ -14,8 +14,8 @@ export default config as {
     intern: string;
   };
   channel: {
-    audit: string;
-    verification: string;
+    auditLog: string;
+    verificationLog: string;
   };
   questions: string[];
 };

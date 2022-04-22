@@ -2,8 +2,10 @@
 import 'dotenv/config';
 
 // All the utility
+import { VerificationUtility } from './utility/verifiationUtility';
 import { EmbedUtility } from './utility/embedUtility';
 import { GuildUtility } from './utility/guildUtility';
+import { UserUtility } from './utility/userUtility';
 
 // Manager
 import { CommandManager } from './manager/commandManager';
@@ -11,7 +13,6 @@ import { EventManager } from './manager/eventManager';
 
 // All the required modules
 import { Client } from 'discord.js';
-import { VerificationUtility } from './utility/verifiationUtility';
 
 const client = new Client({
   intents: [
@@ -28,6 +29,7 @@ const client = new Client({
 const verificationManager = new VerificationUtility();
 const guildUtility = new GuildUtility(client);
 const embedUtility = new EmbedUtility();
+const userUtility = new UserUtility();
 
 const commandManager = new CommandManager(client);
 const eventManager = new EventManager(client);
@@ -42,7 +44,7 @@ export {
   verificationManager as VerificationManager,
   embedUtility as EmbedUtility,
   guildUtility as GuildUtility,
-  
+  userUtility as UserUtilty,
   eventManager as EventManager,
   commandManager as CommandManager
 };

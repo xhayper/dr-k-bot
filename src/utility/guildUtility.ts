@@ -1,3 +1,4 @@
+import { UserUtilty } from '..';
 import config from '../config';
 import {
   Client,
@@ -22,10 +23,10 @@ export class GuildUtility {
     this.#client.guilds.fetch(config.guildId).then(async (guild) => {
       this.guild = guild;
 
-      const auditLogChannel = await guild.channels.fetch(config.channel.audit);
+      const auditLogChannel = await guild.channels.fetch(config.channel.auditLog);
       if (auditLogChannel && auditLogChannel.isText()) this.auditLogChannel = auditLogChannel;
 
-      const verificationLogChannel = await guild.channels.fetch(config.channel.verification);
+      const verificationLogChannel = await guild.channels.fetch(config.channel.verificationLog);
       if (verificationLogChannel && verificationLogChannel.isText())
         this.verificationLogChannel = verificationLogChannel;
     });
@@ -41,7 +42,7 @@ export class GuildUtility {
   }
 
   isBotOwner(member: GuildMember): boolean {
-    return config.user.botOwner.includes(member.user.id);
+    return UserUtilty.isBotOwner(member.user);
   }
 
   isAdministrator(member: GuildMember): boolean {
