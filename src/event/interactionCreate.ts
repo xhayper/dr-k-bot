@@ -1,6 +1,7 @@
 import { ButtonInteraction, Client, CommandInteraction, GuildMember, Interaction, MessageEmbed } from 'discord.js';
-import { CommandManager, EmbedUtility, GuildUtility } from '..';
+import { CommandManager, EmbedUtility, GuildUtility, VerificationManager } from '..';
 import { TypedEvent } from '../base/clientEvent';
+import { VerificationTicket } from '../database';
 
 export default TypedEvent({
   eventName: 'interactionCreate',
@@ -10,6 +11,7 @@ export default TypedEvent({
       const buttonInteraction = interaction as ButtonInteraction;
 
       let moderator: GuildMember | void;
+      let ticket: VerificationTicket | void;
 
       switch (buttonInteraction.customId) {
         case 'verify_accept':
@@ -20,6 +22,9 @@ export default TypedEvent({
           if (!moderator) throw new Error("This wasn't suppose to happened");
           if (!GuildUtility.isModerator(moderator))
             return buttonInteraction.reply({ embeds: [EmbedUtility.NO_PERMISSION()] });
+
+          ticket = await VerificationManager.getTicketFromMessageId(buttonInteraction.message.id);
+          if (!ticket) return buttonInteraction.reply({ embeds: [EmbedUtility.CANT_FIND_TICKET()] });
           break;
         }
         case 'verify': {

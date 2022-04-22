@@ -35,4 +35,8 @@ export class EmbedUtility {
       .setTitle('Hey!')
       .setDescription(`You do not have permission to use this command!`);
   }
+
+  CANT_FIND_TICKET(): MessageEmbed {
+    return this.ERROR_COLOR(new MessageEmbed()).setTitle('Hey!').setDescription(`I couldn't find the ticket!`);
+  }
 }
