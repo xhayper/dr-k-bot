@@ -17,4 +17,5 @@ export default config as {
     audit: string;
     verification: string;
   };
+  questions: string[];
 };
