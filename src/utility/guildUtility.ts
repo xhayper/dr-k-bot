@@ -37,6 +37,11 @@ export class GuildUtility {
     return await this.auditLogChannel.send(message);
   }
 
+  async sendVerificationLog(message: string | MessagePayload | MessageOptions): Promise<void | Message> {
+    if (!this.verificationLogChannel) return;
+    return await this.verificationLogChannel.send(message);
+  }
+
   async getGuildMember(user: UserResolvable): Promise<void | GuildMember> {
     return await this.guild?.members.fetch(user);
   }

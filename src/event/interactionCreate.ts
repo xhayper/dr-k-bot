@@ -1,7 +1,21 @@
-import { ButtonInteraction, Client, CommandInteraction, GuildMember, Interaction, MessageEmbed } from 'discord.js';
 import { CommandManager, EmbedUtility, GuildUtility, VerificationManager } from '..';
 import { TypedEvent } from '../base/clientEvent';
 import { VerificationTicket } from '../database';
+import {
+  ButtonInteraction,
+  Client,
+  Collection,
+  CommandInteraction,
+  GuildMember,
+  Interaction,
+  Message,
+  MessageEmbed,
+  Snowflake,
+  User
+} from 'discord.js';
+
+const questionAskCollection = new Collection<Snowflake, User>();
+const verificationCollection = new Collection<User, boolean>();
 
 export default TypedEvent({
   eventName: 'interactionCreate',
@@ -12,7 +26,9 @@ export default TypedEvent({
 
       let moderator: GuildMember | void;
       let ticket: VerificationTicket | void;
+      let verificationMessage: Message | void;
 
+      // Check for permission, set fields and set up
       switch (buttonInteraction.customId) {
         case 'verify_accept':
         case 'verify_decline':
@@ -21,10 +37,17 @@ export default TypedEvent({
           moderator = await GuildUtility.getGuildMember(buttonInteraction.user.id);
           if (!moderator) throw new Error("This wasn't suppose to happened");
           if (!GuildUtility.isModerator(moderator))
-            return buttonInteraction.reply({ embeds: [EmbedUtility.NO_PERMISSION()] });
+            return buttonInteraction.editReply({
+              embeds: [EmbedUtility.USER_TITLE(EmbedUtility.NO_PERMISSION(), interaction.user)]
+            });
 
           ticket = await VerificationManager.getTicketFromMessageId(buttonInteraction.message.id);
-          if (!ticket) return buttonInteraction.reply({ embeds: [EmbedUtility.CANT_FIND_TICKET()] });
+          if (!ticket)
+            return buttonInteraction.editReply({
+              embeds: [EmbedUtility.USER_TITLE(EmbedUtility.CANT_FIND_TICKET(), interaction.user)]
+            });
+
+          verificationMessage = await GuildUtility.verificationLogChannel?.messages.fetch(ticket.messageId);
           break;
         }
         case 'verify': {
@@ -39,6 +62,36 @@ export default TypedEvent({
               )
             ]
           });
+          break;
+        }
+      }
+
+      // The actual logic
+      switch (buttonInteraction.customId) {
+        case 'verify_accept': {
+          break;
+        }
+        case 'verify_decline': {
+          if (questionAskCollection.has(verificationMessage!.id))
+            return interaction.reply({
+              embeds: [
+                EmbedUtility.USER_TITLE(
+                  EmbedUtility.VERIFICATION_ALREADY_TAKEN(
+                    new MessageEmbed(),
+                    questionAskCollection.get(verificationMessage!.id)!
+                  ),
+                  interaction.user
+                )
+              ]
+            });
+
+          questionAskCollection.set(verificationMessage!.id, interaction.user);
+          break;
+        }
+        case 'verify_ticket': {
+          break;
+        }
+        case 'verify': {
           break;
         }
       }
