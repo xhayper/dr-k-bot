@@ -1,14 +1,45 @@
-import { TypedEvent } from '../base/clientEvent';
-import { Client, CommandInteraction, GuildMember, Interaction } from 'discord.js';
+import { ButtonInteraction, Client, CommandInteraction, GuildMember, Interaction, MessageEmbed } from 'discord.js';
 import { CommandManager, EmbedUtility, GuildUtility } from '..';
+import { TypedEvent } from '../base/clientEvent';
 
 export default TypedEvent({
   eventName: 'interactionCreate',
   on: async (_: Client, interaction: Interaction) => {
     if (!interaction.member || !(interaction.member instanceof GuildMember)) return;
-    if (interaction.isCommand()) {
-      const interactionCommand = interaction as CommandInteraction;
-      const command = CommandManager.commands.get(interactionCommand.commandName);
+    if (interaction.isButton()) {
+      const buttonInteraction = interaction as ButtonInteraction;
+
+      let moderator: GuildMember | void;
+
+      switch (buttonInteraction.customId) {
+        case 'verify_accept':
+        case 'verify_decline':
+        case 'verify_ticket': {
+          await interaction.deferReply();
+          moderator = await GuildUtility.getGuildMember(buttonInteraction.user.id);
+          if (!moderator) throw new Error("This wasn't suppose to happened");
+          if (!GuildUtility.isModerator(moderator))
+            return buttonInteraction.reply({ embeds: [EmbedUtility.NO_PERMISSION()] });
+          break;
+        }
+        case 'verify': {
+          await interaction.deferReply({ ephemeral: true });
+          break;
+        }
+        default: {
+          await interaction.editReply({
+            embeds: [
+              EmbedUtility.ERROR_COLOR(
+                new MessageEmbed().setDescription(`No implementation for ${buttonInteraction.customId}!`)
+              )
+            ]
+          });
+          break;
+        }
+      }
+    } else if (interaction.isCommand()) {
+      const commandInteraction = interaction as CommandInteraction;
+      const command = CommandManager.commands.get(commandInteraction.commandName);
       if (!command) return;
 
       if (command.peferEphemeral) await interaction.deferReply({ ephemeral: true });
@@ -25,7 +56,7 @@ export default TypedEvent({
       )
         return interaction.editReply({ embeds: [EmbedUtility.NO_PERMISSION()] });
 
-      command.execute(interactionCommand);
+      command.execute(commandInteraction);
     }
   }
 });
