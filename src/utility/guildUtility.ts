@@ -1,16 +1,39 @@
-import { Client, Guild, GuildMember, UserResolvable } from 'discord.js';
 import config from '../config';
+import {
+  Client,
+  Guild,
+  GuildMember,
+  Message,
+  MessageOptions,
+  MessagePayload,
+  TextBasedChannel,
+  UserResolvable
+} from 'discord.js';
 
 export class GuildUtility {
   #client: Client;
 
+  auditLogChannel: TextBasedChannel | undefined;
+  verificationLogChannel: TextBasedChannel | undefined;
   guild: Guild | undefined;
 
   constructor(client: Client) {
     this.#client = client;
-    this.#client.guilds.fetch(config.guildId).then((guild) => {
+    this.#client.guilds.fetch(config.guildId).then(async (guild) => {
       this.guild = guild;
+
+      const auditLogChannel = await guild.channels.fetch(config.channel.audit);
+      if (auditLogChannel && auditLogChannel.isText()) this.auditLogChannel = auditLogChannel;
+
+      const verificationLogChannel = await guild.channels.fetch(config.channel.verification);
+      if (verificationLogChannel && verificationLogChannel.isText())
+        this.verificationLogChannel = verificationLogChannel;
     });
+  }
+
+  async sendAuditLog(message: string | MessagePayload | MessageOptions): Promise<void | Message> {
+    if (!this.auditLogChannel) return;
+    return await this.auditLogChannel.send(message);
   }
 
   async getGuildMember(user: UserResolvable): Promise<void | GuildMember> {
