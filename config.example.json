@@ -1,0 +1,11 @@
+{
+  "guildId": "",
+  "user": {
+    "botOwner": [""]
+  },
+  "role": {
+    "administrator": "",
+    "moderator": "",
+    "intern": ""
+  }
+}
