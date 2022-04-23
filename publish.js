@@ -7,28 +7,25 @@ const { REST } = require('@discordjs/rest');
 // TODO: Intergrate this with the command handler themself
 
 const verificationTicketIdOption = (option) => {
-  return option.setName('id').setDescription('The verification ticket id').setRequired(true);
+  return option.setName('id').setDescription('The ticket id').setRequired(true);
 };
 
 const command = [
   new SlashCommandBuilder()
     .setName('eval')
-    .setDescription('-')
+    .setDescription('Evaluate javascript code')
     .addStringOption((option) => option.setName('code').setDescription('The code to evaluate').setRequired(true)),
   new SlashCommandBuilder().setName('nella').setDescription('-'),
   new SlashCommandBuilder()
     .setName('verification')
-    .setDescription('-')
+    .setDescription('Verification ticket management')
     .addSubcommand((builder) =>
-      builder
-        .setName('accept')
-        .setDescription('Accept the verification request')
-        .addStringOption(verificationTicketIdOption)
+      builder.setName('accept').setDescription('-').addStringOption(verificationTicketIdOption)
     )
     .addSubcommand((builder) =>
       builder
         .setName('decline')
-        .setDescription('decline the verification request')
+        .setDescription('-')
         .addStringOption(verificationTicketIdOption)
         .addStringOption((option) =>
           option.setName('reason').setDescription('The reason for declining the request').setRequired(true)
@@ -37,10 +34,14 @@ const command = [
     .addSubcommand((builder) =>
       builder
         .setName('info')
-        .setDescription('Get an information of the verification request')
+        .setDescription('Show a specific verification ticket')
         .addStringOption(verificationTicketIdOption)
     )
-    .addSubcommand((builder) => builder.setName('list').setDescription('Get the list of the verification requests'))
+    .addSubcommand((builder) => builder.setName('list').setDescription('Show unfinished verification tickets')),
+  new SlashCommandBuilder()
+    .setName('ticket')
+    .setDescription('Open a thread to ask for additional information')
+    .addUserOption((option) => option.setName('user').setRequired(true))
 ];
 
 (async () => {

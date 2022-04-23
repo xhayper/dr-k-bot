@@ -30,6 +30,7 @@ export default {
       }
     }
 
+    // The actual logic
     switch (subCommand) {
       case 'accept': {
         // TODO: Maybe merge this with the one in "interactionCreate"?
@@ -126,7 +127,7 @@ export default {
                       )}\nTicket ID: ${
                         verificationTicket.id
                       }\n--------------------------------------------------\n${answerArray
-                        .map((answer, index) => `${index + 1}:\n${answer}\n`)
+                        .map((answer, index) => `${index + 1}:\n${answer}`)
                         .join('\n')}`;
                     })
                   )
@@ -140,6 +141,4 @@ export default {
       }
     }
   }
-
-  // Actual logic
 } as SlashCommand;
