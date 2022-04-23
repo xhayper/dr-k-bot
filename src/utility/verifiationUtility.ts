@@ -32,7 +32,9 @@ export class VerificationUtility {
       if (deletetionData) {
         message.embeds.forEach((embed) => {
           embed.setFooter({
-            text: `Ticket ${deletetionData.deleteType ? 'declined' : 'accepted'} by ${deletetionData.who.tag}`
+            text: `Ticket ${deletetionData.deleteType === 'DECLINED' ? 'declined' : 'accepted'} by ${
+              deletetionData.who.tag
+            }`
           });
           embed.setColor(deletetionData.deleteType === 'DECLINED' ? 'RED' : 'GREEN');
         });

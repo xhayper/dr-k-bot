@@ -46,7 +46,32 @@ export default TypedEvent({
   eventName: 'interactionCreate',
   on: async (client: Client, interaction: Interaction) => {
     if (!interaction.member || !(interaction.member instanceof GuildMember)) return;
-    if (interaction.isButton()) {
+
+    if (interaction.isCommand()) {
+      const commandInteraction = interaction as CommandInteraction;
+      const command = CommandManager.commands.get(commandInteraction.commandName);
+      if (!command) return;
+
+      if (command.peferEphemeral) await interaction.deferReply({ ephemeral: true });
+      else await interaction.deferReply();
+
+      if (command.guildId && (!interaction.guild || !command.guildId.includes(interaction.guild.id)))
+        return interaction.editReply({
+          embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_USE_HERE(), interaction.user)]
+        });
+
+      if (
+        command.permission &&
+        ((command.permission === 'BOT_OWNER' && !GuildUtility.isBotOwner(interaction.member)) ||
+          (command.permission === 'ADMINISTRATOR' && !GuildUtility.isAdministrator(interaction.member)) ||
+          (command.permission === 'MODERATOR' && !GuildUtility.isModerator(interaction.member)))
+      )
+        return interaction.editReply({
+          embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.NO_PERMISSION(), interaction.user)]
+        });
+
+      command.execute(commandInteraction);
+    } else if (interaction.isButton()) {
       const buttonInteraction = interaction as ButtonInteraction;
 
       let moderator: GuildMember | void;
@@ -353,30 +378,6 @@ export default TypedEvent({
           break;
         }
       }
-    } else if (interaction.isCommand()) {
-      const commandInteraction = interaction as CommandInteraction;
-      const command = CommandManager.commands.get(commandInteraction.commandName);
-      if (!command) return;
-
-      if (command.peferEphemeral) await interaction.deferReply({ ephemeral: true });
-      else await interaction.deferReply();
-
-      if (command.guildId && (!interaction.guild || !command.guildId.includes(interaction.guild.id)))
-        return interaction.editReply({
-          embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_USE_HERE(), interaction.user)]
-        });
-
-      if (
-        command.permission &&
-        ((command.permission === 'BOT_OWNER' && !GuildUtility.isBotOwner(interaction.member)) ||
-          (command.permission === 'ADMINISTRATOR' && !GuildUtility.isAdministrator(interaction.member)) ||
-          (command.permission === 'MODERATOR' && !GuildUtility.isModerator(interaction.member)))
-      )
-        return interaction.editReply({
-          embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.NO_PERMISSION(), interaction.user)]
-        });
-
-      command.execute(commandInteraction);
     }
   }
 });
