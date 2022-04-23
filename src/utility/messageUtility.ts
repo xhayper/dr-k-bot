@@ -8,4 +8,13 @@ export class MessageUtility {
       .map((attachment, index) => `[Attachment ${index + 1}](${attachment.proxyURL})`)
       .join('\n')}`;
   }
+
+  disableAllComponent(message: Message): Message {
+    message.components.forEach((actionRow) => {
+      actionRow.components.forEach((component) => {
+        component.setDisabled(true);
+      });
+    });
+    return message;
+  }
 }
