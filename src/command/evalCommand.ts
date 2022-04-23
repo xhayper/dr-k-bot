@@ -4,7 +4,7 @@ import { CommandInteraction } from 'discord.js';
 export default {
   name: "eval",
   permission: "BOT_OWNER",
-  execute: async (command: CommandInteraction) => {
-    command.editReply(await eval(command.options.getString('code', true)));
+  execute: async (commandInteraction: CommandInteraction) => {
+    commandInteraction.editReply(await eval(commandInteraction.options.getString('code', true)));
   }
 } as SlashCommand;

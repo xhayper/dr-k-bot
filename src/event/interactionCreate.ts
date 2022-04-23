@@ -1,4 +1,4 @@
-import { CommandManager, EmbedUtility, GuildUtility, VerificationUtility } from '..';
+import { CommandManager, EmbedUtility, GuildUtility, MessageUtility, VerificationUtility } from '..';
 import { TypedEvent } from '../base/clientEvent';
 import { VerificationTicket } from '../database';
 import config from '../config';
@@ -19,12 +19,6 @@ import {
 
 const questionAskCollection = new Collection<Snowflake, User>();
 const verificationCollection = new Collection<User, boolean>();
-
-function transformMessage(message: Message): string {
-  return `${message.content}${message.attachments.size > 0 ? '\n\n' : ''}${Array.from(message.attachments.values())
-    .map((attachment, index) => `[Attachment ${index + 1}](${attachment.proxyURL})`)
-    .join('\n')}`;
-}
 
 async function handleQuestion(
   textChannel: TextBasedChannel,
@@ -217,7 +211,7 @@ export default TypedEvent({
                   EmbedUtility.ERROR_COLOR(
                     new MessageEmbed({
                       title: 'Sorry!',
-                      description: `Your verification request has been declined by ${moderator}\nReason: ${transformMessage(
+                      description: `Your verification request has been declined by ${moderator}\nReason: ${MessageUtility.transformMessage(
                         reason
                       )}`
                     })
@@ -236,7 +230,7 @@ export default TypedEvent({
               EmbedUtility.SUCCESS_COLOR(
                 EmbedUtility.USER_AUTHOR(
                   new MessageEmbed({
-                    description: `${user} has been declined!`,
+                    description: `${user} has been declined!`
                   }),
                   moderator!.user
                 )
@@ -264,7 +258,7 @@ export default TypedEvent({
               EmbedUtility.SUCCESS_COLOR(
                 EmbedUtility.USER_AUTHOR(
                   new MessageEmbed({
-                    description: `Thread opened with ${member}!`,
+                    description: `Thread opened with ${member}!`
                   }),
                   moderator!.user
                 )
@@ -346,14 +340,14 @@ export default TypedEvent({
 
           const randomTicketId = await VerificationUtility.getUniqueTicketId();
 
-          const transformedAnswer = answerList.map((message) => transformMessage(message));
+          const transformedAnswer = answerList.map((message) => MessageUtility.transformMessage(message));
 
           const verificationData = {
             id: randomTicketId,
             senderId: buttonInteraction.user.id,
             messageId: 'undefined',
             answers: {
-              firstQuestion: transformedAnswer[0],
+              firstAnswer: transformedAnswer[0],
               secondAnswer: transformedAnswer[1],
               thirdAnswer: transformedAnswer[2],
               fourthAnswer: transformedAnswer[3],

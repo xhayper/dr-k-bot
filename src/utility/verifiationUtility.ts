@@ -1,15 +1,14 @@
-import { Client, Message, MessageEmbed, TextBasedChannel, User } from 'discord.js';
+import { Message, TextBasedChannel, User } from 'discord.js';
 import { VerificationTicket } from '../database';
 import { EmbedUtility, GuildUtility } from '..';
 import { v4 as uuidv4 } from 'uuid';
 import config from '../config';
-import moment from 'moment';
 
 export type VerificationData = {
   id: string;
   senderId: string;
   answers: {
-    firstQuestion: string;
+    firstAnswer: string;
     secondAnswer: string;
     thirdAnswer: string;
     fourthAnswer: string;
@@ -18,12 +17,6 @@ export type VerificationData = {
 };
 
 export class VerificationUtility {
-  #client: Client;
-
-  constructor(client: Client) {
-    this.#client = client;
-  }
-
   async deleteTicket(
     ticket: VerificationTicket,
     deletetionData?: {
@@ -109,27 +102,9 @@ export class VerificationUtility {
     addButton: boolean = true,
     pingVerificationTeam: boolean = true
   ): Promise<Message | void> {
-    const targetUser = await this.#client.users.fetch(data.senderId);
-
-    const baseEmbed = new MessageEmbed();
-    baseEmbed.addField(
-      `Ticket Information`,
-      `**User**: ${targetUser}\n**Account creation date**: ${moment(targetUser.createdAt).format(
-        'MMMM Do YYYY'
-      )}\n**Ticket ID**: ${data.id}`
-    );
-    baseEmbed.setThumbnail(targetUser.displayAvatarURL({ dynamic: true, size: 4096 }) || targetUser.defaultAvatarURL);
-
-    const questionList = config.questions;
-
-    for (const [index, value] of Object.entries(Object.values(data.answers))) {
-      const currentIndex = parseInt(index);
-      baseEmbed.addField(questionList[currentIndex], value, true);
-    }
-
     return await channel.send({
       content: pingVerificationTeam ? `<@&${config.role.verificationTeam}> | <@${data.senderId}>` : undefined,
-      embeds: [EmbedUtility.SUCCESS_COLOR(baseEmbed)],
+      embeds: [await EmbedUtility.VERIFICATION_INFO(data)],
       components: addButton
         ? [
             {

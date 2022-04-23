@@ -1,10 +1,11 @@
 import { SlashCommand } from '../base/slashCommand';
 import { CommandInteraction } from 'discord.js';
+import config from '../config';
 
 export default {
   name: "nella",
-  guildId: ['894855956276600873'],
-  execute: (command: CommandInteraction) => {
-    command.editReply("Oh, Nella? He's my boyfriend.");
+  guildId: [config.guildId],
+  execute: (commandInteraction: CommandInteraction) => {
+    commandInteraction.editReply("Oh, Nella? He's my boyfriend.");
   }
 } as SlashCommand;
