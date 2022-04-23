@@ -284,7 +284,7 @@ export default TypedEvent({
                 EmbedUtility.SUCCESS_COLOR(
                   new MessageEmbed({
                     description:
-                      'Before we can grant you access to the rest pf the server, we needs you to answer some questions. The answers will __**NOT**__ be used for any other purposes, please answer all the following questions with honesty. Thanks!'
+                      'Before we can grant you access to the rest of the server, we needs you to answer some questions. The answers will __**NOT**__ be used for any other purposes, please answer all the following questions with honesty. Thanks!'
                   })
                 )
               ]
@@ -316,7 +316,7 @@ export default TypedEvent({
                       title: `Question ${currentIndex + 1}`,
                       description: value,
                       footer: {
-                        text: `Respond within 5 minutes! | ${currentIndex + 1}/${config.questions.length}`
+                        text: `Respond within 5 minutes! | Question ${currentIndex + 1}/${config.questions.length}`
                       }
                     })
                   )
