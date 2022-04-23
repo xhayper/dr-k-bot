@@ -33,32 +33,35 @@ export default TypedEvent({
         case 'verify_accept':
         case 'verify_decline':
         case 'verify_ticket': {
-          await interaction.deferReply();
+          await buttonInteraction.deferReply();
           moderator = await GuildUtility.getGuildMember(buttonInteraction.user.id);
           if (!moderator) throw new Error("This wasn't suppose to happened");
           if (!GuildUtility.isModerator(moderator))
             return buttonInteraction.editReply({
-              embeds: [EmbedUtility.USER_TITLE(EmbedUtility.NO_PERMISSION(), interaction.user)]
+              embeds: [EmbedUtility.USER_TITLE(EmbedUtility.NO_PERMISSION(), buttonInteraction.user)]
             });
 
           ticket = await VerificationManager.getTicketFromMessageId(buttonInteraction.message.id);
           if (!ticket)
             return buttonInteraction.editReply({
-              embeds: [EmbedUtility.USER_TITLE(EmbedUtility.CANT_FIND_TICKET(), interaction.user)]
+              embeds: [EmbedUtility.USER_TITLE(EmbedUtility.CANT_FIND_TICKET(), buttonInteraction.user)]
             });
 
-          verificationMessage = await GuildUtility.verificationLogChannel?.messages.fetch(ticket.messageId);
+          if (ticket) verificationMessage = await VerificationManager.getMessageFromTicket(ticket);
           break;
         }
         case 'verify': {
-          await interaction.deferReply({ ephemeral: true });
+          await buttonInteraction.deferReply({ ephemeral: true });
           break;
         }
         default: {
-          await interaction.editReply({
+          await buttonInteraction.editReply({
             embeds: [
               EmbedUtility.ERROR_COLOR(
-                new MessageEmbed().setDescription(`No implementation for ${buttonInteraction.customId}!`)
+                EmbedUtility.USER_TITLE(
+                  new MessageEmbed().setDescription(`No implementation for ${buttonInteraction.customId}!`),
+                  buttonInteraction.user
+                )
               )
             ]
           });
@@ -73,19 +76,51 @@ export default TypedEvent({
         }
         case 'verify_decline': {
           if (questionAskCollection.has(verificationMessage!.id))
-            return interaction.reply({
+            return buttonInteraction.reply({
               embeds: [
                 EmbedUtility.USER_TITLE(
                   EmbedUtility.VERIFICATION_ALREADY_TAKEN(
                     new MessageEmbed(),
                     questionAskCollection.get(verificationMessage!.id)!
                   ),
-                  interaction.user
+                  buttonInteraction.user
                 )
               ]
             });
 
-          questionAskCollection.set(verificationMessage!.id, interaction.user);
+          questionAskCollection.set(verificationMessage!.id, buttonInteraction.user);
+
+          await buttonInteraction.reply({
+            embeds: [
+              EmbedUtility.USER_TITLE(
+                new MessageEmbed({
+                  description: "What's the reason for declining?"
+                }),
+                buttonInteraction.user
+              )
+            ]
+          });
+
+          const response = await verificationMessage!.channel
+            .awaitMessages({
+              max: 1,
+              filter: (responseMessage: Message) => responseMessage.author.id === buttonInteraction.user.id,
+              time: 180000,
+              errors: ['time']
+            })
+            .catch(() => {
+              buttonInteraction.followUp("You didn't respond in time!");
+              questionAskCollection.delete(verificationMessage!.id);
+              return;
+            });
+
+          if (!response) {
+            questionAskCollection.delete(verificationMessage!.id);
+            return;
+          }
+
+          const reason = response!.first();
+          console.log(reason);
           break;
         }
         case 'verify_ticket': {
@@ -104,7 +139,9 @@ export default TypedEvent({
       else await interaction.deferReply();
 
       if (command.guildId && (!interaction.guild || !command.guildId.includes(interaction.guild.id)))
-        return interaction.editReply({ embeds: [EmbedUtility.CANT_USE_HERE()] });
+        return interaction.editReply({
+          embeds: [EmbedUtility.USER_TITLE(EmbedUtility.CANT_USE_HERE(), interaction.user)]
+        });
 
       if (
         command.permission &&
@@ -112,7 +149,9 @@ export default TypedEvent({
           (command.permission === 'ADMINISTRATOR' && !GuildUtility.isAdministrator(interaction.member)) ||
           (command.permission === 'MODERATOR' && !GuildUtility.isModerator(interaction.member)))
       )
-        return interaction.editReply({ embeds: [EmbedUtility.NO_PERMISSION()] });
+        return interaction.editReply({
+          embeds: [EmbedUtility.USER_TITLE(EmbedUtility.NO_PERMISSION(), interaction.user)]
+        });
 
       command.execute(commandInteraction);
     }
