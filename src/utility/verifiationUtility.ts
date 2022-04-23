@@ -1,6 +1,6 @@
+import { EmbedUtility, GuildUtility, MessageUtility } from '..';
 import { Message, TextBasedChannel, User } from 'discord.js';
 import { VerificationTicket } from '../database';
-import { EmbedUtility, GuildUtility } from '..';
 import { v4 as uuidv4 } from 'uuid';
 import config from '../config';
 
@@ -26,13 +26,9 @@ export class VerificationUtility {
   ): Promise<void> {
     await ticket.destroy();
     if (ticket.messageId != 'undefinded' && GuildUtility.verificationLogChannel) {
-      const message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.messageId);
+      let message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.messageId);
       if (!message) return;
-      message.components.forEach((actionRow) => {
-        actionRow.components.forEach((component) => {
-          component.setDisabled(true);
-        });
-      });
+      message = MessageUtility.disableAllComponent(message);
 
       if (deletetionData) {
         message.embeds.forEach((embed) => {
