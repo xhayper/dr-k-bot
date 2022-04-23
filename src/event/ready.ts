@@ -1,6 +1,7 @@
 import { ActivityOptions, Client } from 'discord.js';
 import { TypedEvent } from '../base/clientEvent';
 import { CommandManager } from '..';
+import { Logger } from '../logger';
 
 const randomStatus: ActivityOptions[] = [
   {
@@ -24,6 +25,6 @@ export default TypedEvent({
 
     client.user!.setActivity(randomStatus[Math.floor(Math.random() * randomStatus.length)]);
 
-    console.log('Alright, Time to do some science.');
+    Logger.info('Alright, Time to do some science.');
   }
 });
