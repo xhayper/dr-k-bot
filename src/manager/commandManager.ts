@@ -1,6 +1,5 @@
 import { SlashCommand } from '../base/slashCommand';
 import { Client, Collection } from 'discord.js';
-import { restClient } from '@discordjs/rest';
 import glob from 'glob';
 import path from 'path';
 

@@ -5,7 +5,7 @@ export class VerificationTicket extends Model {
   declare senderId: string;
   declare messageId: string;
   declare answers: {
-    firstQuestion: string;
+    firstAnswer: string;
     secondAnswer: string;
     thirdAnswer: string;
     fourthAnswer: string;

@@ -1,6 +1,15 @@
-import { MessageEmbed, User } from 'discord.js';
+import { Client, MessageEmbed, User } from 'discord.js';
+import { VerificationData } from './verifiationUtility';
+import config from '../config';
+import moment from 'moment';
 
 export class EmbedUtility {
+  #client: Client;
+
+  constructor(client: Client) {
+    this.#client = client;
+  }
+
   ERROR_COLOR(embed: MessageEmbed): MessageEmbed {
     return embed.setColor('RED');
   }
@@ -62,5 +71,27 @@ export class EmbedUtility {
 
   ALREADY_IN_SESSION(): MessageEmbed {
     return this.ERROR_COLOR(new MessageEmbed()).setDescription(`You are already in a session!`);
+  }
+
+  async VERIFICATION_INFO(data: VerificationData): Promise<MessageEmbed> {
+    const targetUser = await this.#client.users.fetch(data.senderId);
+
+    const baseEmbed = new MessageEmbed();
+    baseEmbed.addField(
+      `Ticket Information`,
+      `**User**: ${targetUser}\n**Account creation date**: ${moment(targetUser.createdAt).format(
+        'MMMM Do YYYY'
+      )}\n**Ticket ID**: ${data.id}`
+    );
+    baseEmbed.setThumbnail(targetUser.displayAvatarURL({ dynamic: true, size: 4096 }) || targetUser.defaultAvatarURL);
+
+    const questionList = config.questions;
+
+    for (const [index, value] of Object.entries(Object.values(data.answers))) {
+      const currentIndex = parseInt(index);
+      baseEmbed.addField(questionList[currentIndex], value, true);
+    }
+
+    return this.SUCCESS_COLOR(baseEmbed);
   }
 }

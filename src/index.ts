@@ -13,6 +13,7 @@ import { EventManager } from './manager/eventManager';
 
 // All the required modules
 import { Client } from 'discord.js';
+import { MessageUtility } from './utility/messageUtility';
 
 const client = new Client({
   intents: [
@@ -26,9 +27,10 @@ const client = new Client({
   ]
 });
 
-const verificationUtility = new VerificationUtility(client);
+const verificationUtility = new VerificationUtility();
 const guildUtility = new GuildUtility(client);
-const embedUtility = new EmbedUtility();
+const embedUtility = new EmbedUtility(client);
+const messageUtility = new MessageUtility();
 const userUtility = new UserUtility();
 
 const commandManager = new CommandManager(client);
@@ -42,6 +44,7 @@ const eventManager = new EventManager(client);
 
 export {
   verificationUtility as VerificationUtility,
+  messageUtility as MessageUtility,
   embedUtility as EmbedUtility,
   guildUtility as GuildUtility,
   userUtility as UserUtilty,
