@@ -143,7 +143,7 @@ export default TypedEvent({
             embeds: [
               EmbedUtility.SUCCESS_COLOR(
                 EmbedUtility.USER_AUTHOR(
-                  new MessageEmbed().setDescription(`Done! You have verified ${member.user}!`),
+                  new MessageEmbed().setDescription(`${member.user} has been accepted!`),
                   buttonInteraction.user
                 ).setFooter({
                   text: ticket!.id
@@ -236,7 +236,7 @@ export default TypedEvent({
               EmbedUtility.SUCCESS_COLOR(
                 EmbedUtility.USER_AUTHOR(
                   new MessageEmbed({
-                    description: `Ticket **${ticket!.id}** has been declined!`
+                    description: `${user} has been declined!`,
                   }),
                   moderator!.user
                 )
@@ -264,7 +264,7 @@ export default TypedEvent({
               EmbedUtility.SUCCESS_COLOR(
                 EmbedUtility.USER_AUTHOR(
                   new MessageEmbed({
-                    description: `I have open a thread with you and ${member}!`
+                    description: `Thread opened with ${member}!`,
                   }),
                   moderator!.user
                 )
