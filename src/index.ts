@@ -26,7 +26,7 @@ const client = new Client({
   ]
 });
 
-const verificationManager = new VerificationUtility();
+const verificationUtility = new VerificationUtility(client);
 const guildUtility = new GuildUtility(client);
 const embedUtility = new EmbedUtility();
 const userUtility = new UserUtility();
@@ -41,7 +41,7 @@ const eventManager = new EventManager(client);
 })();
 
 export {
-  verificationManager as VerificationManager,
+  verificationUtility as VerificationUtility,
   embedUtility as EmbedUtility,
   guildUtility as GuildUtility,
   userUtility as UserUtilty,
