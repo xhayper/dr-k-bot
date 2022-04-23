@@ -63,13 +63,13 @@ export default TypedEvent({
           if (!moderator) throw new Error("This wasn't suppose to happened");
           if (!GuildUtility.isModerator(moderator))
             return buttonInteraction.editReply({
-              embeds: [EmbedUtility.USER_TITLE(EmbedUtility.NO_PERMISSION(), buttonInteraction.user)]
+              embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.NO_PERMISSION(), buttonInteraction.user)]
             });
 
           ticket = await VerificationUtility.getTicketFromMessageId(buttonInteraction.message.id);
           if (!ticket)
             return buttonInteraction.editReply({
-              embeds: [EmbedUtility.USER_TITLE(EmbedUtility.CANT_FIND_TICKET(), buttonInteraction.user)]
+              embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_FIND_TICKET(), buttonInteraction.user)]
             });
 
           if (ticket) verificationMessage = await VerificationUtility.getMessageFromTicket(ticket);
@@ -83,7 +83,7 @@ export default TypedEvent({
           await buttonInteraction.editReply({
             embeds: [
               EmbedUtility.ERROR_COLOR(
-                EmbedUtility.USER_TITLE(
+                EmbedUtility.USER_AUTHOR(
                   new MessageEmbed().setDescription(`No implementation for ${buttonInteraction.customId}!`),
                   buttonInteraction.user
                 )
@@ -97,13 +97,44 @@ export default TypedEvent({
       // The actual logic
       switch (buttonInteraction.customId) {
         case 'verify_accept': {
+          const member = await GuildUtility.getGuildMember(ticket!.senderId);
+          if (!member)
+            return buttonInteraction.editReply({
+              embeds: [
+                EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_FIND_USER(), buttonInteraction.user).setFooter({
+                  text: ticket!.id
+                })
+              ]
+            });
+
+          await member.roles.remove(config.role.unverified);
+
+          await VerificationUtility.deleteTicket(ticket!, {
+            deleteType: 'ACCEPTED',
+            who: moderator!.user
+          });
+
+          await buttonInteraction.editReply({
+            embeds: [
+              EmbedUtility.SUCCESS_COLOR(
+                EmbedUtility.USER_AUTHOR(
+                  new MessageEmbed().setDescription(`Done! You have verified ${member.user}!`),
+                  buttonInteraction.user
+                ).setFooter({
+                  text: ticket!.id
+                })
+              )
+            ]
+          });
+
+          await GuildUtility.sendWelcomeMessage(member);
           break;
         }
         case 'verify_decline': {
           if (questionAskCollection.has(verificationMessage!.id))
             return buttonInteraction.editReply({
               embeds: [
-                EmbedUtility.USER_TITLE(
+                EmbedUtility.USER_AUTHOR(
                   EmbedUtility.VERIFICATION_ALREADY_TAKEN(
                     new MessageEmbed({
                       footer: { text: ticket!.id }
@@ -120,7 +151,7 @@ export default TypedEvent({
           await buttonInteraction.editReply({
             embeds: [
               EmbedUtility.SUCCESS_COLOR(
-                EmbedUtility.USER_TITLE(
+                EmbedUtility.USER_AUTHOR(
                   new MessageEmbed({
                     description: "What's the reason for declining?",
                     footer: {
@@ -141,7 +172,7 @@ export default TypedEvent({
             buttonInteraction.followUp({
               embeds: [
                 EmbedUtility.ERROR_COLOR(
-                  EmbedUtility.USER_TITLE(EmbedUtility.DIDNT_RESPOND_IN_TIME(), buttonInteraction.user)
+                  EmbedUtility.USER_AUTHOR(EmbedUtility.DIDNT_RESPOND_IN_TIME(), buttonInteraction.user)
                 )
               ]
             });
@@ -178,9 +209,8 @@ export default TypedEvent({
           await buttonInteraction.followUp({
             embeds: [
               EmbedUtility.SUCCESS_COLOR(
-                EmbedUtility.USER_TITLE(
+                EmbedUtility.USER_AUTHOR(
                   new MessageEmbed({
-                    title: 'All done!',
                     description: `Ticket **${ticket!.id}** has been declined!`
                   }),
                   moderator!.user
@@ -192,6 +222,33 @@ export default TypedEvent({
           break;
         }
         case 'verify_ticket': {
+          const member = await GuildUtility.getGuildMember(ticket!.senderId);
+          if (!member)
+            return buttonInteraction.editReply({
+              embeds: [
+                EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_FIND_USER(), buttonInteraction.user).setFooter({
+                  text: ticket!.id
+                })
+              ]
+            });
+
+          await GuildUtility.openThread(moderator!, member);
+
+          await buttonInteraction.editReply({
+            embeds: [
+              EmbedUtility.SUCCESS_COLOR(
+                EmbedUtility.USER_AUTHOR(
+                  new MessageEmbed({
+                    description: `I have open a thread with you and ${member}!`
+                  }),
+                  moderator!.user
+                )
+              ).setFooter({
+                text: ticket!.id
+              })
+            ]
+          });
+
           break;
         }
         case 'verify': {
@@ -240,7 +297,7 @@ export default TypedEvent({
                       title: `Question ${currentIndex + 1}`,
                       description: value,
                       footer: {
-                        text: `Please respond within 5 minutes! | ${currentIndex + 1}/${config.questions.length}`
+                        text: `Respond within 5 minutes! | ${currentIndex + 1}/${config.questions.length}`
                       }
                     })
                   )
@@ -306,7 +363,7 @@ export default TypedEvent({
 
       if (command.guildId && (!interaction.guild || !command.guildId.includes(interaction.guild.id)))
         return interaction.editReply({
-          embeds: [EmbedUtility.USER_TITLE(EmbedUtility.CANT_USE_HERE(), interaction.user)]
+          embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_USE_HERE(), interaction.user)]
         });
 
       if (
@@ -316,7 +373,7 @@ export default TypedEvent({
           (command.permission === 'MODERATOR' && !GuildUtility.isModerator(interaction.member)))
       )
         return interaction.editReply({
-          embeds: [EmbedUtility.USER_TITLE(EmbedUtility.NO_PERMISSION(), interaction.user)]
+          embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.NO_PERMISSION(), interaction.user)]
         });
 
       command.execute(commandInteraction);

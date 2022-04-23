@@ -7,11 +7,14 @@
     "administrator": "",
     "moderator": "",
     "intern": "",
-    "verificationTeam": ""
+    "verificationTeam": "",
+    "unverified": ""
   },
   "channel": {
     "audit": "",
-    "verification": ""
+    "verification": "",
+    "ticketThread": "",
+    "general-1": ""
   },
   "questions": [""]
 }
