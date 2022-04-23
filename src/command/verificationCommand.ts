@@ -81,12 +81,9 @@ export default {
         await commandInteraction.editReply({
           embeds: [
             EmbedUtility.SUCCESS_COLOR(
-              EmbedUtility.USER_AUTHOR(
-                new MessageEmbed({
-                  description: `${user} has been declined!`
-                }),
-                commandInteraction.user
-              )
+              new MessageEmbed({
+                description: `${user} has been declined!`
+              })
             )
           ]
         });
