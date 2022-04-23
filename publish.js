@@ -41,7 +41,8 @@ const command = [
   new SlashCommandBuilder()
     .setName('ticket')
     .setDescription('Open a thread to ask for additional information')
-    .addUserOption((option) => option.setName('user').setDescription('-').setRequired(true))
+    .addUserOption((option) => option.setName('user').setDescription('-').setRequired(true)),
+  new SlashCommandBuilder().setName('sourcecode').setDescription("Give you the link to the bot's source code")
 ];
 
 (async () => {
