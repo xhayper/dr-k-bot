@@ -37,9 +37,7 @@ export class EmbedUtility {
   }
 
   CANT_FIND_TICKET(): MessageEmbed {
-    return this.ERROR_COLOR(new MessageEmbed()).setDescription(
-      `I couldn't find the ticket! Maybe it was already handled?`
-    );
+    return this.ERROR_COLOR(new MessageEmbed()).setDescription(`I couldn't find the ticket!`);
   }
 
   CANT_DM(): MessageEmbed {

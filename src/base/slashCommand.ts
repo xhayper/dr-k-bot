@@ -1,10 +1,9 @@
 import { CommandInteraction, GuildResolvable } from 'discord.js';
-import { SlashCommandBuilder } from '@discordjs/builders';
 
 export interface SlashCommand {
-  builder: SlashCommandBuilder;
+  name: string;
   guildId?: GuildResolvable[];
   permission?: 'BOT_OWNER' | 'ADMINISTRATOR' | 'MODERATOR';
-  peferEphemeral?: boolean
+  peferEphemeral?: boolean;
   execute: (commandInteraction: CommandInteraction) => void | Promise<void>;
 }
