@@ -13,11 +13,13 @@ export default config as {
     moderator: string;
     intern: string;
     verificationTeam: string;
+    unverified: string;
   };
   channel: {
     auditLog: string;
     verificationLog: string;
-
+    ticketThread: string;
+    'general-1': string;
   };
   questions: string[];
 };

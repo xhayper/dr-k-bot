@@ -9,7 +9,7 @@ export class EmbedUtility {
     return embed.setColor('GREEN');
   }
 
-  USER_TITLE(embed: MessageEmbed, user: User): MessageEmbed {
+  USER_AUTHOR(embed: MessageEmbed, user: User): MessageEmbed {
     return embed.setAuthor({
       name: `${user.tag}`,
       iconURL:
@@ -56,6 +56,10 @@ export class EmbedUtility {
     return this.SUCCESS_COLOR(new MessageEmbed())
       .setTitle('All done!')
       .setDescription(`Thank you for your submission!\n Your ticket id is **${ticketId}**!`);
+  }
+
+  CANT_FIND_USER(): MessageEmbed {
+    return this.ERROR_COLOR(new MessageEmbed()).setDescription(`I couldn't find the user!`);
   }
 
   ALREADY_IN_SESSION(): MessageEmbed {
