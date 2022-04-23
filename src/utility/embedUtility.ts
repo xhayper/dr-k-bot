@@ -10,20 +10,18 @@ export class EmbedUtility {
   }
 
   USER_TITLE(embed: MessageEmbed, user: User): MessageEmbed {
-    return this.TIMESTAMP_NOW(
-      embed.setAuthor({
-        name: `${user.tag}`,
-        iconURL:
-          user.avatarURL({
-            size: 4096,
-            dynamic: true
-          }) || user.defaultAvatarURL
-      })
-    );
+    return embed.setAuthor({
+      name: `${user.tag}`,
+      iconURL:
+        user.avatarURL({
+          size: 4096,
+          dynamic: true
+        }) || user.defaultAvatarURL
+    });
   }
 
   VERIFICATION_ALREADY_TAKEN(embed: MessageEmbed, user: User): MessageEmbed {
-    return this.ERROR_COLOR(embed).setDescription(`${user.tag} is already working on this ticket!`);
+    return this.ERROR_COLOR(embed).setDescription(`${user} is already working on this ticket!`);
   }
 
   TIMESTAMP_NOW(embed: MessageEmbed): MessageEmbed {
@@ -39,6 +37,28 @@ export class EmbedUtility {
   }
 
   CANT_FIND_TICKET(): MessageEmbed {
-    return this.ERROR_COLOR(new MessageEmbed()).setDescription(`I couldn't find the ticket! Maybe it was already handled?`);
+    return this.ERROR_COLOR(new MessageEmbed()).setDescription(
+      `I couldn't find the ticket! Maybe it was already handled?`
+    );
+  }
+
+  CANT_DM(): MessageEmbed {
+    return this.ERROR_COLOR(new MessageEmbed()).setDescription(
+      `I can't seems to send you a Direct Message, Please check your privacy settings!`
+    );
+  }
+
+  DIDNT_RESPOND_IN_TIME(): MessageEmbed {
+    return this.ERROR_COLOR(new MessageEmbed()).setDescription(`You didn't respond in time!`);
+  }
+
+  VERIFICATION_SUCCESS(ticketId: string): MessageEmbed {
+    return this.SUCCESS_COLOR(new MessageEmbed())
+      .setTitle('All done!')
+      .setDescription(`Thank you for your submission!\n Your ticket id is **${ticketId}**!`);
+  }
+
+  ALREADY_IN_SESSION(): MessageEmbed {
+    return this.ERROR_COLOR(new MessageEmbed()).setDescription(`You are already in a session!`);
   }
 }

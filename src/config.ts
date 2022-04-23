@@ -12,10 +12,12 @@ export default config as {
     administrator: string;
     moderator: string;
     intern: string;
+    verificationTeam: string;
   };
   channel: {
     auditLog: string;
     verificationLog: string;
+
   };
   questions: string[];
 };
