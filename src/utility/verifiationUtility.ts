@@ -5,6 +5,18 @@ import { v4 as uuidv4 } from 'uuid';
 import config from '../config';
 import moment from 'moment';
 
+export type VerificationData = {
+  id: string;
+  senderId: string;
+  answers: {
+    firstQuestion: string;
+    secondAnswer: string;
+    thirdAnswer: string;
+    fourthAnswer: string;
+    fifthAnswer: string;
+  };
+};
+
 export class VerificationUtility {
   #client: Client;
 
@@ -93,17 +105,7 @@ export class VerificationUtility {
 
   async sendTicketInformation(
     channel: TextBasedChannel,
-    data: {
-      id: string;
-      senderId: string;
-      answers: {
-        firstQuestion: string;
-        secondAnswer: string;
-        thirdAnswer: string;
-        fourthAnswer: string;
-        fifthAnswer: string;
-      };
-    },
+    data: VerificationData,
     addButton: boolean = true,
     pingVerificationTeam: boolean = true
   ): Promise<Message | void> {

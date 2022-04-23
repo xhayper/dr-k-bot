@@ -1,19 +1,16 @@
-import { APIApplicationCommand, Routes } from 'discord-api-types/v9';
 import { SlashCommand } from '../base/slashCommand';
 import { Client, Collection } from 'discord.js';
-import { REST } from '@discordjs/rest';
+import { restClient } from '@discordjs/rest';
 import glob from 'glob';
 import path from 'path';
 
 export class CommandManager {
   #client: Client;
-  #rest: REST;
 
   commands: Collection<string, SlashCommand> = new Collection();
 
   constructor(client: Client) {
     this.#client = client;
-    this.#rest = new REST({ version: '9' }).setToken(client.token!);
   }
 
   async reloadCommands() {
@@ -25,20 +22,8 @@ export class CommandManager {
       delete require.cache[require.resolve(command)];
 
       const commandModule = (await import(command)).default as SlashCommand;
-      if (!commandModule.builder) continue;
-      this.commands.set(commandModule.builder.name, commandModule);
+      if (!commandModule.name) continue;
+      this.commands.set(commandModule.name, commandModule);
     }
-
-    const currentCommand = (await this.#rest.get(
-      Routes.applicationCommands(this.#client.user!.id)
-    )) as APIApplicationCommand[];
-
-    for (const command of currentCommand) {
-      await this.#rest.delete(Routes.applicationCommand(this.#client.user!.id, command.id));
-    }
-
-    this.#rest.put(Routes.applicationCommands(this.#client.user!.id), {
-      body: this.commands.map((slashCommand) => slashCommand.builder.toJSON())
-    });
   }
 }
