@@ -79,7 +79,7 @@ export class GuildUtility {
     });
 
     await thread.send({
-      content: `||${config.user.botOwner.map((id) => `<@${id}>`).join(' ')} ${moderator} ${member.user}||`
+      content: `||${config.user.botOwner.map((id) => `<@${id}>`).join(' ')} | ${moderator} ${member.user}||`
     });
 
     return;
