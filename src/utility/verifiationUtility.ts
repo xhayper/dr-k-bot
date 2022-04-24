@@ -60,7 +60,7 @@ export class VerificationUtility {
   }
 
   async getTicketFromMessageId(messageId: string): Promise<void | VerificationTicket> {
-    const ticket = await VerificationTicket.findOne({ where: { messageId } });
+    const ticket = await VerificationTicket.findOne({ where: { logMessageId: messageId } });
     if (!ticket) return;
     return ticket;
   }
