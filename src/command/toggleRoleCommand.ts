@@ -33,7 +33,9 @@ export default {
         EmbedUtility.SUCCESS_COLOR(
           EmbedUtility.AUDIT_MESSAGE(
             commandInteraction.user,
-            `**${removeRole ? '⛔️ Removed' : '✅ Added'} \`${role}\` ${removeRole ? 'from' : 'to'} ${member}!**`
+            `**Role ${removeRole ? '⛔️ Removed' : '✅ Added'} ${
+              removeRole ? 'from' : 'to'
+            } ${member}!**\nRole: \`${role}\``
           )
         )
       ]
