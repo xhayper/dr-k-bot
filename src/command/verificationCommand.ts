@@ -99,9 +99,9 @@ export default {
         await GuildUtility.sendAuditLog({
           embeds: [
             EmbedUtility.ERROR_COLOR(
-              EmbedUtility.AUDIT_MESSAGE(
-                commandInteraction.user,
-                `**⛔️ ${user} has been declined!**\nReason: ${reason}`
+              EmbedUtility.AUDIT_MESSAGE(commandInteraction.user, `**⛔️ ${user} has been declined!**`).addField(
+                '**Reason**',
+                reason
               )
             )
           ]

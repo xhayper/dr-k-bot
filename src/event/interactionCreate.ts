@@ -249,7 +249,10 @@ export default TypedEvent({
           await GuildUtility.sendAuditLog({
             embeds: [
               EmbedUtility.ERROR_COLOR(
-                EmbedUtility.AUDIT_MESSAGE(moderator!.user, `**⛔️ ${user} has been declined!**\nReason: ${reason}`)
+                EmbedUtility.AUDIT_MESSAGE(moderator!.user, `**⛔️ ${user} has been declined!**`).addField(
+                  '**Reason**',
+                  MessageUtility.transformMessage(reason)
+                )
               )
             ]
           });
