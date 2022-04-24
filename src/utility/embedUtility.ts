@@ -74,7 +74,7 @@ export class EmbedUtility {
   }
 
   AUDIT_MESSAGE(user: User, description: string): MessageEmbed {
-    return this.TIMESTAMP_NOW(new MessageEmbed({ description: description }));
+    return this.USER_AUTHOR(this.TIMESTAMP_NOW(new MessageEmbed({ description: description })), user);
   }
 
   async VERIFICATION_INFO(data: VerificationData): Promise<MessageEmbed> {
