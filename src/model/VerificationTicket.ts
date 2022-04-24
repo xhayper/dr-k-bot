@@ -20,11 +20,11 @@ export const verificationTicketDataTypes: ModelAttributes = {
     unique: true,
     allowNull: false
   },
-  senderId: {
+  requesterDiscordId: {
     type: DataTypes.TEXT,
     allowNull: false
   },
-  messageId: {
+  logMessageId: {
     type: DataTypes.TEXT,
     unique: true,
     allowNull: false
