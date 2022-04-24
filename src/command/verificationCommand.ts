@@ -3,7 +3,6 @@ import { EmbedUtility, GuildUtility, VerificationUtility } from '..';
 import { SlashCommand } from '../base/slashCommand';
 import { VerificationTicket } from '../database';
 import config from '../config';
-import moment from 'moment';
 
 export default {
   name: 'verification',
