@@ -1,11 +1,12 @@
 import { Client, Message, MessageEmbed, PartialMessage } from 'discord.js';
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
 import { TypedEvent } from '../base/clientEvent';
+import config from '../config';
 
 export default TypedEvent({
   eventName: 'messageDelete',
   on: async (_: Client, message: Message | PartialMessage) => {
-    if (message.partial || message.author.bot) return;
+    if (message.partial || message.author.bot || message.channel.id == config.channel.auditLog) return;
 
     GuildUtility.sendAuditLog({
       embeds: [
