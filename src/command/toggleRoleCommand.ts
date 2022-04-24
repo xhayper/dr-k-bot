@@ -5,6 +5,7 @@ import config from '../config';
 
 export default {
   name: 'toggleRole',
+  guildId: [config.guildId],
   permission: 'MODERATOR',
   execute: async (commandInteraction: CommandInteraction) => {
     const member = commandInteraction.options.getMember('member', true) as GuildMember;
