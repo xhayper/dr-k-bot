@@ -124,7 +124,7 @@ export default {
                       )}\nTicket ID: ${
                         verificationTicket.id
                       }\n--------------------------------------------------\n${answerArray
-                        .map((answer, index) => `${index + 1}:\n${answer}`)
+                        .map((answer, index) => `${index + 1}: ${answer}`)
                         .join('\n')}`;
                     })
                   )
