@@ -2,8 +2,8 @@ import { DataTypes, Model, ModelAttributes } from 'sequelize';
 
 export class VerificationTicket extends Model {
   declare id: string;
-  declare senderId: string;
-  declare messageId: string;
+  declare requesterDiscordId: string;
+  declare logMessageId: string;
   declare answers: {
     firstAnswer: string;
     secondAnswer: string;

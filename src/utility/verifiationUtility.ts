@@ -4,9 +4,9 @@ import { VerificationTicket } from '../database';
 import { v4 as uuidv4 } from 'uuid';
 import config from '../config';
 
-export type VerificationData = {
+export type PartialVerificationData = {
   id: string;
-  senderId: string;
+  requesterDiscordId: string;
   answers: {
     firstAnswer: string;
     secondAnswer: string;
@@ -25,8 +25,8 @@ export class VerificationUtility {
     }
   ): Promise<void> {
     await ticket.destroy();
-    if (ticket.messageId != 'undefinded' && GuildUtility.verificationLogChannel) {
-      let message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.messageId);
+    if (ticket.logMessageId != 'undefinded' && GuildUtility.verificationLogChannel) {
+      let message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.logMessageId);
       if (!message) return;
       message = MessageUtility.disableAllComponent(message);
 
@@ -83,7 +83,7 @@ export class VerificationUtility {
   async getMessageFromTicket(ticket: VerificationTicket): Promise<void | Message> {
     if (!GuildUtility.verificationLogChannel) return;
 
-    const message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.messageId);
+    const message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.logMessageId);
     if (!message) return;
 
     return message;
@@ -97,12 +97,12 @@ export class VerificationUtility {
 
   async sendTicketInformation(
     channel: TextBasedChannel,
-    data: VerificationData,
+    data: PartialVerificationData,
     addButton: boolean = true,
     pingVerificationTeam: boolean = true
   ): Promise<Message | void> {
     return await channel.send({
-      content: pingVerificationTeam ? `<@&${config.role.verificationTeam}> | <@${data.senderId}>` : undefined,
+      content: pingVerificationTeam ? `<@&${config.role.verificationTeam}> | <@${data.requesterDiscordId}>` : undefined,
       embeds: [await EmbedUtility.VERIFICATION_INFO(data)],
       components: addButton
         ? [

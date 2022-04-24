@@ -116,7 +116,7 @@ export default TypedEvent({
       // The actual logic
       switch (buttonInteraction.customId) {
         case 'verify_accept': {
-          const member = await GuildUtility.getGuildMember(ticket!.senderId);
+          const member = await GuildUtility.getGuildMember(ticket!.requesterDiscordId);
           if (!member)
             return buttonInteraction.editReply({
               embeds: [
@@ -203,7 +203,7 @@ export default TypedEvent({
             throw new Error("This shouldn't happened");
           }
 
-          const user = await client.users.fetch(ticket!.senderId);
+          const user = await client.users.fetch(ticket!.requesterDiscordId);
           if (user)
             try {
               user.send({
@@ -241,7 +241,7 @@ export default TypedEvent({
           break;
         }
         case 'verify_ticket': {
-          const member = await GuildUtility.getGuildMember(ticket!.senderId);
+          const member = await GuildUtility.getGuildMember(ticket!.requesterDiscordId);
           if (!member)
             return buttonInteraction.editReply({
               embeds: [
@@ -344,8 +344,8 @@ export default TypedEvent({
 
           const verificationData = {
             id: randomTicketId,
-            senderId: buttonInteraction.user.id,
-            messageId: 'undefined',
+            requesterDiscordId: buttonInteraction.user.id,
+            logMessageId: 'undefined',
             answers: {
               firstAnswer: transformedAnswer[0],
               secondAnswer: transformedAnswer[1],
@@ -360,7 +360,7 @@ export default TypedEvent({
               GuildUtility.verificationLogChannel,
               verificationData
             );
-            verificationData.messageId = (verifyMessage && verifyMessage.id) || 'undefined';
+            verificationData.logMessageId = (verifyMessage && verifyMessage.id) || 'undefined';
           }
 
           await VerificationTicket.create(verificationData);

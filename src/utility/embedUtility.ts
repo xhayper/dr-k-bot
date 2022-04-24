@@ -1,5 +1,5 @@
 import { Client, MessageEmbed, User } from 'discord.js';
-import { VerificationData } from './verifiationUtility';
+import { PartialVerificationData } from './verifiationUtility';
 import config from '../config';
 import moment from 'moment';
 
@@ -77,8 +77,8 @@ export class EmbedUtility {
     return this.USER_AUTHOR(this.TIMESTAMP_NOW(new MessageEmbed({ description: description })), user);
   }
 
-  async VERIFICATION_INFO(data: VerificationData): Promise<MessageEmbed> {
-    const targetUser = await this.#client.users.fetch(data.senderId);
+  async VERIFICATION_INFO(data: PartialVerificationData): Promise<MessageEmbed> {
+    const targetUser = await this.#client.users.fetch(data.requesterDiscordId);
 
     const baseEmbed = new MessageEmbed();
     baseEmbed.addField(
