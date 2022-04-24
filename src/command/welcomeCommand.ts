@@ -1,5 +1,5 @@
-import { SlashCommand } from '../base/slashCommand';
 import { CommandInteraction, GuildMember } from 'discord.js';
+import { SlashCommand } from '../base/slashCommand';
 import { GuildUtility } from '..';
 
 export default {
