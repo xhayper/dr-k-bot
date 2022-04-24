@@ -4,6 +4,8 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { Routes } = require('discord-api-types/v10');
 const { REST } = require('@discordjs/rest');
 
+const config = require('./config.json');
+
 // TODO: Intergrate this with the command handler themself
 
 const verificationTicketIdOption = (option) => {
@@ -42,7 +44,17 @@ const command = [
     .setName('ticket')
     .setDescription('Open a thread to ask for additional information')
     .addUserOption((option) => option.setName('user').setDescription('-').setRequired(true)),
-  new SlashCommandBuilder().setName('sourcecode').setDescription("Give you the link to the bot's source code")
+  new SlashCommandBuilder().setName('sourcecode').setDescription("Give you the link to the bot's source code"),
+  new SlashCommandBuilder()
+    .setName('welcome')
+    .setDescription('-')
+    .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true)),
+  new SlashCommandBuilder()
+    .setName('togglerole')
+    .setDescription('-')
+    .addStringOption((option) =>
+      option.setName('role').setDescription('-').setRequired(true).addChoices(Object.keys(config.roles))
+    )
 ];
 
 (async () => {
