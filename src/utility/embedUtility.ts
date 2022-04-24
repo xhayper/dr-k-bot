@@ -73,6 +73,10 @@ export class EmbedUtility {
     return this.ERROR_COLOR(new MessageEmbed()).setDescription(`You are already in a session!`);
   }
 
+  AUDIT_MESSAGE(user: User, description: string): MessageEmbed {
+    return this.TIMESTAMP_NOW(new MessageEmbed({ description: description }));
+  }
+
   async VERIFICATION_INFO(data: VerificationData): Promise<MessageEmbed> {
     const targetUser = await this.#client.users.fetch(data.senderId);
 

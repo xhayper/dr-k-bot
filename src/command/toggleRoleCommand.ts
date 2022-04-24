@@ -1,6 +1,6 @@
 import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
 import { SlashCommand } from '../base/slashCommand';
-import { EmbedUtility } from '..';
+import { EmbedUtility, GuildUtility } from '..';
 import config from '../config';
 
 export default {
@@ -24,6 +24,17 @@ export default {
             title: 'Done!',
             description: `${removeRole ? 'Removed' : 'Added'} \`${role}\` ${removeRole ? 'from' : 'to'} ${member}!`
           })
+        )
+      ]
+    });
+
+    await GuildUtility.sendAuditLog({
+      embeds: [
+        EmbedUtility.SUCCESS_COLOR(
+          EmbedUtility.AUDIT_MESSAGE(
+            commandInteraction.user,
+            `**${removeRole ? '⛔️ Removed' : '✅ Added'} \`${role}\` ${removeRole ? 'from' : 'to'} ${member}!**`
+          )
         )
       ]
     });
