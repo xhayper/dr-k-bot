@@ -119,9 +119,9 @@ export default {
                       verificationTicket.id
                     }\n--------------------------------------------------\n${answerArray
                       .map((answer, index) => `${index + 1}: ${answer}`)
-                      .join('\n\n\n')}`;
+                      .join('\n\n')}`;
                   })
-                  .join('\n\n')
+                  .join('\n\n\n')
               ),
               'tickets.txt'
             )
