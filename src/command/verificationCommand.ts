@@ -125,7 +125,7 @@ export default {
                         verificationTicket.id
                       }\n--------------------------------------------------\n${answerArray
                         .map((answer, index) => `${index + 1}: ${answer}`)
-                        .join('\n')}`;
+                        .join('\n\n')}`;
                     })
                   )
                 ).join('\n\n')
