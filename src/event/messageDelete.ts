@@ -9,17 +9,19 @@ export default TypedEvent({
 
     GuildUtility.sendAuditLog({
       embeds: [
-        EmbedUtility.TIMESTAMP_NOW(
-          EmbedUtility.USER_AUTHOR(
-            new MessageEmbed({
-              description: `**🗑 Message sent by ${message.author} deleted in ${
-                message.channel
-              }**\n${MessageUtility.transformMessage(message)}`,
-              footer: {
-                text: `Message ID: ${message.id}`
-              }
-            }),
-            message.author
+        EmbedUtility.ERROR_COLOR(
+          EmbedUtility.TIMESTAMP_NOW(
+            EmbedUtility.USER_AUTHOR(
+              new MessageEmbed({
+                description: `**🗑 Message sent by ${message.author} deleted in ${
+                  message.channel
+                }**\n${MessageUtility.transformMessage(message)}`,
+                footer: {
+                  text: `Message ID: ${message.id}`
+                }
+              }),
+              message.author
+            )
           )
         )
       ]
