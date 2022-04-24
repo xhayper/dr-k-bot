@@ -22,7 +22,7 @@ export default {
         EmbedUtility.SUCCESS_COLOR(
           new MessageEmbed({
             title: 'Done!',
-            description: `${removeRole ? 'Removed' : 'added'} \`${role}\` ${removeRole ? 'from' : 'to'} ${member}!`
+            description: `${removeRole ? 'Removed' : 'Added'} \`${role}\` ${removeRole ? 'from' : 'to'} ${member}!`
           })
         )
       ]
