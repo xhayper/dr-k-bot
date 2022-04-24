@@ -20,8 +20,8 @@ export class VerificationUtility {
   async deleteTicket(
     ticket: VerificationTicket,
     deletetionData?: {
-      deleteType: 'DECLINED' | 'ACCEPTED';
-      who: User;
+      deleteType: 'DECLINED' | 'ACCEPTED' | 'LEAVE';
+      who?: User;
     }
   ): Promise<void> {
     await ticket.destroy();
@@ -33,11 +33,14 @@ export class VerificationUtility {
       if (deletetionData) {
         message.embeds.forEach((embed) => {
           embed.setFooter({
-            text: `Ticket ${deletetionData.deleteType === 'DECLINED' ? 'declined' : 'accepted'} by ${
-              deletetionData.who.tag
-            }`
+            text:
+              deletetionData.deleteType != 'LEAVE'
+                ? `Ticket ${deletetionData.deleteType === 'DECLINED' ? 'declined' : 'accepted'} by ${
+                    deletetionData.who!.tag
+                  }`
+                : `User left the server, Ticket deleted`
           });
-          embed.setColor(deletetionData.deleteType === 'DECLINED' ? 'RED' : 'GREEN');
+          embed.setColor(['DECLINED', 'LEAVE'].includes(deletetionData.deleteType) ? 'RED' : 'GREEN');
         });
       }
 
@@ -62,7 +65,7 @@ export class VerificationUtility {
     return ticket;
   }
 
-  async getTicketsFromUser(userId: string): Promise<void | VerificationTicket[]> {
+  async getTicketsFromUserId(userId: string): Promise<void | VerificationTicket[]> {
     const ticket = await VerificationTicket.findAll({ where: { userId } });
     if (!ticket) return;
     return ticket;

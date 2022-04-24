@@ -20,8 +20,8 @@ const client = new Client({
     // DM
     'DIRECT_MESSAGES',
     // Guild
-    'GUILD_MEMBERS',
     'GUILDS',
+    'GUILD_MEMBERS',
     'GUILD_MESSAGES',
     'GUILD_MESSAGE_REACTIONS'
   ]
