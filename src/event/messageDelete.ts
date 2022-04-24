@@ -5,7 +5,7 @@ import { TypedEvent } from '../base/clientEvent';
 export default TypedEvent({
   eventName: 'messageDelete',
   on: async (_: Client, message: Message | PartialMessage) => {
-    if (message.partial) return;
+    if (message.partial || message.author.bot) return;
 
     GuildUtility.sendAuditLog({
       embeds: [
