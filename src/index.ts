@@ -3,6 +3,7 @@ import 'dotenv/config';
 
 // All the utility
 import { VerificationUtility } from './utility/verifiationUtility';
+import { MessageUtility } from './utility/messageUtility';
 import { EmbedUtility } from './utility/embedUtility';
 import { GuildUtility } from './utility/guildUtility';
 import { UserUtility } from './utility/userUtility';
@@ -13,7 +14,6 @@ import { EventManager } from './manager/eventManager';
 
 // All the required modules
 import { Client } from 'discord.js';
-import { MessageUtility } from './utility/messageUtility';
 
 const client = new Client({
   intents: [
