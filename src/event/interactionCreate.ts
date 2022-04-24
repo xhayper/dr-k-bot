@@ -146,14 +146,6 @@ export default TypedEvent({
             ]
           });
 
-          await GuildUtility.sendAuditLog({
-            embeds: [
-              EmbedUtility.SUCCESS_COLOR(
-                EmbedUtility.AUDIT_MESSAGE(moderator!.user, `**✅ ${member.user} has been accepted!**`)
-              )
-            ]
-          });
-
           await GuildUtility.sendWelcomeMessage(member);
           break;
         }
@@ -241,17 +233,6 @@ export default TypedEvent({
                     description: `${user} has been declined!`
                   }),
                   moderator!.user
-                )
-              )
-            ]
-          });
-
-          await GuildUtility.sendAuditLog({
-            embeds: [
-              EmbedUtility.ERROR_COLOR(
-                EmbedUtility.AUDIT_MESSAGE(moderator!.user, `**⛔️ ${user} has been declined!**`).addField(
-                  '**Reason**',
-                  MessageUtility.transformMessage(reason)
                 )
               )
             ]

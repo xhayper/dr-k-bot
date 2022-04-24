@@ -52,14 +52,6 @@ export default {
         });
 
         await GuildUtility.sendWelcomeMessage(member);
-
-        await GuildUtility.sendAuditLog({
-          embeds: [
-            EmbedUtility.SUCCESS_COLOR(
-              EmbedUtility.AUDIT_MESSAGE(commandInteraction.user, `**✅ ${member.user} has been accepted!**`)
-            )
-          ]
-        });
         break;
       }
 
@@ -92,17 +84,6 @@ export default {
               new MessageEmbed({
                 description: `${user} has been declined!`
               })
-            )
-          ]
-        });
-
-        await GuildUtility.sendAuditLog({
-          embeds: [
-            EmbedUtility.ERROR_COLOR(
-              EmbedUtility.AUDIT_MESSAGE(commandInteraction.user, `**⛔️ ${user} has been declined!**`).addField(
-                '**Reason**',
-                reason
-              )
             )
           ]
         });
