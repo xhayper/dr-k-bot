@@ -34,7 +34,7 @@ export default {
     switch (subCommand) {
       case 'accept': {
         // TODO: Maybe merge this with the one in "interactionCreate"?
-        const member = await GuildUtility.getGuildMember(verificationTicket!.senderId);
+        const member = await GuildUtility.getGuildMember(verificationTicket!.requesterDiscordId);
         if (!member)
           return commandInteraction.editReply({
             embeds: [EmbedUtility.CANT_FIND_USER()]
@@ -58,7 +58,7 @@ export default {
       case 'decline': {
         // TODO: Maybe merge this with the one in "interactionCreate"?
         const reason = commandInteraction.options.getString('reason', true);
-        const user = await commandInteraction.client.users.fetch(verificationTicket!.senderId);
+        const user = await commandInteraction.client.users.fetch(verificationTicket!.requesterDiscordId);
         if (user)
           try {
             user.send({
@@ -109,7 +109,7 @@ export default {
                 (
                   await Promise.all(
                     verificationTicketList.map(async (verificationTicket) => {
-                      const targetUser = await commandInteraction.client.users.fetch(verificationTicket.senderId);
+                      const targetUser = await commandInteraction.client.users.fetch(verificationTicket.requesterDiscordId);
 
                       const answerArray = [
                         verificationTicket.answers.firstAnswer,

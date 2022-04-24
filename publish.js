@@ -1,8 +1,8 @@
 require('dotenv/config');
 
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Routes } = require('discord-api-types/v10');
-const { REST } = require('@discordjs/rest');
+const { SlashCommandBuilder } = require('@discordjs/builders'),
+  { Routes } = require('discord-api-types/v10'),
+  { REST } = require('@discordjs/rest');
 
 const config = require('./config.json');
 

@@ -170,3 +170,7 @@ config.json
 
 # Mac annoying thing
 .DS_Store
+
+# Sqlite database
+*.sqlite
+*.sqlite3
