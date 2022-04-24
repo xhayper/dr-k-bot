@@ -30,17 +30,19 @@ export class GuildUtility {
       this.guild = guild;
 
       const auditLogChannel = await guild.channels.fetch(config.channel.auditLog);
-      if (auditLogChannel && auditLogChannel.isText()) this.auditLogChannel = auditLogChannel;
+      this.auditLogChannel = (auditLogChannel && auditLogChannel.isText() && auditLogChannel) || undefined;
 
       const verificationLogChannel = await guild.channels.fetch(config.channel.verificationLog);
-      if (verificationLogChannel && verificationLogChannel.isText())
-        this.verificationLogChannel = verificationLogChannel;
+      this.verificationLogChannel =
+        (verificationLogChannel && verificationLogChannel.isText() && verificationLogChannel) || undefined;
 
       const primaryGeneralChannel = await guild.channels.fetch(config.channel['general-1']);
-      if (primaryGeneralChannel && primaryGeneralChannel.isText()) this.primaryGeneralChannel = primaryGeneralChannel;
+      this.primaryGeneralChannel =
+        (primaryGeneralChannel && primaryGeneralChannel.isText() && primaryGeneralChannel) || undefined;
 
       const ticketThreadChannel = await guild.channels.fetch(config.channel.ticketThread);
-      if (ticketThreadChannel && ticketThreadChannel.isText()) this.verificationThreadChannel = ticketThreadChannel;
+      this.verificationThreadChannel =
+        (ticketThreadChannel && ticketThreadChannel.isText() && ticketThreadChannel) || undefined;
     });
   }
 

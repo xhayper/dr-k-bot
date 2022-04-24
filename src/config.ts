@@ -21,5 +21,8 @@ export default config as {
     ticketThread: string;
     'general-1': string;
   };
+  toggleRole: {
+    [key: string]: string;
+  };
   questions: string[];
 };
