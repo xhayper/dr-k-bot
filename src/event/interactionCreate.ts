@@ -1,6 +1,7 @@
 import { CommandManager, EmbedUtility, GuildUtility, MessageUtility, VerificationUtility } from '..';
 import { TypedEvent } from '../base/clientEvent';
 import { VerificationTicket } from '../database';
+import { Logger } from '../logger';
 import config from '../config';
 import {
   ButtonInteraction,
@@ -64,6 +65,7 @@ export default TypedEvent({
           embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.NO_PERMISSION(), interaction.user)]
         });
 
+      Logger.info(`${interaction.member.user.tag} used command ${command.name}`);
       command.execute(commandInteraction);
     } else if (interaction.isButton()) {
       const buttonInteraction = interaction as ButtonInteraction;
