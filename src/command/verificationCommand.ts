@@ -106,29 +106,23 @@ export default {
           files: [
             new MessageAttachment(
               Buffer.from(
-                (
-                  await Promise.all(
-                    verificationTicketList.map(async (verificationTicket) => {
-                      const targetUser = await commandInteraction.client.users.fetch(verificationTicket.requesterDiscordId);
+                verificationTicketList
+                  .map((verificationTicket) => {
+                    const answerArray = [
+                      verificationTicket.answers.firstAnswer,
+                      verificationTicket.answers.secondAnswer,
+                      verificationTicket.answers.thirdAnswer,
+                      verificationTicket.answers.fourthAnswer,
+                      verificationTicket.answers.fifthAnswer
+                    ];
 
-                      const answerArray = [
-                        verificationTicket.answers.firstAnswer,
-                        verificationTicket.answers.secondAnswer,
-                        verificationTicket.answers.thirdAnswer,
-                        verificationTicket.answers.fourthAnswer,
-                        verificationTicket.answers.fifthAnswer
-                      ];
-
-                      return `User: ${targetUser.tag}\nAccount creation date: ${moment(targetUser.createdAt).format(
-                        'MMMM Do YYYY'
-                      )}\nTicket ID: ${
-                        verificationTicket.id
-                      }\n--------------------------------------------------\n${answerArray
-                        .map((answer, index) => `${index + 1}: ${answer}`)
-                        .join('\n\n')}`;
-                    })
-                  )
-                ).join('\n\n')
+                    return `User ID: ${verificationTicket.requesterDiscordId}\nTicket ID: ${
+                      verificationTicket.id
+                    }\n--------------------------------------------------\n${answerArray
+                      .map((answer, index) => `${index + 1}: ${answer}`)
+                      .join('\n\n\n')}`;
+                  })
+                  .join('\n\n')
               ),
               'tickets.txt'
             )
