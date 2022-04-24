@@ -6,7 +6,14 @@ import config from '../config';
 export default TypedEvent({
   eventName: 'messageDelete',
   on: async (_: Client, message: Message | PartialMessage) => {
-    if (message.partial || message.author.bot || message.channel.id == config.channel.auditLog) return;
+    if (
+      message.partial ||
+      message.author.bot ||
+      message.channel.id == config.channel.auditLog ||
+      !message.guild ||
+      message.guild.id != config.guildId
+    )
+      return;
 
     GuildUtility.sendAuditLog({
       embeds: [

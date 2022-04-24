@@ -40,7 +40,7 @@ async function handleQuestion(
 export default TypedEvent({
   eventName: 'interactionCreate',
   on: async (client: Client, interaction: Interaction) => {
-    if (!interaction.member || !(interaction.member instanceof GuildMember)) return;
+    if (!interaction.member || !(interaction.member instanceof GuildMember) || (!interaction.guild || interaction.guild.id != config.guildId)) return;
 
     if (interaction.isCommand()) {
       const commandInteraction = interaction as CommandInteraction;
