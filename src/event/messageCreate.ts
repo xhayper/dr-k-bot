@@ -13,15 +13,15 @@ export default TypedEvent({
 
     const splitText = message.content.split(' ');
 
-    if (splitText[0] == '!hayperimergencygiverole') {
-      if (!message.member || !GuildUtility.isBotOwner(message.member)) return message.reply("No u");
-      await message.member.roles.add('895152300354576394');
-      await message.member.roles.add('895152636842627072');
-      await message.member.roles.add('900568768667877386');
-      await message.member.roles.add('900568107033178162');
-      message.reply("Ok, Boomer");
-      return;
-    }
+    // if (splitText[0] == '!hayperimergencygiverole') {
+    //   if (!message.member || !GuildUtility.isBotOwner(message.member)) return message.reply("No u");
+    //   await message.member.roles.add('895152300354576394');
+    //   await message.member.roles.add('895152636842627072');
+    //   await message.member.roles.add('900568768667877386');
+    //   await message.member.roles.add('900568107033178162');
+    //   message.reply("Ok, Boomer");
+    //   return;
+    // }
 
     if (
       message.mentions.users.size == 0 ||
