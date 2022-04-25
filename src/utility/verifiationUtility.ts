@@ -26,7 +26,9 @@ export class VerificationUtility {
   ): Promise<void> {
     await ticket.destroy();
     if (ticket.logMessageId != 'undefinded' && GuildUtility.verificationLogChannel) {
-      let message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.logMessageId);
+      let message = await GuildUtility.verificationLogChannel.messages
+        .fetch(ticket.logMessageId)
+        .catch(() => undefined);
       if (!message) return;
       message = MessageUtility.disableAllComponent(message);
 
@@ -83,7 +85,9 @@ export class VerificationUtility {
   async getMessageFromTicket(ticket: VerificationTicket): Promise<void | Message> {
     if (!GuildUtility.verificationLogChannel) return;
 
-    const message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.logMessageId).catch(() => undefined);
+    const message = await GuildUtility.verificationLogChannel.messages
+      .fetch(ticket.logMessageId)
+      .catch(() => undefined);
     if (!message) return;
 
     return message;
