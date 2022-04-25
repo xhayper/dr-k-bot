@@ -1,3 +1,5 @@
+require('dotenv/config');
+
 const pm2 = require('pm2');
 
 pm2.connect((err) => {
