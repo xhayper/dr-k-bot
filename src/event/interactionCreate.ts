@@ -247,7 +247,7 @@ export default TypedEvent({
           break;
         }
         case 'verify_ticket': {
-          const member = await GuildUtility.getGuildMember(ticket!.requesterDiscordId);
+          const member = await GuildUtility.getGuildMember(ticket!.requesterDiscordId).catch(() => null);
           if (!member)
             return buttonInteraction.editReply({
               embeds: [
