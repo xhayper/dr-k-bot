@@ -8,3 +8,5 @@ require('@pm2/io').init({
     appName: 'dr-k-bot'
   }
 });
+
+require('./dist/index');
