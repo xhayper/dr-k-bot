@@ -1,4 +1,3 @@
-// The Final Experiment
 import { TypedEvent } from '../base/clientEvent';
 import { Client, Message } from 'discord.js';
 import { GuildUtility } from '..';
@@ -11,6 +10,7 @@ export default TypedEvent({
       ![/KP/gim, /Kaiju Paradise/gim, /TFE/gim, /The Finale Experience/gim].some((regex) => regex.test(message.content))
     )
       return;
-    message.delete();
+    await message.reply("Please, Don't mention that");
+    await message.delete();
   }
 });
