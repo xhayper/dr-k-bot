@@ -66,7 +66,7 @@ export class VerificationUtility {
   }
 
   async getTicketsFromUserId(userId: string): Promise<void | VerificationTicket[]> {
-    const ticket = await VerificationTicket.findAll({ where: { userId } });
+    const ticket = await VerificationTicket.findAll({ where: { requesterDiscordId: userId } });
     if (!ticket) return;
     return ticket;
   }
