@@ -221,7 +221,7 @@ export default TypedEvent({
                   )
                 ]
               })
-              .catch(() => null);
+              .catch(() => undefined);
 
           await VerificationUtility.deleteTicket(ticket!, {
             deleteType: 'DECLINED',
@@ -330,7 +330,7 @@ export default TypedEvent({
               })
               .catch(() => {
                 verificationCollection.delete(buttonInteraction.user);
-                return dmChannel.send({ embeds: [EmbedUtility.DIDNT_RESPOND_IN_TIME()] }).catch(() => {});
+                return dmChannel.send({ embeds: [EmbedUtility.DIDNT_RESPOND_IN_TIME()] }).catch(() => undefined);
               });
 
             const answer = await handleQuestion(dmChannel);
@@ -373,7 +373,7 @@ export default TypedEvent({
 
           await dmChannel.send({
             embeds: [EmbedUtility.SUCCESS_COLOR(EmbedUtility.VERIFICATION_SUCCESS(randomTicketId))]
-          });
+          }).catch(() => undefined);
 
           break;
         }
