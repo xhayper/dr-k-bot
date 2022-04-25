@@ -206,7 +206,7 @@ export default TypedEvent({
             throw new Error("This shouldn't happened");
           }
 
-          const user = await client.users.fetch(ticket!.requesterDiscordId);
+          const user = await client.users.fetch(ticket!.requesterDiscordId).catch(() => undefined);
           if (user)
             user
               .send({
@@ -247,7 +247,7 @@ export default TypedEvent({
           break;
         }
         case 'verify_ticket': {
-          const member = await GuildUtility.getGuildMember(ticket!.requesterDiscordId).catch(() => null);
+          const member = await GuildUtility.getGuildMember(ticket!.requesterDiscordId);
           if (!member)
             return buttonInteraction.editReply({
               embeds: [
