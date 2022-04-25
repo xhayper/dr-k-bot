@@ -228,17 +228,20 @@ export default TypedEvent({
             who: moderator!.user
           });
 
-          await buttonInteraction.followUp({
+          await reason.reply({
             embeds: [
               EmbedUtility.SUCCESS_COLOR(
                 EmbedUtility.USER_AUTHOR(
                   new MessageEmbed({
                     description: `${user} has been declined!`
-                  }),
+                  }).setFooter({ text: ticket!.id }),
                   moderator!.user
                 )
               )
-            ]
+            ],
+            allowedMentions: {
+              repliedUser: false
+            }
           });
 
           break;
