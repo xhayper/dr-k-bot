@@ -58,7 +58,7 @@ const command = [
         .setName('role')
         .setDescription('-')
         .setRequired(true)
-        .addChoices(...Object.keys(config.toggleRole).map((roleName) => ({ name: roleName, value: 'string' })))
+        .addChoices(...Object.keys(config.toggleRole).map((roleName) => ({ name: roleName, value: roleName })))
     )
 ];
 
