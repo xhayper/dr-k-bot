@@ -1,16 +1,10 @@
 import { SlashCommand } from '../base/slashCommand';
-import { Client, Collection } from 'discord.js';
+import { Collection } from 'discord.js';
 import glob from 'glob';
 import path from 'path';
 
 export class CommandManager {
-  #client: Client;
-
   commands: Collection<string, SlashCommand> = new Collection();
-
-  constructor(client: Client) {
-    this.#client = client;
-  }
 
   async reloadCommands() {
     this.commands.clear();
