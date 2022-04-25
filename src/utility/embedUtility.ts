@@ -82,7 +82,7 @@ export class EmbedUtility {
     const baseEmbed = new MessageEmbed();
     baseEmbed.addField(
       `Ticket Information`,
-      `**User**: ${targetUser}\n**Account creation date**: <t:${Math.round(targetUser.createdTimestamp / 1000)>}>\n**Ticket ID**: ${data.id}`
+      `**User**: ${targetUser}\n**Account creation date**: <t:${Math.round(targetUser.createdTimestamp / 1000)}>\n**Ticket ID**: ${data.id}`
     );
     baseEmbed.setThumbnail(targetUser.displayAvatarURL({ dynamic: true, size: 4096 }) || targetUser.defaultAvatarURL);
 
