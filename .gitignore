@@ -174,3 +174,6 @@ config.json
 # Sqlite database
 *.sqlite
 *.sqlite3
+
+# No insult for you
+insult.json
