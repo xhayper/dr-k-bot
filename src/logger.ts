@@ -17,8 +17,15 @@ const logger = Winston.createLogger({
   transports: [
     new Winston.transports.Console(),
     // Normal
-    new Winston.transports.File({ filename: path.join(__dirname, '../logs/latest.log'), options: { flags: 'w' } }),
-    new Winston.transports.File({ filename: path.join(__dirname, `../logs/${new Date().toISOString()}.log`) })
+    new Winston.transports.File({
+      filename: path.join(__dirname, '../logs/latest.log'),
+      options: { flags: 'w' },
+      handleExceptions: true
+    }),
+    new Winston.transports.File({
+      filename: path.join(__dirname, `../logs/${new Date().toISOString()}.log`),
+      handleExceptions: true
+    })
   ]
 });
 
