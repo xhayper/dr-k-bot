@@ -208,8 +208,8 @@ export default TypedEvent({
 
           const user = await client.users.fetch(ticket!.requesterDiscordId);
           if (user)
-            try {
-              user.send({
+            user
+              .send({
                 embeds: [
                   EmbedUtility.ERROR_COLOR(
                     new MessageEmbed({
@@ -220,8 +220,8 @@ export default TypedEvent({
                     })
                   )
                 ]
-              });
-            } catch (ignored) {}
+              })
+              .catch(() => null);
 
           await VerificationUtility.deleteTicket(ticket!, {
             deleteType: 'DECLINED',
