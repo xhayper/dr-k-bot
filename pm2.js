@@ -1,6 +1,7 @@
 require('dotenv/config');
 
 const pm2 = require('pm2'),
+  { exec } = require('child_process'),
   path = require('path');
 
 exec(`npx pm2 plus`);
