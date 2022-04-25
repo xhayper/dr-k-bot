@@ -1,18 +1,10 @@
 require('dotenv/config');
 
-const pm2 = require('pm2'),
-  path = require('path');
-
-pm2.connect((err) => {
-  if (err) {
-    console.error(err);
-    process.exit(2);
+require('@pm2/io').init({
+  standalone: true,
+  apmOptions: {
+    publicKey: process.env.PM2_PUBLIC_KEY,
+    secretKey: process.env.PN2_SECRET_KEY,
+    appName: 'dr-k-bot'
   }
-
-  pm2.start({
-    autorestart: true,
-    script: path.join(__dirname, 'dist/index.js'),
-    name: 'dr-k-bot',
-    source_map_support: true
-  });
 });
