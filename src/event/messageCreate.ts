@@ -5,7 +5,7 @@ import { GuildUtility } from '..';
 export default TypedEvent({
   eventName: 'messageCreate',
   on: async (_: Client, message: Message) => {
-    if (message.author.bot || GuildUtility.isModerator(message.member!)) return;
+    if (!message.member || message.author.bot || GuildUtility.isModerator(message.member)) return;
     if (
       ![/KP/gim, /Kaiju Paradise/gim, /TFE/gim, /The Finale Experiment/gim].some((regex) => regex.test(message.content))
     )
