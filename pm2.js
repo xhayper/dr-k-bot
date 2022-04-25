@@ -1,10 +1,11 @@
 require('dotenv/config');
 
-const { execSync } = require('child_process'),
+const pm2 = require('pm2'),
+  { exec } = require('child_process'),
   path = require('path');
 
-execSync(`pm2 plus`);
-execSync(`pm2 link ${process.env.PM2_PUBLIC_KEY} ${process.env.PM2_SECRET_KEY}`);
+exec(`pm2 plus`);
+exec(`pm2 link ${process.env.PM2_PUBLIC_KEY} ${process.env.PM2_SECRET_KEY}`);
 
 pm2.connect(true, (err) => {
   if (err) {
