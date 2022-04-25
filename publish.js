@@ -52,6 +52,7 @@ const command = [
   new SlashCommandBuilder()
     .setName('togglerole')
     .setDescription('-')
+    .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true))
     .addStringOption((option) =>
       option
         .setName('role')
