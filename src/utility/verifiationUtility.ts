@@ -83,7 +83,7 @@ export class VerificationUtility {
   async getMessageFromTicket(ticket: VerificationTicket): Promise<void | Message> {
     if (!GuildUtility.verificationLogChannel) return;
 
-    const message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.logMessageId);
+    const message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.logMessageId).catch(() => undefined);
     if (!message) return;
 
     return message;

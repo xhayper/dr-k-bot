@@ -57,7 +57,9 @@ export default {
       case 'decline': {
         // TODO: Maybe merge this with the one in "interactionCreate"?
         const reason = commandInteraction.options.getString('reason', true);
-        const user = await commandInteraction.client.users.fetch(verificationTicket!.requesterDiscordId);
+        const user = await commandInteraction.client.users
+          .fetch(verificationTicket!.requesterDiscordId)
+          .catch(() => undefined);
         if (user)
           try {
             user.send({
