@@ -61,7 +61,6 @@ export default {
           .fetch(verificationTicket!.requesterDiscordId)
           .catch(() => undefined);
         if (user)
-          try {
             user.send({
               embeds: [
                 EmbedUtility.ERROR_COLOR(
@@ -71,8 +70,7 @@ export default {
                   })
                 )
               ]
-            });
-          } catch (ignored) {}
+            }).catch(() => undefined);
 
         await VerificationUtility.deleteTicket(verificationTicket!, {
           deleteType: 'DECLINED',
