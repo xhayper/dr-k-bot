@@ -4,7 +4,7 @@ import { EmbedUtility, GuildUtility } from '..';
 import config from '../config';
 
 export default {
-  name: 'toggleRole',
+  name: 'togglerole',
   guildId: [config.guildId],
   permission: 'MODERATOR',
   execute: async (commandInteraction: CommandInteraction) => {
