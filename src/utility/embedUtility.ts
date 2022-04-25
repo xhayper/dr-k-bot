@@ -1,7 +1,6 @@
-import { Client, MessageEmbed, User } from 'discord.js';
 import { PartialVerificationData } from './verifiationUtility';
+import { Client, MessageEmbed, User } from 'discord.js';
 import config from '../config';
-import moment from 'moment';
 
 export class EmbedUtility {
   #client: Client;
@@ -83,9 +82,7 @@ export class EmbedUtility {
     const baseEmbed = new MessageEmbed();
     baseEmbed.addField(
       `Ticket Information`,
-      `**User**: ${targetUser}\n**Account creation date**: ${moment(targetUser.createdAt).format(
-        'MMMM Do YYYY'
-      )}\n**Ticket ID**: ${data.id}`
+      `**User**: ${targetUser}\n**Account creation date**: <t:${Math.round(targetUser.createdTimestamp / 1000)>}>\n**Ticket ID**: ${data.id}`
     );
     baseEmbed.setThumbnail(targetUser.displayAvatarURL({ dynamic: true, size: 4096 }) || targetUser.defaultAvatarURL);
 
