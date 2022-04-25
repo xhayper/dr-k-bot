@@ -26,24 +26,29 @@ export class GuildUtility {
 
   constructor(client: Client) {
     this.#client = client;
-    this.#client.guilds.fetch(config.guildId).then(async (guild) => {
-      this.guild = guild;
+    this.#client.guilds
+      .fetch(config.guildId)
+      .then(async (guild) => {
+        this.guild = guild;
 
-      const auditLogChannel = await guild.channels.fetch(config.channel.auditLog);
-      this.auditLogChannel = (auditLogChannel && auditLogChannel.isText() && auditLogChannel) || undefined;
+        const auditLogChannel = await guild.channels.fetch(config.channel.auditLog).catch(() => undefined);
+        this.auditLogChannel = (auditLogChannel && auditLogChannel.isText() && auditLogChannel) || undefined;
 
-      const verificationLogChannel = await guild.channels.fetch(config.channel.verificationLog);
-      this.verificationLogChannel =
-        (verificationLogChannel && verificationLogChannel.isText() && verificationLogChannel) || undefined;
+        const verificationLogChannel = await guild.channels
+          .fetch(config.channel.verificationLog)
+          .catch(() => undefined);
+        this.verificationLogChannel =
+          (verificationLogChannel && verificationLogChannel.isText() && verificationLogChannel) || undefined;
 
-      const primaryGeneralChannel = await guild.channels.fetch(config.channel['general-1']);
-      this.primaryGeneralChannel =
-        (primaryGeneralChannel && primaryGeneralChannel.isText() && primaryGeneralChannel) || undefined;
+        const primaryGeneralChannel = await guild.channels.fetch(config.channel['general-1']).catch(() => undefined);
+        this.primaryGeneralChannel =
+          (primaryGeneralChannel && primaryGeneralChannel.isText() && primaryGeneralChannel) || undefined;
 
-      const ticketThreadChannel = await guild.channels.fetch(config.channel.ticketThread);
-      this.verificationThreadChannel =
-        (ticketThreadChannel && ticketThreadChannel.isText() && ticketThreadChannel) || undefined;
-    });
+        const ticketThreadChannel = await guild.channels.fetch(config.channel.ticketThread).catch(() => undefined);
+        this.verificationThreadChannel =
+          (ticketThreadChannel && ticketThreadChannel.isText() && ticketThreadChannel) || undefined;
+      })
+      .catch(() => null);
   }
 
   async sendWelcomeMessage(member: GuildMember): Promise<void | Message> {
@@ -98,7 +103,7 @@ export class GuildUtility {
   }
 
   async getGuildMember(user: UserResolvable): Promise<void | GuildMember> {
-    return await this.guild?.members.fetch(user);
+    return await this.guild?.members.fetch(user).catch(() => undefined);
   }
 
   isBotOwner(member: GuildMember): boolean {
