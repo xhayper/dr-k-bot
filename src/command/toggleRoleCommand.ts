@@ -31,12 +31,14 @@ export default {
 
     await GuildUtility.sendAuditLog({
       embeds: [
-        EmbedUtility.SUCCESS_COLOR(
-          EmbedUtility.AUDIT_MESSAGE(
-            commandInteraction.user,
-            `**${removeRole ? "⛔️" : "✅"} Role ${removeRole ? 'removed' : 'added'} ${removeRole ? 'from' : 'to'} ${member}!**`
-          ).addField(`**Role ${removeRole ? 'removed' : 'added'}**`, `<@&${roleId}>`)
+        EmbedUtility.AUDIT_MESSAGE(
+          commandInteraction.user,
+          `**${removeRole ? '⛔️' : '✅'} Role ${removeRole ? 'removed' : 'added'} ${
+            removeRole ? 'from' : 'to'
+          } ${member}!**`
         )
+          .addField(`**Role ${removeRole ? 'removed' : 'added'}**`, `<@&${roleId}>`)
+          .setColor(removeRole ? 'RED' : 'GREEN')
       ]
     });
   }
