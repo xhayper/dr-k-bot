@@ -12,6 +12,10 @@ const verificationTicketIdOption = (option) => {
   return option.setName('id').setDescription('The ticket id').setRequired(true);
 };
 
+const memberOption = (option, description = '-') => {
+  return option.setName('member').setDescription(description).setRequired(true);
+};
+
 const command = [
   new SlashCommandBuilder()
     .setName('eval')
@@ -45,14 +49,11 @@ const command = [
     .setDescription('Open a thread to ask for additional information')
     .addUserOption((option) => option.setName('user').setDescription('-').setRequired(true)),
   new SlashCommandBuilder().setName('sourcecode').setDescription("Give you the link to the bot's source code"),
-  new SlashCommandBuilder()
-    .setName('welcome')
-    .setDescription('-')
-    .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true)),
+  new SlashCommandBuilder().setName('welcome').setDescription('-').addUserOption(memberOption),
   new SlashCommandBuilder()
     .setName('togglerole')
     .setDescription('-')
-    .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true))
+    .addUserOption(memberOption)
     .addStringOption((option) =>
       option
         .setName('role')
@@ -63,18 +64,19 @@ const command = [
   new SlashCommandBuilder()
     .setName('dm')
     .setDescription('-')
-    .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true))
-    .addSubcommand((builder) => builder.setName('nsfw_profile').setDescription('-'))
+    .addSubcommand((builder) => builder.setName('nsfw_profile').setDescription('-').addUserOption(memberOption))
     .addSubcommand((builder) =>
       builder
         .setName('warn')
         .setDescription('-')
+        .addUserOption(memberOption)
         .addStringOption((option) => option.setName('reason').setDescription('-').setRequired(true))
     )
     .addSubcommand((builder) =>
       builder
         .setName('custom')
         .setDescription('-')
+        .addUserOption(memberOption)
         .addStringOption((option) => option.setName('message').setDescription('-').setRequired(true))
     )
 ];
