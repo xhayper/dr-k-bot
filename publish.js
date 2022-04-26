@@ -59,6 +59,23 @@ const command = [
         .setDescription('-')
         .setRequired(true)
         .addChoices(...Object.keys(config.toggleRole).map((roleName) => ({ name: roleName, value: roleName })))
+    ),
+  new SlashCommandBuilder()
+    .setName('dm')
+    .setDescription('-')
+    .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true))
+    .addSubcommand((builder) => builder.setName('nsfw_profile').setDescription('-'))
+    .addSubcommand((builder) =>
+      builder
+        .setName('warn')
+        .setDescription('-')
+        .addStringOption((option) => option.setName('reason').setDescription('-').setRequired(true))
+    )
+    .addSubcommand((builder) =>
+      builder
+        .setName('custom')
+        .setDescription('-')
+        .addStringOption((option) => option.setName('message').setDescription('-').setRequired(true))
     )
 ];
 
