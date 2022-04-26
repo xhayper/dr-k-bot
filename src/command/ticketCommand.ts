@@ -6,7 +6,7 @@ import config from '../config';
 
 export default {
   data: new SlashCommandBuilder()
-    .setName('tacket')
+    .setName('ticket')
     .setDescription('Open a thread to ask for additional information')
     .addUserOption((option) => option.setName('user').setDescription('-').setRequired(true)),
   guildId: [config.guildId],
