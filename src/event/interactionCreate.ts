@@ -65,7 +65,7 @@ export default TypedEvent({
           embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.NO_PERMISSION(), interaction.user)]
         });
 
-      Logger.info(`${interaction.member.user.tag} used command ${command.name}`);
+      Logger.info(`${interaction.member.user.tag} used command ${command.data.name}`);
       command.execute(commandInteraction);
     } else if (interaction.isButton()) {
       if (!interaction.guild || interaction.guild.id != config.guildId) return;

@@ -17,10 +17,6 @@ const memberOption = (option, description = '-') => {
 };
 
 const command = [
-  new SlashCommandBuilder()
-    .setName('eval')
-    .setDescription('Evaluate javascript code')
-    .addStringOption((option) => option.setName('code').setDescription('The code to evaluate').setRequired(true)),
   new SlashCommandBuilder().setName('nella').setDescription('-'),
   new SlashCommandBuilder()
     .setName('verification')
