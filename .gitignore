@@ -177,3 +177,7 @@ config.json
 
 # No insult for you
 insult.json
+
+# idk
+package-lock.json
+yarn.lock
