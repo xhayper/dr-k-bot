@@ -36,6 +36,7 @@ export default {
           });
           break;
         }
+        
         case 'custom': {
           await member.user.send({
             embeds: [

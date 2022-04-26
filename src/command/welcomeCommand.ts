@@ -1,6 +1,6 @@
-import { CommandInteraction, GuildMember } from 'discord.js';
+import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
 import { SlashCommand } from '../base/slashCommand';
-import { GuildUtility } from '..';
+import { EmbedUtility, GuildUtility } from '..';
 import config from '../config';
 
 export default {
@@ -8,6 +8,18 @@ export default {
   guildId: [config.guildId],
   permission: 'MODERATOR',
   execute: async (commandInteraction: CommandInteraction) => {
-    GuildUtility.sendWelcomeMessage(commandInteraction.options.getMember('member', true) as GuildMember);
+    const member = commandInteraction.options.getMember('member', true) as GuildMember;
+    
+    await GuildUtility.sendWelcomeMessage(member);
+    await commandInteraction.editReply({
+      embeds: [
+        EmbedUtility.SUCCESS_COLOR(
+          new MessageEmbed({
+            title: 'All done!',
+            description: `I have send welcome message for ${member}.`
+          })
+        )
+      ]
+    });
   }
 } as SlashCommand;
