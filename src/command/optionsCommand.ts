@@ -29,6 +29,33 @@ export default {
             .setDescription('-')
             .setRequired(true)
           )
+      )
+      .addSubcommand((sub) =>
+        sub
+          .setName('showFilters')
+          .setDescription('Shows all chat filters.')
+      )
+      .addSubcommand((sub) =>
+        sub
+          .setName('setUserMediaLimit')
+          .setDescription('Sets the media limit for each user.')
+          .addIntegerOption((option) =>
+            option
+            .setName('timer')
+            .setDescription('In minutes')
+            .setRequired(true)
+          )
+          .addIntegerOption((option) =>
+            option
+            .setName('messageCount')
+            .setDescription('-')
+            .setRequired(true)
+          )
+      )
+      .addSubcommand((sub) =>
+        sub
+          .setName('dashboard')
+          .setDescription('Shows the option information dashboard.')
       ),
   guildId: [config.guildId],
   permission: 'MODERATOR',
