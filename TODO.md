@@ -1,11 +1,10 @@
 ### Todo
 
-- [ ] Add logging to all moderation action
 - [ ] Merge most of the embed code
 
 ### In Progress
 
-- [ ] Re add all command
-- [ ] Add logging
-
 ### Done
+- [Y] Add logging to all moderation action
+- [Y] Re add all command
+- [Y] Add logging
