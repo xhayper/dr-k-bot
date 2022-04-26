@@ -29,5 +29,6 @@ export default config as {
   // Chat filters should be in regex and be strings
   misc: {
     chatFilters: string[];
+    killSwitch: bool;
   };
 };
