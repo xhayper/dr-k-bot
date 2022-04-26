@@ -50,7 +50,7 @@ export class EmbedUtility {
 
   CANT_DM(): MessageEmbed {
     return this.ERROR_COLOR(new MessageEmbed()).setDescription(
-      `I can't seems to send you a Direct Message, Please check your privacy settings!`
+      `I can't seem to send you a Direct Message, Please check your privacy settings!`
     );
   }
 
