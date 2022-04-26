@@ -25,7 +25,8 @@ export default config as {
   toggleRole: {
     [key: string]: string;
   };
-  questions: string[];
+  questions: string[]; 
+  // Chat filters should be in regex and be strings
   misc: {
     chatFilters: string[];
   };
