@@ -67,7 +67,7 @@ export class GuildUtility {
                 }) || member.user.defaultAvatarURL
             },
             // TODO: Remove hard-coded channel id
-            description: `We're happy to have you here!\nOnce you're level 5, Head over to <#895157379103092776> to get some roles!`
+            description: `We're happy to have you here!\nOnce you're level 5, Head over to <#\`${config.channel["role-selection"]}\`> to get some roles!`
           })
         )
       ]
