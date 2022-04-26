@@ -12,6 +12,13 @@ export default {
           .setName('removeFilter')
           .setDescription('Removes one of the chat filters.')
           .addChoices(...config.misc.chatFilters)
+          .addStringOption((option) =>
+            option
+            .setName('filter')
+            .setDescription('-')
+            .addChoices(...config.misc.chatFilters)
+            .setRequired(true)
+          )
       )
       .addSubcommand((sub) =>
         sub
