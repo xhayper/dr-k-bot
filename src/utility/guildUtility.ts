@@ -66,7 +66,7 @@ export class GuildUtility {
                   size: 4096
                 }) || member.user.defaultAvatarURL
             },
-            description: `We're happy to have you here!\nOnce you're level 5, Head over to <#\`${config.channel["role-selection"]}\`> to get some roles!`
+            description: `We're happy to have you here!\nOnce you're level 5, Head over to <#${config.channel['role-selection']}> to get some roles!`
           })
         )
       ]

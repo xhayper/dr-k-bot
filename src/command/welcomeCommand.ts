@@ -9,14 +9,14 @@ export default {
   permission: 'MODERATOR',
   execute: async (commandInteraction: CommandInteraction) => {
     const member = commandInteraction.options.getMember('member', true) as GuildMember;
-    
+
     await GuildUtility.sendWelcomeMessage(member);
     await commandInteraction.editReply({
       embeds: [
         EmbedUtility.SUCCESS_COLOR(
           new MessageEmbed({
             title: 'All done!',
-            description: `I have send welcome message for ${member}.`
+            description: `I have send welcome message for ${member}!`
           })
         )
       ]
