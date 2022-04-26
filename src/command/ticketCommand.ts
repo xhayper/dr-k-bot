@@ -1,10 +1,14 @@
 import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../base/slashCommand';
 import { EmbedUtility, GuildUtility } from '..';
 import config from '../config';
 
 export default {
-  name: 'ticket',
+  data: new SlashCommandBuilder()
+    .setName('tacket')
+    .setDescription('Open a thread to ask for additional information')
+    .addUserOption((option) => option.setName('user').setDescription('-').setRequired(true)),
   guildId: [config.guildId],
   permission: 'MODERATOR',
   execute: async (commandInteraction: CommandInteraction) => {

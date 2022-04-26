@@ -1,11 +1,37 @@
+import { SlashCommandBuilder, SlashCommandStringOption } from '@discordjs/builders';
 import { CommandInteraction, MessageAttachment, MessageEmbed } from 'discord.js';
 import { EmbedUtility, GuildUtility, VerificationUtility } from '..';
 import { SlashCommand } from '../base/slashCommand';
 import { VerificationTicket } from '../database';
 import config from '../config';
 
+const verificationTicketIdOption = (option: SlashCommandStringOption) => {
+  return option.setName('id').setDescription('The ticket id').setRequired(true);
+};
+
 export default {
-  name: 'verification',
+  data: new SlashCommandBuilder()
+    .setName('verification')
+    .setDescription('Verification ticket management')
+    .addSubcommand((builder) =>
+      builder.setName('accept').setDescription('-').addStringOption(verificationTicketIdOption)
+    )
+    .addSubcommand((builder) =>
+      builder
+        .setName('decline')
+        .setDescription('-')
+        .addStringOption(verificationTicketIdOption)
+        .addStringOption((option) =>
+          option.setName('reason').setDescription('The reason for declining the request').setRequired(true)
+        )
+    )
+    .addSubcommand((builder) =>
+      builder
+        .setName('info')
+        .setDescription('Show a specific verification ticket')
+        .addStringOption(verificationTicketIdOption)
+    )
+    .addSubcommand((builder) => builder.setName('list').setDescription('Show unfinished verification tickets')),
   guildId: [config.guildId],
   permission: 'MODERATOR',
   execute: async (commandInteraction: CommandInteraction) => {
@@ -61,7 +87,8 @@ export default {
           .fetch(verificationTicket!.requesterDiscordId)
           .catch(() => undefined);
         if (user)
-            user.send({
+          user
+            .send({
               embeds: [
                 EmbedUtility.ERROR_COLOR(
                   new MessageEmbed({
@@ -70,7 +97,8 @@ export default {
                   })
                 )
               ]
-            }).catch(() => undefined);
+            })
+            .catch(() => undefined);
 
         await VerificationUtility.deleteTicket(verificationTicket!, {
           deleteType: 'DECLINED',

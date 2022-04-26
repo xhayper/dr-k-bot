@@ -1,10 +1,21 @@
 import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../base/slashCommand';
 import { EmbedUtility, GuildUtility } from '..';
 import config from '../config';
 
 export default {
-  name: 'togglerole',
+  data: new SlashCommandBuilder()
+    .setName('togglerole')
+    .setDescription('-')
+    .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true))
+    .addStringOption((option) =>
+      option
+        .setName('role')
+        .setDescription('-')
+        .setRequired(true)
+        .addChoices(...Object.keys(config.toggleRole).map((roleName) => ({ name: roleName, value: roleName })))
+    ),
   guildId: [config.guildId],
   permission: 'MODERATOR',
   execute: async (commandInteraction: CommandInteraction) => {

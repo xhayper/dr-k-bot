@@ -33,7 +33,7 @@ const embedUtility = new EmbedUtility(client);
 const messageUtility = new MessageUtility();
 const userUtility = new UserUtility();
 
-const commandManager = new CommandManager();
+const commandManager = new CommandManager(client);
 const eventManager = new EventManager(client);
 
 (async () => {

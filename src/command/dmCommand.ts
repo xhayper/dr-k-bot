@@ -1,10 +1,31 @@
+import { SlashCommandBuilder, SlashCommandUserOption } from '@discordjs/builders';
 import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
 import { SlashCommand } from '../base/slashCommand';
 import { EmbedUtility } from '..';
 import config from '../config';
 
+const memberOption = (option: SlashCommandUserOption, description = '-') =>
+  option.setName('member').setDescription(description).setRequired(true);
+
 export default {
-  name: 'dm',
+  data: new SlashCommandBuilder()
+    .setName('dm')
+    .setDescription('-')
+    .addSubcommand((builder) => builder.setName('nsfw_profile').setDescription('-').addUserOption(memberOption))
+    .addSubcommand((builder) =>
+      builder
+        .setName('warn')
+        .setDescription('-')
+        .addUserOption(memberOption)
+        .addStringOption((option) => option.setName('reason').setDescription('-').setRequired(true))
+    )
+    .addSubcommand((builder) =>
+      builder
+        .setName('custom')
+        .setDescription('-')
+        .addUserOption(memberOption)
+        .addStringOption((option) => option.setName('message').setDescription('-').setRequired(true))
+    ),
   guildId: [config.guildId],
   permission: 'MODERATOR',
   execute: async (commandInteraction: CommandInteraction) => {
@@ -36,7 +57,7 @@ export default {
           });
           break;
         }
-        
+
         case 'custom': {
           await member.user.send({
             embeds: [
@@ -68,11 +89,10 @@ export default {
       await commandInteraction.editReply({
         embeds: [
           EmbedUtility.SUCCESS_COLOR(
-              new MessageEmbed({
-                title: 'All done!',
-                description: `Message sent to ${member.user}!`
-              }
-            )
+            new MessageEmbed({
+              title: 'All done!',
+              description: `Message sent to ${member.user}!`
+            })
           )
         ]
       });
