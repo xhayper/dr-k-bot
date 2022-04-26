@@ -17,7 +17,7 @@
     "dotenv": "^16.0.0",
     "glob": "^8.0.1",
     "sequelize": "^6.19.0",
-    "slash-register": "^1.0.1",
+    "slash-register": "^1.0.2",
     "sqlite3": "^5.0.5",
     "uuid": "^8.3.2",
     "winston": "^3.7.2"
