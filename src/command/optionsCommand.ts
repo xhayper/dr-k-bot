@@ -56,10 +56,80 @@ export default {
         sub
           .setName('dashboard')
           .setDescription('Shows the option information dashboard.')
+      )
+      .addSubcommand((sub) =>
+        sub
+          .setName('killSwitch') // Probably should restrict to head mods and bot owners only
+          .setDescription('Deactivates auto moderation and verification capabilities until toggled back on.')
       ),
   guildId: [config.guildId],
   permission: 'MODERATOR',
   execute: async (commandInteraction: CommandInteraction) => {
-    // TODO add logic after confirming the menu works.
+    
+    const subCommand = commandInteraction.options.getSubcommand(true);
+    
+     switch (subCommand) {
+         case 'removeFilter':
+         case 'addFilter':
+           config.misc.chatFilters.push(commandInteraction.options.getString('filter', true)); // Sanitizing probably needed
+           await interaction.reply(
+             {
+              embeds: [
+                EmbedUtility.SUCCESS_COLOR(
+                  new MessageEmbed()
+                  .setTitle("Success!")
+                  .setDescription("Filter successfully added!")
+                )
+              ]
+            }
+           ).catch(() => undefined);
+           break;
+         case 'showFilters':
+           await interaction.reply(
+             {
+              embeds: [
+                EmbedUtility.SUCCESS_COLOR(
+                  new MessageEmbed()
+                  .setTitle("Filters")
+                  .setDescription("```" + config.misc.chatFilters.join(", ") + "```")
+                )
+              ]
+            }
+           ).catch(() => undefined);
+           break;
+         // case 'setUserMediaLimit':
+         case 'dashboard':
+           await interaction.reply(
+             {
+              embeds: [
+                EmbedUtility.SUCCESS_COLOR(
+                  new MessageEmbed()
+                  .setTitle("Dashboard")
+                  .setDescription("Information dashboard for Dr. K bot.")
+                  .addFields(
+		                { name: 'Chat filters', value: "```" + config.misc.chatFilters.join(", ") + "```" },
+                    { name: 'Status', value: "```" + (!config.misc.killSwitch ? "Active" : "Disabled") + "```" },
+                    // { name: 'Media Timer', value: "", inline: true },
+                    // { name: 'Media Limit', value: "", inline: true }
+	                )
+                )
+              ]
+            }
+           ).catch(() => undefined);
+           break;
+         case 'killSwitch':
+           config.misc.killSwitch ? config.misc.killSwitch = "false" : config.misc.killSwitch = "true";
+           await interaction.reply(
+             {
+              embeds: [
+                EmbedUtility.SUCCESS_COLOR(
+                  new MessageEmbed()
+                  .setTitle("Success!")
+                  .setDescription("Kill switch set to "+config.misc.killSwitch)
+                )
+              ]
+            }
+           ).catch(() => undefined);
+           break;
   }
 } as SlashCommand;
