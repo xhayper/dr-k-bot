@@ -24,7 +24,7 @@ export default {
 
     try {
       switch (dmType) {
-        case 'nsfw_pfp': {
+        case 'nsfw_profile': {
           await member.user.send({
             embeds: [
               EmbedUtility.ERROR_COLOR(
@@ -66,17 +66,20 @@ export default {
 
       await commandInteraction.editReply({
         embeds: [
-          EmbedUtility.USER_AUTHOR(
-            new MessageEmbed({
-              title: 'All done!',
-              description: `Message sent to ${member.user}!`
-            }),
-            commandInteraction.user
+          EmbedUtility.SUCCESS_COLOR(
+            EmbedUtility.USER_AUTHOR(
+              new MessageEmbed({
+                title: 'All done!',
+                description: `Message sent to ${member.user}!`
+              }),
+              commandInteraction.user
+            )
           )
         ]
       });
     } catch (e: any) {
-      if (e.code === 50007) { // This implies that there was an error while sending a dm
+      if (e.code === 50007) {
+        // This implies that there was an error while sending a dm
         return commandInteraction.editReply({
           embeds: [
             EmbedUtility.ERROR_COLOR(
