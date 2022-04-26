@@ -26,4 +26,7 @@ export default config as {
     [key: string]: string;
   };
   questions: string[];
+  misc: {
+    chatFilters: string[];
+  };
 };
