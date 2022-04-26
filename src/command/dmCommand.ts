@@ -67,12 +67,10 @@ export default {
       await commandInteraction.editReply({
         embeds: [
           EmbedUtility.SUCCESS_COLOR(
-            EmbedUtility.USER_AUTHOR(
               new MessageEmbed({
                 title: 'All done!',
                 description: `Message sent to ${member.user}!`
-              }),
-              commandInteraction.user
+              }
             )
           )
         ]
