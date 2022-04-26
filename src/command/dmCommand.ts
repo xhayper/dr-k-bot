@@ -82,7 +82,7 @@ export default {
           embeds: [
             EmbedUtility.ERROR_COLOR(
               new MessageEmbed({
-                description: `I can't seems to sent ${member.user} a dm!`
+                description: `I can't seem to sent ${member.user} a dm!`
               })
             )
           ]
