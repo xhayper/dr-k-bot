@@ -20,6 +20,7 @@ export default config as {
     verificationLog: string;
     ticketThread: string;
     'general-1': string;
+    'role-selection': string;
   };
   toggleRole: {
     [key: string]: string;
