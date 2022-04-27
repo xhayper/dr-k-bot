@@ -20,16 +20,17 @@ export default config as {
     verificationLog: string;
     ticketThread: string;
     'general-1': string;
+    'general-2': string;
     'role-selection': string;
   };
   toggleRole: {
     [key: string]: string;
   };
   questions: string[]; 
-  // Chat filters should be in regex and be strings
+  // Chat filters should not exist
   misc: {
     // chatFilters: string[];
-    killSwitch: string; 
+    // killSwitch: string; 
     mediaTimer: string;
     mediaLimit: string;
   };
