@@ -30,7 +30,7 @@ export default config as {
   misc: {
     chatFilters: string[];
     killSwitch: string; 
-    // mediaTimer: string;
-    // mediaLimit: string;
+    mediaTimer: string;
+    mediaLimit: string;
   };
 };
