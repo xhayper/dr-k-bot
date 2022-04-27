@@ -6,10 +6,12 @@ import { GuildUtility } from '..';
 import config from '../config';
 
 const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, '../../insult.json'), 'utf8')) as string[];
-const savedMessages = { // Only a list of general-1 messages for now. 
-  'general-1':[],
-  'general-2':[]
-}; 
+
+const channelList=[
+  "general-1",
+  "general-2"
+];
+const savedMessages={};
 
 export default TypedEvent({
   eventName: 'messageCreate',
@@ -27,25 +29,26 @@ export default TypedEvent({
     //   message.reply("Ok, Boomer");
     //   return;
     // }
-    
-    for (channelName in Object.keys(savedMessages)) { // TODO: Implement chat filters here.
+    for (channelName in channelList) {
       if (message.channel.id == config.channel[channelName]) {
       
-        if (message.attachments.size > 0) { // Doesn't differentiate between attatchements, might have to fix that later.
-          savedMessages[channelName][message.id]=message; 
-        }
-      
-        for (ID in Object.keys(savedMessages[channelName])) {
-          if (Date().getTime() - savedMessages[channelName][ID].createdTimestamp > config.misc.mediaTimer*60*1000) { 
-            delete savedMessages[channelName][ID];
+        if (message.attachments.size > 0) { 
+          
+          userTemp = savedMessages[message.author.id];
+          if (userTemp==null) userTemp={};
+          userTemp[message.id]=message;
+          
+          setTimeout(() => {
+            delete userTemp[message.id];
+          }, config.misc.mediaTimer*60*1000);
+          
+          if (userTemp.length > config.misc.mediaLimit) {
+            message.reply("Your limit for media have been exceeded. Please move to a more appropriate channel.");
           }
-        }
-    
-        if (Object.keys(savedMessages[channelName]).length > config.misc.mediaLimit) { 
-          channel.send("Channel limits for media have been exceeded. Please move to a more appropriate channel.") // TODO: Change message to directly point to media
         }
       }
     }
+    
     if (
       message.mentions.users.size == 0 ||
       0 >= splitText.length ||
