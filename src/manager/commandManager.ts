@@ -18,8 +18,8 @@ export class CommandManager {
   async reloadCommands() {
     this.#slashRegister.login(this.#client.token!);
 
-    this.#slashRegister.commandList = [];
-    this.#slashRegister.guildCommandList.clear();
+    this.#slashRegister.clearGlobalCommand();
+    this.#slashRegister.clearGuildCommand();
 
     this.commands.clear();
 
@@ -31,7 +31,7 @@ export class CommandManager {
       const commandModule = (await import(command)).default as SlashCommand;
       if (!commandModule.data) continue;
       this.commands.set(commandModule.data.name, commandModule);
-      this.#slashRegister.addCommand(commandModule.data.toJSON() as APIApplicationCommandBase);
+      this.#slashRegister.addGlobalCommand(commandModule.data.toJSON() as APIApplicationCommandBase);
     }
 
     await this.#slashRegister.syncAll();
