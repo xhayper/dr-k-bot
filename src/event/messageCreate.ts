@@ -27,7 +27,7 @@ export default TypedEvent({
     //   return;
     // }
     
-    for (channelName in Object.keys(savedMessages)) {
+    for (channelName in Object.keys(savedMessages)) { // TODO: Implement chat filters here.
       if (message.channel.id == config.channel[channelName]) {
       
         if (message.attachments.size > 0) { // Doesn't differentiate between attatchements, might have to fix that later.
