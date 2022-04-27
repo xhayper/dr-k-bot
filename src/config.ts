@@ -28,7 +28,7 @@ export default config as {
   questions: string[]; 
   // Chat filters should be in regex and be strings
   misc: {
-    chatFilters: string[];
+    // chatFilters: string[];
     killSwitch: string; 
     mediaTimer: string;
     mediaLimit: string;
