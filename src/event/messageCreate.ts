@@ -6,8 +6,9 @@ import { GuildUtility } from '..';
 import config from '../config';
 
 const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, '../../insult.json'), 'utf8')) as string[];
-var savedMessages = { // Only a list of general-1 messages for now. 
-  'general-1':[]
+const savedMessages = { // Only a list of general-1 messages for now. 
+  'general-1':[],
+  'general-2':[]
 }; 
 
 export default TypedEvent({
