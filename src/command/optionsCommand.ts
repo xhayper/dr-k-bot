@@ -37,7 +37,7 @@ export default {
       ) */
       .addSubcommand((sub) =>
         sub
-          .setName('setUserMediaLimit')
+          .setName('setUserMedia')
           .setDescription('Sets the media limit for each user.')
           .addIntegerOption((option) =>
             option
@@ -97,7 +97,21 @@ export default {
             }
            ).catch(() => undefined);
            break; */
-         // case 'setUserMediaLimit':
+         case 'setUserMedia':
+	   config.misc.mediaLimit = commandInteraction.options.getString('messageCount', true);
+	   config.misc.mediaTimer = commandInteraction.options.getString('timer', true);
+	   await interaction.reply(
+             {
+              embeds: [
+                EmbedUtility.SUCCESS_COLOR(
+                  new MessageEmbed()
+                  .setTitle("Success!")
+                  .setDescription("Media settings successfully changed!")
+                )
+              ]
+            }
+           ).catch(() => undefined);
+	   break;
          case 'dashboard':
            await interaction.reply(
              {
