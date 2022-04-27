@@ -69,7 +69,7 @@ export default {
     const subCommand = commandInteraction.options.getSubcommand(true);
     
      switch (subCommand) {
-         case 'removeFilter':
+      /* case 'removeFilter':
          case 'addFilter':
            config.misc.chatFilters.push(commandInteraction.options.getString('filter', true)); // Sanitizing probably needed
            await interaction.reply(
@@ -96,7 +96,7 @@ export default {
               ]
             }
            ).catch(() => undefined);
-           break;
+           break; */
          // case 'setUserMediaLimit':
          case 'dashboard':
            await interaction.reply(
@@ -109,8 +109,8 @@ export default {
                   .addFields(
 		    // { name: 'Chat filters', value: "```" + config.misc.chatFilters.join(", ") + "```" },
                     { name: 'Status', value: "```" + (!config.misc.killSwitch ? "Active" : "Disabled") + "```" },
-                    { name: 'Media Timer', value: "", inline: true },
-                    { name: 'Media Limit', value: "", inline: true }
+                    { name: 'Media Timer', value: config.misc.mediaTimer, inline: true },
+                    { name: 'Media Limit', value: config.misc.mediaLimit, inline: true }
 	                )
                 )
               ]
