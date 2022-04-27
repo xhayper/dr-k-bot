@@ -7,7 +7,7 @@ export default {
   data: new SlashCommandBuilder()
       .setName("options")
       .setDescription('Adjust Dr. K bot options.')
-      .addSubcommand((sub) =>
+    /*.addSubcommand((sub) =>
         sub
           .setName('removeFilter')
           .setDescription('Removes one of the chat filters.')
@@ -34,7 +34,7 @@ export default {
         sub
           .setName('showFilters')
           .setDescription('Shows all chat filters.')
-      )
+      ) */
       .addSubcommand((sub) =>
         sub
           .setName('setUserMediaLimit')
@@ -107,10 +107,10 @@ export default {
                   .setTitle("Dashboard")
                   .setDescription("Information dashboard for Dr. K bot.")
                   .addFields(
-		                { name: 'Chat filters', value: "```" + config.misc.chatFilters.join(", ") + "```" },
+		    // { name: 'Chat filters', value: "```" + config.misc.chatFilters.join(", ") + "```" },
                     { name: 'Status', value: "```" + (!config.misc.killSwitch ? "Active" : "Disabled") + "```" },
-                    // { name: 'Media Timer', value: "", inline: true },
-                    // { name: 'Media Limit', value: "", inline: true }
+                    { name: 'Media Timer', value: "", inline: true },
+                    { name: 'Media Limit', value: "", inline: true }
 	                )
                 )
               ]
