@@ -1,23 +1,22 @@
+import { Client, Collection, Message, Snowflake } from 'discord.js';
 import { TypedEvent } from '../base/clientEvent';
-import { Client, Message } from 'discord.js';
-import path from 'path';
-import fs from 'fs';
 import { GuildUtility } from '..';
 import config from '../config';
+import path from 'path';
+import fs from 'fs';
 
 const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, '../../insult.json'), 'utf8')) as string[];
 
-const channelList=[
-  "general-1",
-  "general-2"
-];
-const savedMessages={};
+const channelList = [config.channel['general-1'], config.channel['general-2']];
+
+const userMediaCount = new Collection<Snowflake, number>();
+const timeoutMap = new Collection<Snowflake, NodeJS.Timeout>();
 
 export default TypedEvent({
   eventName: 'messageCreate',
   on: async (client: Client, message: Message) => {
     if (message.author.bot || message.channel.type == 'DM') return;
-    
+
     const splitText = message.content.split(' ');
 
     // if (splitText[0] == '!hayperimergencygiverole') {
@@ -29,26 +28,24 @@ export default TypedEvent({
     //   message.reply("Ok, Boomer");
     //   return;
     // }
-    for (channelName in channelList) {
-      if (message.channel.id == config.channel[channelName]) {
-      
-        if (message.attachments.size > 0) { 
-          
-          userTemp = savedMessages[message.author.id];
-          if (userTemp==null) userTemp={};
-          userTemp[message.id]=message;
-          
-          setTimeout(() => {
-            delete userTemp[message.id];
-          }, config.misc.mediaTimer*60*1000);
-          
-          if (userTemp.length > config.misc.mediaLimit) {
-            message.reply("Your limit for media have been exceeded. Please move to a more appropriate channel.");
-          }
-        }
+
+    if (channelList.includes(message.channel.id))
+      if (message.attachments.size > 0) {
+        if (!timeoutMap.has(message.author.id))
+          timeoutMap.set(
+            message.author.id,
+            setTimeout(() => {
+              userMediaCount.delete(message.author.id);
+            }, config.misc.mediaTimer * 60 * 1000)
+          );
+
+        let mediaCount = userMediaCount.get(message.author.id) || 0;
+        mediaCount += message.attachments.size;
+
+        if (mediaCount > config.misc.mediaLimit)
+          return message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
       }
-    }
-    
+
     if (
       message.mentions.users.size == 0 ||
       0 >= splitText.length ||
