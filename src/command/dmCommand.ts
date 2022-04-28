@@ -11,10 +11,10 @@ export default {
   data: new SlashCommandBuilder()
     .setName('dm')
     .setDescription('-')
-    .addSubcommand((builder) => builder.setName('nsfw_profile').setDescription('-').addUserOption(memberOption))
+    .addSubcommand((builder) => builder.setName('nsfw').setDescription('-').addUserOption(memberOption))
     .addSubcommand((builder) =>
       builder
-        .setName('verbal_warn')
+        .setName('warn')
         .setDescription('-')
         .addUserOption(memberOption)
         .addStringOption((option) => option.setName('reason').setDescription('-').setRequired(true))
@@ -38,14 +38,14 @@ export default {
       case 'custom':
         message = commandInteraction.options.getString('message', true);
         break;
-      case 'verbal_warn':
+      case 'warn':
         message = commandInteraction.options.getString('reason', true);
         break;
     }
 
     try {
       switch (dmType) {
-        case 'nsfw_profile': {
+        case 'nsfw': {
           await member.user.send({
             embeds: [
               EmbedUtility.ERROR_COLOR(
@@ -71,13 +71,13 @@ export default {
           break;
         }
 
-        case 'verbal_warn': {
+        case 'warn': {
           await member.user.send({
             embeds: [
               EmbedUtility.ERROR_COLOR(
                 new MessageEmbed({
                   title: 'Hey!',
-                  description: `${commandInteraction.user} has verbal warned you for ${message}`
+                  description: `${commandInteraction.user} has warned you for ${message}`
                 })
               )
             ]
