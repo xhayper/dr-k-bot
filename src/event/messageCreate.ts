@@ -37,8 +37,9 @@ export default TypedEvent({
         if (!userTimeMap.has(message.author.id) || timePassed) userTimeMap.set(message.author.id, new Date());
 
         let mediaCount =
-          !timePassed && userMediaCount.has(message.author.id) ? userMediaCount.get(message.author.id)! : 0;
-        mediaCount += message.attachments.size;
+          !timePassed && userMediaCount.has(message.author.id)
+            ? userMediaCount.get(message.author.id)! + message.attachments.size
+            : 0;
 
         userMediaCount.set(message.author.id, mediaCount);
 
