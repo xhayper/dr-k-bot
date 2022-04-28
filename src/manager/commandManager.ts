@@ -1,6 +1,6 @@
+import { APIApplicationCommandBase, SlashRegister } from 'slash-register';
 import { SlashCommand } from '../base/slashCommand';
 import { Client, Collection } from 'discord.js';
-import { APIApplicationCommandBase, SlashRegister } from 'slash-register';
 import glob from 'glob';
 import path from 'path';
 
@@ -31,7 +31,14 @@ export class CommandManager {
       const commandModule = (await import(command)).default as SlashCommand;
       if (!commandModule.data) continue;
       this.commands.set(commandModule.data.name, commandModule);
-      this.#slashRegister.addGlobalCommand(commandModule.data.toJSON() as APIApplicationCommandBase);
+      if (commandModule.guildId) {
+        const commandJSON = commandModule.data.toJSON() as APIApplicationCommandBase;
+        for (const guildId of commandModule.guildId) {
+          this.#slashRegister.addGuildCommand(guildId, commandJSON);
+        }
+      } else {
+        this.#slashRegister.addGlobalCommand(commandModule.data.toJSON() as APIApplicationCommandBase);
+      }
     }
 
     await this.#slashRegister.syncAll();

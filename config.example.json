@@ -15,10 +15,15 @@
     "verification": "",
     "ticketThread": "",
     "general-1": "",
+    "general-2": "",
     "role-selection": ""
   },
   "toggleRole": {
     "": ""
   },
-  "questions": [""]
+  "questions": [""],
+  "misc": {
+    "mediaCooldown": 0,
+    "mediaLimit": 0
+  }
 }

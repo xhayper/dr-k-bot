@@ -1,6 +1,9 @@
 import { Client, Collection, Message, Snowflake } from 'discord.js';
 import { TypedEvent } from '../base/clientEvent';
+<<<<<<< HEAD
 import { GuildUtility } from '..';
+=======
+>>>>>>> upstream/main
 import config from '../config';
 import path from 'path';
 import fs from 'fs';
@@ -9,8 +12,15 @@ const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, '../../insult
 
 const channelList = [config.channel['general-1'], config.channel['general-2']];
 
+<<<<<<< HEAD
 const userMediaCount = new Collection<Snowflake, number>();
 const timeoutMap = new Collection<Snowflake, NodeJS.Timeout>();
+=======
+// <ChannelID, <UserId, MediaCount>>
+const userMediaCount = new Collection<Snowflake, Collection<Snowflake, number>>();
+// <ChannelID, <UserId, FirstPostTime>>
+const userTimeMap = new Collection<Snowflake, Collection<Snowflake, Date>>();
+>>>>>>> upstream/main
 
 export default TypedEvent({
   eventName: 'messageCreate',
@@ -29,6 +39,7 @@ export default TypedEvent({
     //   return;
     // }
 
+<<<<<<< HEAD
     if (channelList.includes(message.channel.id))
       if (message.attachments.size > 0) {
         if (!timeoutMap.has(message.author.id))
@@ -47,6 +58,27 @@ export default TypedEvent({
         if (mediaCount > config.misc.mediaLimit)
           return message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
       }
+=======
+    if (channelList.includes(message.channel.id) && message.attachments.size > 0) {
+      const timeMap = userTimeMap.get(message.channel.id) || new Collection<Snowflake, Date>();
+      const countMap = userMediaCount.get(message.channel.id) || new Collection<Snowflake, number>();
+
+      const timePassed = timeMap.has(message.author.id)
+        ? new Date().getTime() - timeMap.get(message.author.id)!.getTime() > config.misc.mediaCooldown * 1000
+        : true;
+
+      if (!timeMap.has(message.author.id) || timePassed) timeMap.set(message.author.id, new Date());
+
+      let mediaCount =
+        (!countMap.has(message.author.id) || timePassed ? 0 : countMap.get(message.author.id)!) +
+        message.attachments.size;
+
+      countMap.set(message.author.id, mediaCount);
+
+      if (mediaCount > config.misc.mediaLimit)
+        return message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
+    }
+>>>>>>> upstream/main
 
     if (
       message.mentions.users.size == 0 ||

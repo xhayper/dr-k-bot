@@ -11,7 +11,7 @@ export default {
   data: new SlashCommandBuilder()
     .setName('dm')
     .setDescription('-')
-    .addSubcommand((builder) => builder.setName('nsfw_profile').setDescription('-').addUserOption(memberOption))
+    .addSubcommand((builder) => builder.setName('nsfw').setDescription('-').addUserOption(memberOption))
     .addSubcommand((builder) =>
       builder
         .setName('warn')
@@ -45,7 +45,7 @@ export default {
 
     try {
       switch (dmType) {
-        case 'nsfw_profile': {
+        case 'nsfw': {
           await member.user.send({
             embeds: [
               EmbedUtility.ERROR_COLOR(
@@ -77,7 +77,7 @@ export default {
               EmbedUtility.ERROR_COLOR(
                 new MessageEmbed({
                   title: 'Hey!',
-                  description: `${commandInteraction.user} has verbal warned you for ${message}`
+                  description: `${commandInteraction.user} has warned you for ${message}, Contact them if you have questions or concerns regarding the warn.`
                 })
               )
             ]
