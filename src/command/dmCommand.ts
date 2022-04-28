@@ -14,7 +14,7 @@ export default {
     .addSubcommand((builder) => builder.setName('nsfw_profile').setDescription('-').addUserOption(memberOption))
     .addSubcommand((builder) =>
       builder
-        .setName('verbal')
+        .setName('verbal_warn')
         .setDescription('-')
         .addUserOption(memberOption)
         .addStringOption((option) => option.setName('reason').setDescription('-').setRequired(true))
@@ -38,7 +38,7 @@ export default {
       case 'custom':
         message = commandInteraction.options.getString('message', true);
         break;
-      case 'verbal':
+      case 'verbal_warn':
         message = commandInteraction.options.getString('reason', true);
         break;
     }
@@ -71,7 +71,7 @@ export default {
           break;
         }
 
-        case 'verbal': {
+        case 'verbal_warn': {
           await member.user.send({
             embeds: [
               EmbedUtility.ERROR_COLOR(
