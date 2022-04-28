@@ -1,10 +1,16 @@
+import { Client, Collection, Message, Snowflake } from 'discord.js';
 import { TypedEvent } from '../base/clientEvent';
-import { Client, Message } from 'discord.js';
+import { GuildUtility } from '..';
+import config from '../config';
 import path from 'path';
 import fs from 'fs';
-import { GuildUtility } from '..';
 
 const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, '../../insult.json'), 'utf8')) as string[];
+
+const channelList = [config.channel['general-1'], config.channel['general-2']];
+
+const userMediaCount = new Collection<Snowflake, number>();
+const timeoutMap = new Collection<Snowflake, NodeJS.Timeout>();
 
 export default TypedEvent({
   eventName: 'messageCreate',
@@ -22,6 +28,25 @@ export default TypedEvent({
     //   message.reply("Ok, Boomer");
     //   return;
     // }
+
+    if (channelList.includes(message.channel.id))
+      if (message.attachments.size > 0) {
+        if (!timeoutMap.has(message.author.id))
+          timeoutMap.set(
+            message.author.id,
+            setTimeout(() => {
+              userMediaCount.delete(message.author.id);
+            }, config.misc.mediaTimer * 60 * 1000)
+          );
+
+        let mediaCount = userMediaCount.get(message.author.id) || 0;
+        mediaCount += message.attachments.size;
+        
+        userMediaCount.set(message.author.id, mediaCount);
+
+        if (mediaCount > config.misc.mediaLimit)
+          return message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
+      }
 
     if (
       message.mentions.users.size == 0 ||
