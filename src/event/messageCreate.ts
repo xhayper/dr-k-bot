@@ -1,6 +1,5 @@
 import { Client, Collection, Message, Snowflake } from 'discord.js';
 import { TypedEvent } from '../base/clientEvent';
-import { GuildUtility } from '..';
 import config from '../config';
 import path from 'path';
 import fs from 'fs';
@@ -10,7 +9,7 @@ const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, '../../insult
 const channelList = [config.channel['general-1'], config.channel['general-2']];
 
 const userMediaCount = new Collection<Snowflake, number>();
-const timeoutMap = new Collection<Snowflake, NodeJS.Timeout>();
+const userTimeoutMap = new Collection<Snowflake, NodeJS.Timeout>();
 
 export default TypedEvent({
   eventName: 'messageCreate',
@@ -31,17 +30,17 @@ export default TypedEvent({
 
     if (channelList.includes(message.channel.id))
       if (message.attachments.size > 0) {
-        if (!timeoutMap.has(message.author.id))
-          timeoutMap.set(
+        if (!userTimeoutMap.has(message.author.id))
+          userTimeoutMap.set(
             message.author.id,
             setTimeout(() => {
               userMediaCount.delete(message.author.id);
-            }, config.misc.mediaTimer * 60 * 1000)
+            }, config.misc.mediaCooldown * 60 * 1000)
           );
 
         let mediaCount = userMediaCount.get(message.author.id) || 0;
         mediaCount += message.attachments.size;
-        
+
         userMediaCount.set(message.author.id, mediaCount);
 
         if (mediaCount > config.misc.mediaLimit)

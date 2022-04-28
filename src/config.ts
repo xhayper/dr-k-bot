@@ -27,11 +27,8 @@ export default config as {
     [key: string]: string;
   };
   questions: string[]; 
-  // Chat filters should not exist
   misc: {
-    // chatFilters: string[];
-    // killSwitch: string; 
-    mediaTimer: string;
-    mediaLimit: string;
+    mediaCooldown: number;
+    mediaLimit: number;
   };
 };
