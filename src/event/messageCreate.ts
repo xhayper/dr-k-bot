@@ -8,8 +8,8 @@ const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, '../../insult
 
 const channelList = [config.channel['general-1'], config.channel['general-2']];
 
-const userMediaCount = new Collection<Snowflake, number>();
-const userTimeMap = new Collection<Snowflake, Date>();
+const userMediaCount = new Collection<Snowflake, Collection<Snowflake, number>>();
+const userTimeMap = new Collection<Snowflake, Collection<Snowflake, Date>>();
 
 export default TypedEvent({
   eventName: 'messageCreate',
@@ -28,23 +28,25 @@ export default TypedEvent({
     //   return;
     // }
 
-    if (channelList.includes(message.channel.id))
-      if (message.attachments.size > 0) {
-        const timePassed = userTimeMap.has(message.author.id)
-          ? new Date().getTime() - userTimeMap.get(message.author.id)!.getTime() > config.misc.mediaCooldown * 1000
-          : true;
+    if (channelList.includes(message.channel.id) && message.attachments.size > 0) {
+      const timeMap = userTimeMap.get(message.channel.id) || new Collection<Snowflake, Date>();
+      const countMap = userMediaCount.get(message.channel.id) || new Collection<Snowflake, number>();
 
-        if (!userTimeMap.has(message.author.id) || timePassed) userTimeMap.set(message.author.id, new Date());
+      const timePassed = timeMap.has(message.author.id)
+        ? new Date().getTime() - timeMap.get(message.author.id)!.getTime() > config.misc.mediaCooldown * 1000
+        : true;
 
-        let mediaCount =
-          (!timePassed && userMediaCount.has(message.author.id) ? userMediaCount.get(message.author.id)! : 0) +
-          message.attachments.size;
+      if (!timeMap.has(message.author.id) || timePassed) timeMap.set(message.author.id, new Date());
 
-        userMediaCount.set(message.author.id, mediaCount);
+      let mediaCount =
+        (!timePassed && countMap.has(message.author.id) ? countMap.get(message.author.id)! : 0) +
+        message.attachments.size;
 
-        if (mediaCount > config.misc.mediaLimit)
-          return message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
-      }
+      countMap.set(message.author.id, mediaCount);
+
+      if (mediaCount > config.misc.mediaLimit)
+        return message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
+    }
 
     if (
       message.mentions.users.size == 0 ||
