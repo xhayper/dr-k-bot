@@ -8,7 +8,9 @@ const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, '../../insult
 
 const channelList = [config.channel['general-1'], config.channel['general-2']];
 
+// <ChannelID, <UserId, MediaCount>>
 const userMediaCount = new Collection<Snowflake, Collection<Snowflake, number>>();
+// <ChannelID, <UserId, FirstPostTime>>
 const userTimeMap = new Collection<Snowflake, Collection<Snowflake, Date>>();
 
 export default TypedEvent({
