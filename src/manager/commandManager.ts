@@ -1,6 +1,6 @@
+import { APIApplicationCommandBase, SlashRegister } from 'slash-register';
 import { SlashCommand } from '../base/slashCommand';
 import { Client, Collection } from 'discord.js';
-import { APIApplicationCommandBase, SlashRegister } from 'slash-register';
 import glob from 'glob';
 import path from 'path';
 
