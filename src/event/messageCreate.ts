@@ -9,7 +9,7 @@ const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, '../../insult
 const channelList = [config.channel['general-1'], config.channel['general-2']];
 
 const userMediaCount = new Collection<Snowflake, number>();
-const userTimeoutMap = new Collection<Snowflake, NodeJS.Timeout>();
+const userTimeMap = new Collection<Snowflake, Date>();
 
 export default TypedEvent({
   eventName: 'messageCreate',
@@ -30,15 +30,14 @@ export default TypedEvent({
 
     if (channelList.includes(message.channel.id))
       if (message.attachments.size > 0) {
-        if (!userTimeoutMap.has(message.author.id))
-          userTimeoutMap.set(
-            message.author.id,
-            setTimeout(() => {
-              userMediaCount.delete(message.author.id);
-            }, config.misc.mediaCooldown * 60 * 1000)
-          );
+        const timePassed = userTimeMap.has(message.author.id)
+          ? new Date().getTime() - userTimeMap.get(message.author.id)!.getTime() > config.misc.mediaCooldown * 1000
+          : true;
 
-        let mediaCount = userMediaCount.get(message.author.id) || 0;
+        if (!userTimeMap.has(message.author.id) || timePassed) userTimeMap.set(message.author.id, new Date());
+
+        let mediaCount =
+          !timePassed && userMediaCount.has(message.author.id) ? userMediaCount.get(message.author.id)! : 0;
         mediaCount += message.attachments.size;
 
         userMediaCount.set(message.author.id, mediaCount);
