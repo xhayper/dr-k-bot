@@ -41,6 +41,8 @@ export default TypedEvent({
 
         let mediaCount = userMediaCount.get(message.author.id) || 0;
         mediaCount += message.attachments.size;
+        
+        userMediaCount.set(message.author.id, mediaCount);
 
         if (mediaCount > config.misc.mediaLimit)
           return message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
