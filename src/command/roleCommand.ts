@@ -6,7 +6,7 @@ import config from '../config';
 
 export default {
   data: new SlashCommandBuilder()
-    .setName('togglerole')
+    .setName('role')
     .setDescription('-')
     .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true))
     .addStringOption((option) =>
