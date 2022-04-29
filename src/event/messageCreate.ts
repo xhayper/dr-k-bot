@@ -35,13 +35,15 @@ export default TypedEvent({
       const countMap = userMediaCount.get(message.channel.id) || new Collection<Snowflake, number>();
 
       const timePassed = timeMap.has(message.author.id)
-        ? new Date().getTime() - timeMap.get(message.author.id)!.getTime() > config.misc.mediaCooldown * 1000
-        : true;
+        ? (new Date().getTime() - timeMap.get(message.author.id)!.getTime()) * 1000
+        : null;
 
-      if (!timeMap.has(message.author.id) || timePassed) timeMap.set(message.author.id, new Date());
+      const cooldownEnded = timePassed ? timePassed > config.misc.mediaCooldown : false;
+
+      if (!timeMap.has(message.author.id) || cooldownEnded) timeMap.set(message.author.id, new Date());
 
       let mediaCount =
-        (!countMap.has(message.author.id) || timePassed ? 0 : countMap.get(message.author.id)!) +
+        (!countMap.has(message.author.id) || cooldownEnded ? 0 : countMap.get(message.author.id)!) +
         message.attachments.size;
 
       countMap.set(message.author.id, mediaCount);
