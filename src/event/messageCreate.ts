@@ -8,14 +8,14 @@ import fs from 'fs';
 
 const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, '../../insult.json'), 'utf8')) as string[];
 
-const channelList = [config.channel['general-1'], config.channel['general-2']];
+const channelList = [config.channel['general-1'], config.channel['general-2']]; 
 
 // <ChannelID, <UserId, MediaCount>>
 const userMediaCount = new Collection<Snowflake, Collection<Snowflake, number>>();
 // <ChannelID, <UserId, FirstPostTime>>
 const userTimeMap = new Collection<Snowflake, Collection<Snowflake, Date>>();
 // <UserId, WarnCount>
-const userWarnCount = new Collection<Snowflake, number>();
+const userWarnCount = new Collection<Snowflake, number>(); // REMINDER: Change to something that can actually be saved past bot resets
 
 export default TypedEvent({
   eventName: 'messageCreate',
