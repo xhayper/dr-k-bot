@@ -1,3 +1,4 @@
+import { EmbedUtility, GuildUtility } from '..';
 import { Client, Collection, Message, Snowflake } from 'discord.js';
 import { TypedEvent } from '../base/clientEvent';
 import config from '../config';
@@ -48,8 +49,21 @@ export default TypedEvent({
 
       countMap.set(message.author.id, mediaCount);
 
-      if (mediaCount > config.misc.mediaLimit)
+      if (mediaCount > config.misc.mediaLimit) {
+        GuildUtility.sendAuditLog({
+          embeds: [
+            EmbedUtility.ERROR_COLOR(
+              EmbedUtility.AUDIT_MESSAGE(
+                message.author,
+                `**${message.author} verbally warned for surpassing media limit in ${message.channel}**`
+              ).setFooter({
+                text: `User ID: ${message.author.id}`
+              })
+            )
+          ]
+        });
         return message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
+      }
     }
 
     if (
