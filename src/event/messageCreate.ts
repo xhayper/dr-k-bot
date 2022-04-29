@@ -13,6 +13,8 @@ const channelList = [config.channel['general-1'], config.channel['general-2']];
 const userMediaCount = new Collection<Snowflake, Collection<Snowflake, number>>();
 // <ChannelID, <UserId, FirstPostTime>>
 const userTimeMap = new Collection<Snowflake, Collection<Snowflake, Date>>();
+// <UserId, WarnCount>
+const userWarnCount = new Collection<Snowflake, number>();
 
 export default TypedEvent({
   eventName: 'messageCreate',
@@ -50,6 +52,8 @@ export default TypedEvent({
       countMap.set(message.author.id, mediaCount);
 
       if (mediaCount > config.misc.mediaLimit) {
+        !userWarnCount.has(message.author.id) ? userWarnCount.set(message.author.id, 1) : userWarnCount.set(message.author.id, userWarnCount.get(message.author.id) + 1);
+        
         GuildUtility.sendAuditLog({
           embeds: [
             EmbedUtility.ERROR_COLOR(
@@ -57,11 +61,12 @@ export default TypedEvent({
                 message.author,
                 `**${message.author} verbally warned for surpassing media limit in ${message.channel}**`
               ).setFooter({
-                text: `User ID: ${message.author.id}`
+                text: `User ID: ${message.author.id}\nTimes warned: ${userWarnCount.get(message.author.id)}`
               })
             )
           ]
         });
+          
         return message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
       }
     }
