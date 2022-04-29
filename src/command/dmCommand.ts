@@ -77,7 +77,7 @@ export default {
               EmbedUtility.ERROR_COLOR(
                 new MessageEmbed({
                   title: 'Hey!',
-                  description: `${commandInteraction.user} has warned you for ${message}, Contact them if you have questions or concerns regarding the warn.`
+                  description: `${commandInteraction.user} has warned you for "${message}". Contact them if you have questions or concerns regarding the warn`
                 })
               )
             ]
