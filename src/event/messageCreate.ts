@@ -1,6 +1,7 @@
 import { EmbedUtility, GuildUtility } from '..';
 import { Client, Collection, Message, Snowflake } from 'discord.js';
 import { TypedEvent } from '../base/clientEvent';
+import translate from 'google-translate-api';
 import config from '../config';
 import path from 'path';
 import fs from 'fs';
@@ -70,14 +71,32 @@ export default TypedEvent({
         return message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
       }
     }
-
+    // Translation function, may switch to moderator command only if the api gets overloaded.
+    if (message.content.length > 7) { // Probably shouldn't be hard coded here 
+    let transMessage = await translate(
+      message.content,
+      {
+        from: "auto",
+        to: "en"
+      }
+    );
+    
+    if (transMessage.from.language.iso !== "en")
+      transMessage.text = transMessage.text.replace("@","[@]"); // Paranoia sanitizing (might change to regex but lazy)
+      message.reply({
+        content:`**Text translated from: ${transMessage.from.language.iso}**\n${transMessage.text}`,
+        allowedMentions: {
+          repliedUser: false
+        }
+      });
+    
     if (
       message.mentions.users.size == 0 ||
       0 >= splitText.length ||
       ![`<@${client.user!.id}>`, `<@!${client.user!.id}>`].some((mentionText) => splitText[0].startsWith(mentionText))
     )
       return;
-
+    
     await message.reply({
       content: insultList[Math.floor(Math.random() * insultList.length)],
       allowedMentions: {
