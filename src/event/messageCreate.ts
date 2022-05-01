@@ -1,17 +1,21 @@
+import { EmbedUtility, GuildUtility } from '..';
 import { Client, Collection, Message, Snowflake } from 'discord.js';
 import { TypedEvent } from '../base/clientEvent';
+import translate from 'google-translate-api';
 import config from '../config';
 import path from 'path';
 import fs from 'fs';
 
 const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, '../../insult.json'), 'utf8')) as string[];
 
-const channelList = [config.channel['general-1'], config.channel['general-2']];
+const channelList = [config.channel['general-1'], config.channel['general-2']]; 
 
 // <ChannelID, <UserId, MediaCount>>
 const userMediaCount = new Collection<Snowflake, Collection<Snowflake, number>>();
 // <ChannelID, <UserId, FirstPostTime>>
 const userTimeMap = new Collection<Snowflake, Collection<Snowflake, Date>>();
+// <UserId, WarnCount>
+const userWarnCount = new Collection<Snowflake, number>(); // REMINDER: Change to something that can actually be saved past bot resets
 
 export default TypedEvent({
   eventName: 'messageCreate',
@@ -48,17 +52,51 @@ export default TypedEvent({
 
       countMap.set(message.author.id, mediaCount);
 
-      if (mediaCount > config.misc.mediaLimit)
+      if (mediaCount > config.misc.mediaLimit) {
+        !userWarnCount.has(message.author.id) ? userWarnCount.set(message.author.id, 1) : userWarnCount.set(message.author.id, userWarnCount.get(message.author.id) + 1);
+        
+        GuildUtility.sendAuditLog({
+          embeds: [
+            EmbedUtility.ERROR_COLOR(
+              EmbedUtility.AUDIT_MESSAGE(
+                message.author,
+                `**${message.author} verbally warned for surpassing media limit in ${message.channel}**`
+              ).setFooter({
+                text: `User ID: ${message.author.id}\nTimes warned: ${userWarnCount.get(message.author.id)}`
+              })
+            )
+          ]
+        });
+          
         return message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
+      }
     }
-
+    // Translation function, may switch to moderator command only if the api gets overloaded.
+    if (message.content.length > 7) { // Probably shouldn't be hard coded here 
+    let transMessage = await translate(
+      message.content,
+      {
+        from: "auto",
+        to: "en"
+      }
+    );
+    
+    if (transMessage.from.language.iso !== "en")
+      transMessage.text = transMessage.text.replace("@","[@]"); // Paranoia sanitizing (might change to regex but lazy)
+      message.reply({
+        content:`**Text translated from: ${transMessage.from.language.iso}**\n${transMessage.text}`,
+        allowedMentions: {
+          repliedUser: false
+        }
+      });
+    
     if (
       message.mentions.users.size == 0 ||
       0 >= splitText.length ||
       ![`<@${client.user!.id}>`, `<@!${client.user!.id}>`].some((mentionText) => splitText[0].startsWith(mentionText))
     )
       return;
-
+    
     await message.reply({
       content: insultList[Math.floor(Math.random() * insultList.length)],
       allowedMentions: {
