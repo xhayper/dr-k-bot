@@ -75,6 +75,10 @@ export class EmbedUtility {
     return this.USER_AUTHOR(this.TIMESTAMP_NOW(new MessageEmbed({ description: description })), user);
   }
 
+  OPERATION_CANCELLED(): MessageEmbed {
+    return this.ERROR_COLOR(new MessageEmbed({ description: 'I have cancelled the operation!' }));
+  }
+
   async VERIFICATION_INFO(data: PartialVerificationData): Promise<MessageEmbed> {
     const targetUser = await this.#client.users.fetch(data.requesterDiscordId);
 
