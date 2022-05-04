@@ -322,7 +322,7 @@ export default TypedEvent({
                       title: `Question ${currentIndex + 1}`,
                       description: value,
                       footer: {
-                        text: `Respond within 5 minutes! | Question ${currentIndex + 1}/${config.questions.length}`
+                        text: `Respond within 5 minutes! | Say \`cancel\` to exit! | Question ${currentIndex + 1}/${config.questions.length}`
                       }
                     })
                   )
