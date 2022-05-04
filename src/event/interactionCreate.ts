@@ -39,7 +39,7 @@ async function handleQuestion(
   const response = message.first();
   if (!response) return;
   if (response.content.toLowerCase().trim() === 'cancel') {
-    if (cancelMessage) await textChannel.send(cancelMessage);
+    if (cancelMessage) await response.reply(cancelMessage);
     return;
   }
   return response;
