@@ -135,18 +135,10 @@ export default {
               Buffer.from(
                 verificationTicketList
                   .map((verificationTicket) => {
-                    const answerArray = [
-                      verificationTicket.answers.firstAnswer,
-                      verificationTicket.answers.secondAnswer,
-                      verificationTicket.answers.thirdAnswer,
-                      verificationTicket.answers.fourthAnswer,
-                      verificationTicket.answers.fifthAnswer
-                    ];
-
                     return `User ID: ${verificationTicket.requesterDiscordId}\nTicket ID: ${
                       verificationTicket.id
-                    }\n--------------------------------------------------\n${answerArray
-                      .map((answer, index) => `${index + 1}: ${answer}`)
+                    }\n--------------------------------------------------\n${verificationTicket.answers
+                      .map((answerData) => `${answerData.question}: ${answerData.answer}`)
                       .join('\n\n')}`;
                   })
                   .join('\n\n\n')

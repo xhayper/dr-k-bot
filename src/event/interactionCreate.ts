@@ -328,9 +328,9 @@ export default TypedEvent({
                   )
                 ]
               })
-              .catch(() => {
+              .catch(async () => {
                 verificationCollection.delete(buttonInteraction.user);
-                return dmChannel.send({ embeds: [EmbedUtility.DIDNT_RESPOND_IN_TIME()] }).catch(() => undefined);
+                return await dmChannel.send({ embeds: [EmbedUtility.DIDNT_RESPOND_IN_TIME()] }).catch(() => undefined);
               });
 
             const answer = await handleQuestion(dmChannel);
@@ -338,7 +338,10 @@ export default TypedEvent({
               verificationCollection.delete(buttonInteraction.user);
               return;
             } else {
-              answerList.push(answer);
+              answerList.push({
+                question: value,
+                message: answer
+              });
             }
           }
 
@@ -346,7 +349,11 @@ export default TypedEvent({
 
           const randomTicketId = await VerificationUtility.getUniqueTicketId();
 
-          const transformedAnswer = answerList.map((message) => MessageUtility.transformMessage(message));
+          const transformedAnswer = answerList.map((answerData) => (
+            {
+              question: answerData.question,
+              answer: MessageUtility.transformMessage(answerData.message)
+            }));
 
           const verificationData = {
             id: randomTicketId,
