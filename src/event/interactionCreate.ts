@@ -349,23 +349,16 @@ export default TypedEvent({
 
           const randomTicketId = await VerificationUtility.getUniqueTicketId();
 
-          const transformedAnswer = answerList.map((answerData) => (
-            {
-              question: answerData.question,
-              answer: MessageUtility.transformMessage(answerData.message)
-            }));
+          const transformedAnswer = answerList.map((answerData) => ({
+            question: answerData.question,
+            answer: MessageUtility.transformMessage(answerData.message)
+          }));
 
           const verificationData = {
             id: randomTicketId,
             requesterDiscordId: buttonInteraction.user.id,
             logMessageId: 'undefined',
-            answers: {
-              firstAnswer: transformedAnswer[0],
-              secondAnswer: transformedAnswer[1],
-              thirdAnswer: transformedAnswer[2],
-              fourthAnswer: transformedAnswer[3],
-              fifthAnswer: transformedAnswer[4]
-            }
+            answers: transformedAnswer
           };
 
           if (GuildUtility.verificationLogChannel) {
@@ -378,9 +371,11 @@ export default TypedEvent({
 
           await VerificationTicket.create(verificationData);
 
-          await dmChannel.send({
-            embeds: [EmbedUtility.SUCCESS_COLOR(EmbedUtility.VERIFICATION_SUCCESS(randomTicketId))]
-          }).catch(() => undefined);
+          await dmChannel
+            .send({
+              embeds: [EmbedUtility.SUCCESS_COLOR(EmbedUtility.VERIFICATION_SUCCESS(randomTicketId))]
+            })
+            .catch(() => undefined);
 
           break;
         }
