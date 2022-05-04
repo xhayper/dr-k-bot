@@ -13,6 +13,7 @@ import {
   Interaction,
   Message,
   MessageEmbed,
+  MessageMentionOptions,
   MessageOptions,
   MessagePayload,
   Snowflake,
@@ -26,7 +27,7 @@ const verificationCollection = new Collection<User, boolean>();
 async function handleQuestion(
   textChannel: TextBasedChannel,
   filter?: CollectorFilter<[Message<boolean>]>,
-  cancelMessage: string | MessagePayload | MessageOptions | null = {
+  cancelMessage: string | MessageOptions | null = {
     embeds: [EmbedUtility.OPERATION_CANCELLED()]
   }
 ): Promise<Message | void> {
@@ -39,7 +40,24 @@ async function handleQuestion(
   const response = message.first();
   if (!response) return;
   if (response.content.toLowerCase().trim() === 'cancel') {
-    if (cancelMessage) await response.reply(cancelMessage);
+    if (cancelMessage != null && cancelMessage) {
+      const opt: { allowedMentions: MessageMentionOptions } = {
+        allowedMentions: {
+          repliedUser: false
+        }
+      };
+      if (typeof cancelMessage === 'string') {
+        await response.reply({
+          content: cancelMessage,
+          ...opt
+        });
+      } else {
+        await response.reply({
+          ...cancelMessage,
+          ...opt
+        });
+      }
+    }
     return;
   }
   return response;
