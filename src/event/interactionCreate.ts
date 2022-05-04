@@ -235,7 +235,7 @@ export default TypedEvent({
 
           if (!reason) {
             questionAskCollection.delete(verificationMessage!.id);
-            throw new Error("This shouldn't happened");
+            return;
           }
 
           const user = await client.users.fetch(ticket!.requesterDiscordId).catch(() => undefined);
