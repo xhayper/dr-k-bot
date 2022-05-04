@@ -13,6 +13,8 @@ import {
   Interaction,
   Message,
   MessageEmbed,
+  MessageOptions,
+  MessagePayload,
   Snowflake,
   TextBasedChannel,
   User
@@ -23,7 +25,10 @@ const verificationCollection = new Collection<User, boolean>();
 
 async function handleQuestion(
   textChannel: TextBasedChannel,
-  filter?: CollectorFilter<[Message<boolean>]>
+  filter?: CollectorFilter<[Message<boolean>]>,
+  cancelMessage: string | MessagePayload | MessageOptions | null = {
+    embeds: [EmbedUtility.OPERATION_CANCELLED()]
+  }
 ): Promise<Message | void> {
   const message = await textChannel.awaitMessages({
     max: 1,
@@ -33,7 +38,10 @@ async function handleQuestion(
   });
   const response = message.first();
   if (!response) return;
-  if (response.content.toLowerCase().trim() === 'cancel') return;
+  if (response.content.toLowerCase().trim() === 'cancel') {
+    if (cancelMessage) await textChannel.send(cancelMessage);
+    return;
+  }
   return response;
 }
 
@@ -188,7 +196,14 @@ export default TypedEvent({
 
           const reason = await handleQuestion(
             GuildUtility.verificationLogChannel!,
-            (responseMessage: Message) => responseMessage.author.id === buttonInteraction.user.id
+            (responseMessage: Message) => responseMessage.author.id === buttonInteraction.user.id,
+            {
+              embeds: [
+                EmbedUtility.TIMESTAMP_NOW(
+                  EmbedUtility.USER_AUTHOR(EmbedUtility.OPERATION_CANCELLED(), buttonInteraction.user)
+                )
+              ]
+            }
           ).catch(() => {
             questionAskCollection.delete(verificationMessage!.id);
             buttonInteraction.followUp({
@@ -322,7 +337,9 @@ export default TypedEvent({
                       title: `Question ${currentIndex + 1}`,
                       description: value,
                       footer: {
-                        text: `Respond within 5 minutes! | Say \`cancel\` to exit! | Question ${currentIndex + 1}/${config.questions.length}`
+                        text: `Respond within 5 minutes! | Say \`cancel\` to exit! | Question ${currentIndex + 1}/${
+                          config.questions.length
+                        }`
                       }
                     })
                   )
