@@ -202,7 +202,7 @@ export default TypedEvent({
                   new MessageEmbed({
                     description: "What's the reason for declining?",
                     footer: {
-                      text: `Respond within 5 minutes | Say '**cancel**'to exit | ${ticket!.id}`
+                      text: `Respond within 5 minutes | Say 'cancel'to exit | ${ticket!.id}`
                     }
                   }),
                   buttonInteraction.user
@@ -354,7 +354,7 @@ export default TypedEvent({
                       title: `Question ${currentIndex + 1}`,
                       description: value,
                       footer: {
-                        text: `Respond within 5 minutes! | Say '**cancel**' to exit! | Question ${currentIndex + 1}/${
+                        text: `Respond within 5 minutes! | Say 'cancel' to exit! | Question ${currentIndex + 1}/${
                           config.questions.length
                         }`
                       }
