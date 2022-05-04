@@ -8,12 +8,9 @@ export type PartialVerificationData = {
   id: string;
   requesterDiscordId: string;
   answers: {
-    firstAnswer: string;
-    secondAnswer: string;
-    thirdAnswer: string;
-    fourthAnswer: string;
-    fifthAnswer: string;
-  };
+    question: string;
+    answer: string;
+  }[];
 };
 
 export class VerificationUtility {

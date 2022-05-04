@@ -5,12 +5,9 @@ export class VerificationTicket extends Model {
   declare requesterDiscordId: string;
   declare logMessageId: string;
   declare answers: {
-    firstAnswer: string;
-    secondAnswer: string;
-    thirdAnswer: string;
-    fourthAnswer: string;
-    fifthAnswer: string;
-  };
+    question: string;
+    answer: string;
+  }[];
 }
 
 export const verificationTicketDataTypes: ModelAttributes = {
