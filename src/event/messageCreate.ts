@@ -34,6 +34,23 @@ export default TypedEvent({
     //   return;
     // }
 
+    if (message.channel.id === config.channel["art-channel"] && message.attachments.size < 1) {
+      GuildUtility.sendAuditLog({
+          embeds: [
+            EmbedUtility.ERROR_COLOR(
+              EmbedUtility.AUDIT_MESSAGE(
+                message.author,
+                `**${message.author} verbally warned for conversing in ${message.channel}**`
+              ).setFooter({
+                text: `User ID: ${message.author.id}`
+              })
+            )
+          ]
+      });
+      message.author.send("Please do not send messages in the art channel, it is for posting art only.");
+      message.delete(); // Assuming we get delete perms as thats the only way we can do this.
+    }
+    
     if (channelList.includes(message.channel.id) && message.attachments.size > 0) {
       const timeMap = userTimeMap.get(message.channel.id) || new Collection<Snowflake, Date>();
       const countMap = userMediaCount.get(message.channel.id) || new Collection<Snowflake, number>();
