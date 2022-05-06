@@ -1,6 +1,5 @@
 import { PartialVerificationData } from './verifiationUtility';
 import { Client, MessageEmbed, User } from 'discord.js';
-import config from '../config';
 
 export class EmbedUtility {
   #client: Client;
@@ -76,21 +75,25 @@ export class EmbedUtility {
     return this.USER_AUTHOR(this.TIMESTAMP_NOW(new MessageEmbed({ description: description })), user);
   }
 
+  OPERATION_CANCELLED(): MessageEmbed {
+    return this.ERROR_COLOR(new MessageEmbed({ description: 'I have cancelled the operation!' }));
+  }
+
   async VERIFICATION_INFO(data: PartialVerificationData): Promise<MessageEmbed> {
     const targetUser = await this.#client.users.fetch(data.requesterDiscordId);
 
     const baseEmbed = new MessageEmbed();
     baseEmbed.addField(
       `Ticket Information`,
-      `**User**: ${targetUser}\n**Account creation date**: <t:${Math.round(targetUser.createdTimestamp / 1000)}>\n**Ticket ID**: ${data.id}`
+      `**User**: ${targetUser.tag}\n**Account creation date**: <t:${Math.round(
+        targetUser.createdTimestamp / 1000
+      )}>\n**Ticket ID**: ${data.id}`
     );
+
     baseEmbed.setThumbnail(targetUser.displayAvatarURL({ dynamic: true, size: 4096 }) || targetUser.defaultAvatarURL);
 
-    const questionList = config.questions;
-
-    for (const [index, value] of Object.entries(Object.values(data.answers))) {
-      const currentIndex = parseInt(index);
-      baseEmbed.addField(questionList[currentIndex], value, true);
+    for (const answerData of Object.values(data.answers)) {
+      baseEmbed.addField(answerData.question, answerData.answer, true);
     }
 
     return this.SUCCESS_COLOR(baseEmbed);

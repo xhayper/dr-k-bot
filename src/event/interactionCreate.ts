@@ -13,6 +13,8 @@ import {
   Interaction,
   Message,
   MessageEmbed,
+  MessageMentionOptions,
+  MessageOptions,
   Snowflake,
   TextBasedChannel,
   User
@@ -23,7 +25,10 @@ const verificationCollection = new Collection<User, boolean>();
 
 async function handleQuestion(
   textChannel: TextBasedChannel,
-  filter?: CollectorFilter<[Message<boolean>]>
+  filter?: CollectorFilter<[Message<boolean>]>,
+  cancelMessage: string | MessageOptions | null = {
+    embeds: [EmbedUtility.OPERATION_CANCELLED()]
+  }
 ): Promise<Message | void> {
   const message = await textChannel.awaitMessages({
     max: 1,
@@ -33,7 +38,27 @@ async function handleQuestion(
   });
   const response = message.first();
   if (!response) return;
-  if (response.content.toLowerCase().trim() === 'cancel') return;
+  if (response.content.toLowerCase().trim() === 'cancel') {
+    if (cancelMessage != null && cancelMessage) {
+      const opt: { allowedMentions: MessageMentionOptions } = {
+        allowedMentions: {
+          repliedUser: false
+        }
+      };
+      if (typeof cancelMessage === 'string') {
+        await response.reply({
+          content: cancelMessage,
+          ...opt
+        });
+      } else {
+        await response.reply({
+          ...cancelMessage,
+          ...opt
+        });
+      }
+    }
+    return;
+  }
   return response;
 }
 
@@ -177,7 +202,7 @@ export default TypedEvent({
                   new MessageEmbed({
                     description: "What's the reason for declining?",
                     footer: {
-                      text: `${ticket!.id} | Respond within 5 minutes | Say 'cancel' to exit`
+                      text: `Respond within 5 minutes | Say '**cancel**'to exit | ${ticket!.id}`
                     }
                   }),
                   buttonInteraction.user
@@ -188,7 +213,14 @@ export default TypedEvent({
 
           const reason = await handleQuestion(
             GuildUtility.verificationLogChannel!,
-            (responseMessage: Message) => responseMessage.author.id === buttonInteraction.user.id
+            (responseMessage: Message) => responseMessage.author.id === buttonInteraction.user.id,
+            {
+              embeds: [
+                EmbedUtility.TIMESTAMP_NOW(
+                  EmbedUtility.USER_AUTHOR(EmbedUtility.OPERATION_CANCELLED(), buttonInteraction.user)
+                )
+              ]
+            }
           ).catch(() => {
             questionAskCollection.delete(verificationMessage!.id);
             buttonInteraction.followUp({
@@ -203,7 +235,7 @@ export default TypedEvent({
 
           if (!reason) {
             questionAskCollection.delete(verificationMessage!.id);
-            throw new Error("This shouldn't happened");
+            return;
           }
 
           const user = await client.users.fetch(ticket!.requesterDiscordId).catch(() => undefined);
@@ -322,15 +354,17 @@ export default TypedEvent({
                       title: `Question ${currentIndex + 1}`,
                       description: value,
                       footer: {
-                        text: `Respond within 5 minutes! | Question ${currentIndex + 1}/${config.questions.length}`
+                        text: `Respond within 5 minutes! | Say '**cancel**' to exit! | Question ${currentIndex + 1}/${
+                          config.questions.length
+                        }`
                       }
                     })
                   )
                 ]
               })
-              .catch(() => {
+              .catch(async () => {
                 verificationCollection.delete(buttonInteraction.user);
-                return dmChannel.send({ embeds: [EmbedUtility.DIDNT_RESPOND_IN_TIME()] }).catch(() => undefined);
+                return await dmChannel.send({ embeds: [EmbedUtility.DIDNT_RESPOND_IN_TIME()] }).catch(() => undefined);
               });
 
             const answer = await handleQuestion(dmChannel);
@@ -338,7 +372,10 @@ export default TypedEvent({
               verificationCollection.delete(buttonInteraction.user);
               return;
             } else {
-              answerList.push(answer);
+              answerList.push({
+                question: value,
+                message: answer
+              });
             }
           }
 
@@ -346,19 +383,16 @@ export default TypedEvent({
 
           const randomTicketId = await VerificationUtility.getUniqueTicketId();
 
-          const transformedAnswer = answerList.map((message) => MessageUtility.transformMessage(message));
+          const transformedAnswer = answerList.map((answerData) => ({
+            question: answerData.question,
+            answer: MessageUtility.transformMessage(answerData.message)
+          }));
 
           const verificationData = {
             id: randomTicketId,
             requesterDiscordId: buttonInteraction.user.id,
             logMessageId: 'undefined',
-            answers: {
-              firstAnswer: transformedAnswer[0],
-              secondAnswer: transformedAnswer[1],
-              thirdAnswer: transformedAnswer[2],
-              fourthAnswer: transformedAnswer[3],
-              fifthAnswer: transformedAnswer[4]
-            }
+            answers: transformedAnswer
           };
 
           if (GuildUtility.verificationLogChannel) {
@@ -371,9 +405,11 @@ export default TypedEvent({
 
           await VerificationTicket.create(verificationData);
 
-          await dmChannel.send({
-            embeds: [EmbedUtility.SUCCESS_COLOR(EmbedUtility.VERIFICATION_SUCCESS(randomTicketId))]
-          }).catch(() => undefined);
+          await dmChannel
+            .send({
+              embeds: [EmbedUtility.SUCCESS_COLOR(EmbedUtility.VERIFICATION_SUCCESS(randomTicketId))]
+            })
+            .catch(() => undefined);
 
           break;
         }
