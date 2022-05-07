@@ -85,7 +85,8 @@ export default TypedEvent({
           ]
         });
           
-        return message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
+        return message.author.send('Your limit for media have been exceeded. Please move to a more appropriate channel.');
+        message.delete();
       }
     }
     // Translation function, may switch to moderator command only if the api gets overloaded.
