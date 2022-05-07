@@ -89,7 +89,7 @@ export default TypedEvent({
       }
     }
     // Translation function, may switch to moderator command only if the api gets overloaded.
-    if (message.content.length > 7) { // Probably shouldn't be hard coded here 
+    /*if (message.content.length > 7) { // Probably shouldn't be hard coded here 
     let transMessage = await translate(
       message.content,
       {
@@ -105,7 +105,7 @@ export default TypedEvent({
         allowedMentions: {
           repliedUser: false
         }
-      });
+      });*/
     
     if (
       message.mentions.users.size == 0 ||
