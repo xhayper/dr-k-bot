@@ -108,6 +108,24 @@ export default TypedEvent({
         }
       });*/
     
+    if ( message.channel.id == config.channel["user-verification"] && message.content.indexOf("16") > -1 ) {
+      GuildUtility.sendAuditLog({
+          embeds: [
+            EmbedUtility.ERROR_COLOR(
+              EmbedUtility.AUDIT_MESSAGE(
+                message.author,
+                `**${message.author} verbally warned for mentioning the age requirement**`
+              ).setFooter({
+                text: `User ID: ${message.author.id}`
+              })
+            )
+          ]
+        });
+          
+        return message.author.send('Do not mention the age requirement during verification.');
+        message.delete();
+    }
+
     if (
       message.mentions.users.size == 0 ||
       0 >= splitText.length ||
