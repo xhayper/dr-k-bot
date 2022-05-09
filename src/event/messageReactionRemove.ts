@@ -11,7 +11,7 @@ export default TypedEvent({
                 EmbedUtility.ERROR_COLOR(
                     EmbedUtility.AUDIT_MESSAGE(
                         reaction.message.author!,
-                        `**🗑 Reaction on [message](${reaction.message.url}) by ${user.tag} was deleted!`
+                        `**🗑 Reaction on [message](${reaction.message.url}) by ${user.tag} was deleted!**`
                     ).addField("Emoji", reaction.emoji.url ? `[\:${reaction.emoji.name}\:](${reaction.emoji.url})` : reaction.emoji.name!)
                 )
             ]
