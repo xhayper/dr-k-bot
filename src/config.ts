@@ -19,6 +19,7 @@ export default config as {
     auditLog: string;
     verificationLog: string;
     ticketThread: string;
+    'user-verification': string;
     'general-1': string;
     'general-2': string;
     'role-selection': string;
