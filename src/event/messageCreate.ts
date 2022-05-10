@@ -1,6 +1,6 @@
 import { Client, Collection, Message, Snowflake } from 'discord.js';
 import { TypedEvent } from '../base/clientEvent';
-import { EmbedUtility, GuildUtility } from '..';
+import { EmbedUtility, GuildUtility, MessageUtility } from '..';
 import config from '../config';
 import path from 'path';
 import fs from 'fs';
@@ -97,7 +97,7 @@ export default TypedEvent({
             EmbedUtility.AUDIT_MESSAGE(
               message.author,
               `**${message.author} verbally warned for mentioning the age requirement**`
-            ).addField("Content", message.content)
+            ).addField("Content", MessageUtility.transformMessage(message))
           )
         ]
       });
