@@ -47,7 +47,7 @@ export default TypedEvent({
           )
         ]
       });
-      await message.reply('Please do not send messages in the art channel, it is for posting art only.');
+      await message.author.send('Please do not send messages in the art channel, it is for posting art only.');
       return message.delete();
     }
 
