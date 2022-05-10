@@ -99,9 +99,7 @@ export default TypedEvent({
             EmbedUtility.AUDIT_MESSAGE(
               message.author,
               `**${message.author} verbally warned for mentioning the age requirement**`
-            ).addField("Content", message.content).setFooter({
-              text: `User ID: ${message.author.id}`
-            })
+            ).addField("Content", message.content)
           )
         ]
       });
