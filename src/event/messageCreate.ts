@@ -16,7 +16,7 @@ const userTimeMap = new Collection<Snowflake, Collection<Snowflake, Date>>();
 // <UserId, WarnCount>
 const userWarnCount = new Collection<Snowflake, number>(); // REMINDER: Change to something that can actually be saved past bot resets
 
-const urlRegEx = /\b(?:http:|www.|https:)\b/gi;
+const urlRegEx = /(?:http\:|www\.|https\:)/gi;
 
 export default TypedEvent({
   eventName: 'messageCreate',
