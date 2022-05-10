@@ -16,6 +16,8 @@ const userTimeMap = new Collection<Snowflake, Collection<Snowflake, Date>>();
 // <UserId, WarnCount>
 const userWarnCount = new Collection<Snowflake, number>(); // REMINDER: Change to something that can actually be saved past bot resets
 
+const urlRegEx = /\b(?:http:|www.|https:)\b/gi;
+
 export default TypedEvent({
   eventName: 'messageCreate',
   on: async (client: Client, message: Message) => {
@@ -33,7 +35,7 @@ export default TypedEvent({
     //   return;
     // }
 
-    if (message.channel.id === config.channel['art-channel'] && 0 >= message.attachments.size) {
+    if (message.channel.id === config.channel['art-channel'] && (0 >= message.attachments.size || !urlRegEx.test(message.content)) ) {
       return;
       GuildUtility.sendAuditLog({
         embeds: [
@@ -45,7 +47,7 @@ export default TypedEvent({
           )
         ]
       });
-      await message.reply('Please do not send messages in the art channel, it is for posting art only.');
+      await message.author.send('Please do not send messages in the art channel, it is for posting art only.');
       return message.delete();
     }
 
