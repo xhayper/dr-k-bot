@@ -114,7 +114,7 @@ export default TypedEvent({
             EmbedUtility.ERROR_COLOR(
               EmbedUtility.AUDIT_MESSAGE(
                 message.author,
-                `**${message.author} verbally warned for mentioning the age requirement**`
+                `**${message.author} verbally warned for mentioning the age requirement**\nMessage Content: ${message.content}`
               ).setFooter({
                 text: `User ID: ${message.author.id}`
               })
