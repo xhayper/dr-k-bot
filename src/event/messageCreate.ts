@@ -34,6 +34,7 @@ export default TypedEvent({
     // }
 
     if (message.channel.id === config.channel['art-channel'] && 0 >= message.attachments.size) {
+      return;
       GuildUtility.sendAuditLog({
         embeds: [
           EmbedUtility.ERROR_COLOR(
@@ -102,7 +103,6 @@ export default TypedEvent({
         ]
       });
 
-      await message.reply('Do not mention the age requirement.');
       return message.delete();
     }
 
