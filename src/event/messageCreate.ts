@@ -67,9 +67,7 @@ export default TypedEvent({
       countMap.set(message.author.id, mediaCount);
 
       if (mediaCount > config.misc.mediaLimit) {
-        !userWarnCount.has(message.author.id)
-          ? userWarnCount.set(message.author.id, 1)
-          : userWarnCount.set(message.author.id, userWarnCount.get(message.author.id) + 1);
+        userWarnCount.set(message.author.id, (userWarnCount.get(message.author.id) || 0) + 1);
 
         GuildUtility.sendAuditLog({
           embeds: [
