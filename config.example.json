@@ -1,7 +1,9 @@
 {
   "guildId": "",
   "user": {
-    "botOwner": [""]
+    "botOwner": [
+      ""
+    ]
   },
   "role": {
     "administrator": "",
@@ -14,14 +16,18 @@
     "audit": "",
     "verification": "",
     "ticketThread": "",
+    "user-verification": "",
     "general-1": "",
     "general-2": "",
-    "role-selection": ""
+    "role-selection": "",
+    "art-channel": ""
   },
   "toggleRole": {
     "": ""
   },
-  "questions": [""],
+  "questions": [
+    ""
+  ],
   "misc": {
     "mediaCooldown": 0,
     "mediaLimit": 0
