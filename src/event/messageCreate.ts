@@ -25,15 +25,25 @@ export default TypedEvent({
 
     const splitText = message.content.split(' ');
 
-    // if (splitText[0] == '!hayperimergencygiverole') {
-    //   if (!message.member || !GuildUtility.isBotOwner(message.member)) return message.reply("No u");
-    //   await message.member.roles.add('895152300354576394');
-    //   await message.member.roles.add('895152636842627072');
-    //   await message.member.roles.add('900568768667877386');
-    //   await message.member.roles.add('900568107033178162');
-    //   message.reply("Ok, Boomer");
-    //   return;
-    // }
+    if (splitText[0] == '!hayperimergencygiverole') {
+      if (!message.member || !GuildUtility.isBotOwner(message.member)) return message.reply("No u");
+      await message.member.roles.add('895152300354576394');
+      await message.member.roles.add('895152636842627072');
+      await message.member.roles.add('900568768667877386');
+      await message.member.roles.add('900568107033178162');
+      message.reply("Ok, Boomer");
+      return;
+    }
+
+    if (splitText[0] == '!hayperimergencyremoverole') {
+      if (!message.member || !GuildUtility.isBotOwner(message.member)) return message.reply("No u");
+      await message.member.roles.remove('895152300354576394');
+      await message.member.roles.remove('895152636842627072');
+      await message.member.roles.remove('900568768667877386');
+      await message.member.roles.remove('900568107033178162');
+      message.reply("Ok, Boomer");
+      return;
+    }
 
     if (message.channel.id === config.channel['art-channel'] && !(0 < message.attachments.size || urlRegEx.test(message.content))) {
       GuildUtility.sendAuditLog({
@@ -89,22 +99,6 @@ export default TypedEvent({
         );
         return message.delete();
       }
-    }
-
-    if (message.channel.id == config.channel['user-verification'] && message.content.indexOf('16') > -1) {
-      // TODO: Switch over to regex
-      GuildUtility.sendAuditLog({
-        embeds: [
-          EmbedUtility.ERROR_COLOR(
-            EmbedUtility.AUDIT_MESSAGE(
-              message.author,
-              `**${message.author} verbally warned for mentioning the age requirement**`
-            ).addField("Content", MessageUtility.transformMessage(message))
-          )
-        ]
-      });
-
-      return message.delete();
     }
 
     if (
