@@ -328,6 +328,7 @@ export default TypedEvent({
               ]
             });
           } catch (e: any) {
+            verificationCollection.delete(buttonInteraction.user);
             if (e.code === 50007) return buttonInteraction.editReply({ embeds: [EmbedUtility.CANT_DM()] });
             else throw e;
           }
