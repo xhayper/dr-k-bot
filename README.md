@@ -19,6 +19,6 @@ Discord moderation bot for [Official Changed](https://discord.gg/changed) discor
 
 ## Features
 
-- Warning system
+<!-- - Warning system
 
-- Server access system
+- Server access system -->
