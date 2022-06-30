@@ -116,4 +116,8 @@ export class GuildUtility {
   isModerator(member: GuildMember): boolean {
     return member.roles.cache.has(config.role.moderator) || this.isAdministrator(member);
   }
+  
+  isSecurity(member: GuildMember): boolean {
+    return member.roles.cache.has(config.role.security) || this.isModerator(member);
+  }
 }
