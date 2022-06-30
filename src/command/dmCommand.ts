@@ -27,7 +27,7 @@ export default {
         .addStringOption((option) => option.setName('message').setDescription('-').setRequired(true))
     ),
   guildId: [config.guildId],
-  permission: 'MODERATOR',
+  permission: 'SECURITY',
   execute: async (commandInteraction: CommandInteraction) => {
     const member = commandInteraction.options.getMember('member', true) as GuildMember;
     const dmType = commandInteraction.options.getSubcommand(true);
