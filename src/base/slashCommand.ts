@@ -4,7 +4,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 export interface SlashCommand {
   data: SlashCommandBuilder;
   guildId?: Snowflake[] | string[];
-  permission?: 'BOT_OWNER' | 'ADMINISTRATOR' | 'MODERATOR';
+  permission?: 'BOT_OWNER' | 'ADMINISTRATOR' | 'MODERATOR' | 'SECURITY';
   peferEphemeral?: boolean;
   execute: (commandInteraction: CommandInteraction) => void | Promise<void>;
 }
