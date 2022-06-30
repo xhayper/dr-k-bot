@@ -11,6 +11,7 @@ export default config as {
   role: {
     administrator: string;
     moderator: string;
+    security: string;
     intern: string;
     verificationTeam: string;
     unverified: string;
