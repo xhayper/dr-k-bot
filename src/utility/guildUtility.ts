@@ -46,7 +46,7 @@ export class GuildUtility {
 
         const ticketThreadChannel = await guild.channels.fetch(config.channel.ticketThread).catch(() => undefined);
         this.verificationThreadChannel =
-          (ticketThreadChannel && ticketThreadChannel.isText() && ticketThreadChannel) || undefined;
+          (ticketThreadChannel && ticketThreadChannel.isText() && !ticketThreadChannel.isVoiceBased() && ticketThreadChannel) || undefined;
       })
       .catch(() => null);
   }
