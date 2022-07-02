@@ -9,7 +9,7 @@
   "scripts": {
     "prepare": "tsc",
     "start": "node .",
-    "dev": "nodemon --watch './src/**/*' --exec ts-node src/index.ts"
+    "dev": "nodemon --watch ./src/**/* --exec ts-node src/index.ts"
   },
   "dependencies": {
     "@discordjs/builders": "^0.15.0",
