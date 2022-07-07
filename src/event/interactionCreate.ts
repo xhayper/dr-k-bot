@@ -110,7 +110,7 @@ export default TypedEvent({
           await buttonInteraction.deferReply();
           moderator = await GuildUtility.getGuildMember(buttonInteraction.user.id);
           if (!moderator) throw new Error("This wasn't suppose to happened");
-          if (!GuildUtility.isModerator(moderator))
+          if (!GuildUtility.isSecurity(moderator))
             return buttonInteraction.editReply({
               embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.NO_PERMISSION(), buttonInteraction.user)]
             });
