@@ -10,7 +10,7 @@ export default {
     .setDescription('Open a thread to ask for additional information')
     .addUserOption((option) => option.setName('user').setDescription('-').setRequired(true)),
   guildId: [config.guildId],
-  permission: 'MODERATOR',
+  permission: 'SECURITY',
   execute: async (commandInteraction: CommandInteraction) => {
     const targetMember = commandInteraction.options.getMember('user', true);
     await GuildUtility.openThread(commandInteraction.member as GuildMember, targetMember as GuildMember);
