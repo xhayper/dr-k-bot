@@ -17,7 +17,7 @@ export default {
         .addChoices(...Object.keys(config.toggleRole).map((roleName) => ({ name: roleName, value: roleName })))
     ),
   guildId: [config.guildId],
-  permission: 'MODERATOR',
+  permission: 'SECURITY',
   execute: async (commandInteraction: CommandInteraction) => {
     const member = commandInteraction.options.getMember('member', true) as GuildMember;
     const role = commandInteraction.options.getString('role', true);
