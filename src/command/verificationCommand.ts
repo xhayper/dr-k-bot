@@ -33,7 +33,7 @@ export default {
     )
     .addSubcommand((builder) => builder.setName('list').setDescription('Show unfinished verification tickets')),
   guildId: [config.guildId],
-  permission: 'MODERATOR',
+  permission: 'SECURITY',
   execute: async (commandInteraction: CommandInteraction) => {
     let verificationTicket: VerificationTicket | void;
 
