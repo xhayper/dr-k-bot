@@ -10,7 +10,7 @@ export default {
     .setDescription('-')
     .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true)),
   guildId: [config.guildId],
-  permission: 'MODERATOR',
+  permission: 'SECURITY',
   execute: async (commandInteraction: CommandInteraction) => {
     const member = commandInteraction.options.getMember('member', true) as GuildMember;
 
