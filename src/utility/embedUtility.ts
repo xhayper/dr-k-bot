@@ -60,7 +60,7 @@ export class EmbedUtility {
   VERIFICATION_SUCCESS(ticketId: string): EmbedBuilder {
     return this.SUCCESS_COLOR(new EmbedBuilder())
       .setTitle('All done!')
-      .setDescription(`Thank you for your submission!\n Your ticket id is **${ticketId}**!`);
+      .setDescription(`Thank you for your submission!`); //\n Your ticket id is **${ticketId}**!`);
   }
 
   CANT_FIND_USER(): EmbedBuilder {
