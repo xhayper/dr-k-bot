@@ -1,5 +1,5 @@
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
-import { Message, TextBasedChannel, User } from 'discord.js';
+import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, Message, TextBasedChannel, User } from 'discord.js';
 import { VerificationTicket } from '../database';
 import { v4 as uuidv4 } from 'uuid';
 import config from '../config';
@@ -30,22 +30,24 @@ export class VerificationUtility {
       message = MessageUtility.disableAllComponent(message);
 
       if (deletetionData) {
-        message.embeds.forEach((embed) => {
-          embed.setFooter({
+        message.embeds.map((embed) => {
+          const embedBuilder = EmbedBuilder.from(embed);
+          embedBuilder.setFooter({
             text:
               deletetionData.deleteType != 'LEAVE'
-                ? `Ticket ${deletetionData.deleteType === 'DECLINED' ? 'declined' : 'accepted'} by ${
-                    deletetionData.who!.tag
-                  }`
+                ? `Ticket ${deletetionData.deleteType === 'DECLINED' ? 'declined' : 'accepted'} by ${deletetionData.who!.tag
+                }`
                 : `User left the server, Ticket deleted`
           });
-          embed.setColor(['DECLINED', 'LEAVE'].includes(deletetionData.deleteType) ? 'RED' : 'GREEN');
+          embedBuilder.setColor(['DECLINED', 'LEAVE'].includes(deletetionData.deleteType) ? Colors.Red : Colors.Green);
+          return embedBuilder;
         });
       }
 
       await message.edit({
         content: message.content,
-        attachments: message.attachments.map((attachment) => attachment),
+        // TODO: Fix this
+        // attachments: message.attachments.map((attachment) => attachment),
         embeds: message.embeds,
         components: message.components
       });
@@ -102,36 +104,20 @@ export class VerificationUtility {
     addButton: boolean = true,
     pingVerificationTeam: boolean = true
   ): Promise<Message | void> {
+    const embedData = {
+
+    }
+
     return await channel.send({
       content: pingVerificationTeam ? `<@&${config.role.verificationTeam}> | <@${data.requesterDiscordId}>` : undefined,
       embeds: [await EmbedUtility.VERIFICATION_INFO(data)],
-      components: addButton
-        ? [
-            {
-              type: 'ACTION_ROW',
-              components: [
-                {
-                  type: 'BUTTON',
-                  label: 'Accept',
-                  customId: 'verify_accept',
-                  style: 'SUCCESS'
-                },
-                {
-                  type: 'BUTTON',
-                  label: 'Decline',
-                  customId: 'verify_decline',
-                  style: 'DANGER'
-                },
-                {
-                  type: 'BUTTON',
-                  label: 'Ticket',
-                  customId: 'verify_ticket',
-                  style: 'SECONDARY'
-                }
-              ]
-            }
-          ]
-        : undefined
+      components: [
+        new ActionRowBuilder<ButtonBuilder>().addComponents([
+          new ButtonBuilder().setLabel('Accept').setCustomId('verify_accept').setStyle(ButtonStyle.Success),
+          new ButtonBuilder().setLabel('Decline').setCustomId('verify_decline').setStyle(ButtonStyle.Danger),
+          new ButtonBuilder().setLabel('Ticket').setCustomId('verify_ticket').setStyle(ButtonStyle.Secondary)
+        ])
+      ]
     });
   }
 }

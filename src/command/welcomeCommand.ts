@@ -1,4 +1,4 @@
-import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
+import { ChatInputCommandInteraction, GuildMember, EmbedBuilder } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../base/slashCommand';
 import { EmbedUtility, GuildUtility } from '..';
@@ -11,14 +11,14 @@ export default {
     .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true)),
   guildId: [config.guildId],
   permission: 'SECURITY',
-  execute: async (commandInteraction: CommandInteraction) => {
-    const member = commandInteraction.options.getMember('member', true) as GuildMember;
+  execute: async (ChatInputCommandInteraction: ChatInputCommandInteraction) => {
+    const member = ChatInputCommandInteraction.options.getMember('member') as GuildMember;
 
     await GuildUtility.sendWelcomeMessage(member);
-    await commandInteraction.editReply({
+    await ChatInputCommandInteraction.editReply({
       embeds: [
         EmbedUtility.SUCCESS_COLOR(
-          new MessageEmbed({
+          new EmbedBuilder({
             title: 'All done!',
             description: `I have send welcome message for ${member}!`
           })

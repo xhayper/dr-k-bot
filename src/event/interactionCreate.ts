@@ -12,12 +12,14 @@ import {
   GuildMember,
   Interaction,
   Message,
-  MessageEmbed,
+  EmbedBuilder,
   MessageMentionOptions,
   MessageOptions,
   Snowflake,
   TextBasedChannel,
-  User
+  User,
+  InteractionType,
+  ChatInputCommandInteraction
 } from 'discord.js';
 
 const questionAskCollection = new Collection<Snowflake, User>();
@@ -67,9 +69,9 @@ export default TypedEvent({
   on: async (client: Client, interaction: Interaction) => {
     if (!interaction.member || !(interaction.member instanceof GuildMember)) return;
 
-    if (interaction.isCommand()) {
-      const commandInteraction = interaction as CommandInteraction;
-      const command = CommandManager.commands.get(commandInteraction.commandName);
+    if (interaction.type == InteractionType.ApplicationCommand) {
+      const chatInputCommandInteraction = interaction as ChatInputCommandInteraction;
+      const command = CommandManager.commands.get(chatInputCommandInteraction.commandName);
       if (!command) return;
 
       if (command.peferEphemeral) await interaction.deferReply({ ephemeral: true });
@@ -93,7 +95,7 @@ export default TypedEvent({
         });
 
       Logger.info(`${interaction.member.user.tag} used command ${command.data.name}`);
-      command.execute(commandInteraction);
+      command.execute(chatInputCommandInteraction);
     } else if (interaction.isButton()) {
       if (!interaction.guild || interaction.guild.id != config.guildId) return;
       const buttonInteraction = interaction as ButtonInteraction;
@@ -133,7 +135,7 @@ export default TypedEvent({
             embeds: [
               EmbedUtility.ERROR_COLOR(
                 EmbedUtility.USER_AUTHOR(
-                  new MessageEmbed().setDescription(`No implementation for ${buttonInteraction.customId}!`),
+                  new EmbedBuilder().setDescription(`No implementation for ${buttonInteraction.customId}!`),
                   buttonInteraction.user
                 )
               )
@@ -167,7 +169,7 @@ export default TypedEvent({
             embeds: [
               EmbedUtility.SUCCESS_COLOR(
                 EmbedUtility.USER_AUTHOR(
-                  new MessageEmbed().setDescription(`${member.user} has been accepted!`),
+                  new EmbedBuilder().setDescription(`${member.user} has been accepted!`),
                   buttonInteraction.user
                 ).setFooter({
                   text: ticket!.id
@@ -185,7 +187,7 @@ export default TypedEvent({
               embeds: [
                 EmbedUtility.USER_AUTHOR(
                   EmbedUtility.VERIFICATION_ALREADY_TAKEN(
-                    new MessageEmbed({
+                    new EmbedBuilder({
                       footer: { text: ticket!.id }
                     }),
                     questionAskCollection.get(verificationMessage!.id)!
@@ -201,7 +203,7 @@ export default TypedEvent({
             embeds: [
               EmbedUtility.SUCCESS_COLOR(
                 EmbedUtility.USER_AUTHOR(
-                  new MessageEmbed({
+                  new EmbedBuilder({
                     description: "What's the reason for declining?",
                     footer: {
                       text: `Respond within 5 minutes | Say 'cancel'to exit | ${ticket!.id}`
@@ -246,7 +248,7 @@ export default TypedEvent({
               .send({
                 embeds: [
                   EmbedUtility.ERROR_COLOR(
-                    new MessageEmbed({
+                    new EmbedBuilder({
                       title: 'Sorry!',
                       description: `Your verification request has been declined by ${moderator}\nReason: ${MessageUtility.transformMessage(
                         reason
@@ -266,7 +268,7 @@ export default TypedEvent({
             embeds: [
               EmbedUtility.SUCCESS_COLOR(
                 EmbedUtility.USER_AUTHOR(
-                  new MessageEmbed({
+                  new EmbedBuilder({
                     description: `${user} has been declined!`
                   }).setFooter({ text: ticket!.id }),
                   moderator!.user
@@ -297,7 +299,7 @@ export default TypedEvent({
             embeds: [
               EmbedUtility.SUCCESS_COLOR(
                 EmbedUtility.USER_AUTHOR(
-                  new MessageEmbed({
+                  new EmbedBuilder({
                     description: `Thread opened with ${member}!`
                   }),
                   moderator!.user
@@ -322,7 +324,7 @@ export default TypedEvent({
             await dmChannel.send({
               embeds: [
                 EmbedUtility.SUCCESS_COLOR(
-                  new MessageEmbed({
+                  new EmbedBuilder({
                     description:
                       'Before we can grant you access to the rest of the server, we needs you to answer some questions. The answers will __**NOT**__ be used for any other purposes, please answer all the following questions with honesty. Thanks!'
                   })
@@ -338,7 +340,7 @@ export default TypedEvent({
           buttonInteraction.editReply({
             embeds: [
               EmbedUtility.SUCCESS_COLOR(
-                new MessageEmbed({
+                new EmbedBuilder({
                   description: 'Please check your Direct Message!'
                 })
               )
@@ -353,7 +355,7 @@ export default TypedEvent({
               .send({
                 embeds: [
                   EmbedUtility.SUCCESS_COLOR(
-                    new MessageEmbed({
+                    new EmbedBuilder({
                       title: `Question ${currentIndex + 1}`,
                       description: value,
                       footer: {

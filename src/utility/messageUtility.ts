@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, Message } from 'discord.js';
 
 export class MessageUtility {
   transformMessage(message: Message): string {
@@ -10,10 +10,12 @@ export class MessageUtility {
   }
 
   disableAllComponent(message: Message): Message {
-    message.components.forEach((actionRow) => {
-      actionRow.components.forEach((component) => {
-        component.setDisabled(true);
-      });
+    message.components.map((actionRow) => {
+      const actionRowBuilder = ActionRowBuilder.from(actionRow);
+      return actionRowBuilder.setComponents(actionRowBuilder.components.map((component) => {
+        return ButtonBuilder.from(component as any).setDisabled(true);
+      })
+      );
     });
     return message;
   }

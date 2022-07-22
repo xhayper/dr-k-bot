@@ -1,4 +1,4 @@
-import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
+import { ChatInputCommandInteraction, GuildMember, EmbedBuilder, Colors } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../base/slashCommand';
 import { EmbedUtility, GuildUtility } from '..';
@@ -18,9 +18,9 @@ export default {
     ),
   guildId: [config.guildId],
   permission: 'SECURITY',
-  execute: async (commandInteraction: CommandInteraction) => {
-    const member = commandInteraction.options.getMember('member', true) as GuildMember;
-    const role = commandInteraction.options.getString('role', true);
+  execute: async (chatInputCommandInteraction: ChatInputCommandInteraction) => {
+    const member = chatInputCommandInteraction.options.getMember('member') as GuildMember;
+    const role = chatInputCommandInteraction.options.getString('role', true);
 
     const roleId = config.toggleRole[role];
     if (!roleId) throw new Error("That wasn't suppose to happened!");
@@ -29,10 +29,10 @@ export default {
     if (removeRole) member.roles.remove(roleId);
     else member.roles.add(roleId);
 
-    await commandInteraction.editReply({
+    await chatInputCommandInteraction.editReply({
       embeds: [
         EmbedUtility.SUCCESS_COLOR(
-          new MessageEmbed({
+          new EmbedBuilder({
             title: 'Done!',
             description: `${removeRole ? 'Removed' : 'Added'} \`${role}\` ${removeRole ? 'from' : 'to'} ${member}!`
           })
@@ -43,13 +43,12 @@ export default {
     await GuildUtility.sendAuditLog({
       embeds: [
         EmbedUtility.AUDIT_MESSAGE(
-          commandInteraction.user,
-          `**${removeRole ? '⛔️' : '✅'} Role ${removeRole ? 'removed' : 'added'} ${
-            removeRole ? 'from' : 'to'
+          chatInputCommandInteraction.user,
+          `**${removeRole ? '⛔️' : '✅'} Role ${removeRole ? 'removed' : 'added'} ${removeRole ? 'from' : 'to'
           } ${member}!**`
         )
-          .addField(`**Role ${removeRole ? 'removed' : 'added'}**`, `<@&${roleId}>`)
-          .setColor(removeRole ? 'RED' : 'GREEN')
+          .addFields([{ name: `**Role ${removeRole ? 'removed' : 'added'}**`, value: `<@&${roleId}>` }])
+          .setColor(removeRole ? Colors.Red : Colors.Green)
       ]
     });
   }

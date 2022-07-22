@@ -12,7 +12,12 @@ export default TypedEvent({
                     EmbedUtility.AUDIT_MESSAGE(
                         user,
                         `**🗑 Reaction on [message](${reaction.message.url}) was deleted!**`
-                    ).addField("Emoji", reaction.emoji.url ? `[\:${reaction.emoji.name}\:](${reaction.emoji.url})` : reaction.emoji.name!)
+                    ).addFields([
+                        {
+                            name: "Emoji",
+                            value: reaction.emoji.url ? `[\:${reaction.emoji.name}\:](${reaction.emoji.url})` : reaction.emoji.name!
+                        }
+                    ])
                 )
             ]
         });

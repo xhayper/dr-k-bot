@@ -5,13 +5,14 @@ import {
   Guild,
   GuildMember,
   Message,
-  MessageEmbed,
+  EmbedBuilder,
   MessageOptions,
   MessagePayload,
   NewsChannel,
   TextBasedChannel,
   TextChannel,
-  UserResolvable
+  UserResolvable,
+  ChannelType
 } from 'discord.js';
 
 export class GuildUtility {
@@ -32,21 +33,21 @@ export class GuildUtility {
         this.guild = guild;
 
         const auditLogChannel = await guild.channels.fetch(config.channel.auditLog).catch(() => undefined);
-        this.auditLogChannel = (auditLogChannel && auditLogChannel.isText() && auditLogChannel) || undefined;
+        this.auditLogChannel = (auditLogChannel && auditLogChannel.type === ChannelType.GuildText && auditLogChannel) || undefined;
 
         const verificationLogChannel = await guild.channels
           .fetch(config.channel.verificationLog)
           .catch(() => undefined);
         this.verificationLogChannel =
-          (verificationLogChannel && verificationLogChannel.isText() && verificationLogChannel) || undefined;
+          (verificationLogChannel && verificationLogChannel.type === ChannelType.GuildText && verificationLogChannel) || undefined;
 
         const primaryGeneralChannel = await guild.channels.fetch(config.channel['general-1']).catch(() => undefined);
         this.primaryGeneralChannel =
-          (primaryGeneralChannel && primaryGeneralChannel.isText() && primaryGeneralChannel) || undefined;
+          (primaryGeneralChannel && primaryGeneralChannel.type === ChannelType.GuildText && primaryGeneralChannel) || undefined;
 
         const ticketThreadChannel = await guild.channels.fetch(config.channel.ticketThread).catch(() => undefined);
         this.verificationThreadChannel =
-          (ticketThreadChannel && ticketThreadChannel.isText() && !ticketThreadChannel.isVoice() && ticketThreadChannel) || undefined;
+          (ticketThreadChannel && ticketThreadChannel.type === ChannelType.GuildText && ticketThreadChannel) || undefined;
       })
       .catch(() => null);
   }
@@ -57,12 +58,12 @@ export class GuildUtility {
       content: member.toString(),
       embeds: [
         EmbedUtility.SUCCESS_COLOR(
-          new MessageEmbed({
+          new EmbedBuilder({
             title: `Everyone give \`${member.user.tag}\` a warm welcome!`,
             thumbnail: {
               url:
                 member.user.avatarURL({
-                  dynamic: true,
+                  extension: "png",
                   size: 4096
                 }) || member.user.defaultAvatarURL
             },
@@ -81,7 +82,7 @@ export class GuildUtility {
       type: 'GUILD_PRIVATE_THREAD',
       // @ts-expect-error
       invitable: true,
-      autoArchiveDuration: 'MAX'
+      autoArchiveDuration: 10080
     });
 
     await thread.send({

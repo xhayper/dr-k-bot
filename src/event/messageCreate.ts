@@ -1,4 +1,4 @@
-import { Client, Collection, Message, Snowflake } from 'discord.js';
+import { ChannelType, Client, Collection, Message, Snowflake } from 'discord.js';
 import { TypedEvent } from '../base/clientEvent';
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
 import config from '../config';
@@ -22,7 +22,7 @@ const mediaRegEx = /(?:http\:|www\.|https\:)(?:.*\.gif|.*\.png|.*\.mp4|.*\.jpg|.
 export default TypedEvent({
   eventName: 'messageCreate',
   on: async (client: Client, message: Message) => {
-    if (message.author.bot || message.channel.type == 'DM') return;
+    if (message.author.bot || message.channel.type == ChannelType.DM) return;
 
     const splitText = message.content.split(' ');
 
