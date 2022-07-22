@@ -1,5 +1,5 @@
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
-import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, Message, TextBasedChannel, User } from 'discord.js';
+import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Colors, Embed, EmbedBuilder, Message, TextBasedChannel, User } from 'discord.js';
 import { VerificationTicket } from '../database';
 import { v4 as uuidv4 } from 'uuid';
 import config from '../config';
@@ -29,8 +29,10 @@ export class VerificationUtility {
       if (!message) return;
       message = MessageUtility.disableAllComponent(message);
 
+      let embeds: EmbedBuilder[] = [];
+
       if (deletetionData) {
-        message.embeds.map((embed) => {
+        embeds = message.embeds.map((embed) => {
           const embedBuilder = EmbedBuilder.from(embed);
           embedBuilder.setFooter({
             text:
@@ -46,9 +48,7 @@ export class VerificationUtility {
 
       await message.edit({
         content: message.content,
-        // TODO: Fix this
-        // attachments: message.attachments.map((attachment) => attachment),
-        embeds: message.embeds,
+        embeds: embeds || message.embeds,
         components: message.components
       });
     }
@@ -107,13 +107,13 @@ export class VerificationUtility {
     return await channel.send({
       content: pingVerificationTeam ? `<@&${config.role.verificationTeam}> | <@${data.requesterDiscordId}>` : undefined,
       embeds: [await EmbedUtility.VERIFICATION_INFO(data)],
-      components: addButton ? [] : [
+      components: addButton ? [
         new ActionRowBuilder<ButtonBuilder>().addComponents([
           new ButtonBuilder().setLabel('Accept').setCustomId('verify_accept').setStyle(ButtonStyle.Success),
           new ButtonBuilder().setLabel('Decline').setCustomId('verify_decline').setStyle(ButtonStyle.Danger),
           new ButtonBuilder().setLabel('Ticket').setCustomId('verify_ticket').setStyle(ButtonStyle.Secondary)
         ])
-      ]
+      ] : []
     });
   }
 }

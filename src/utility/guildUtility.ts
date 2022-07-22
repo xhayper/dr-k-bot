@@ -14,7 +14,6 @@ import {
   UserResolvable,
   ChannelType
 } from 'discord.js';
-import { Logger } from '../logger';
 
 export class GuildUtility {
   #client: Client;
@@ -47,7 +46,6 @@ export class GuildUtility {
           (primaryGeneralChannel && primaryGeneralChannel.type === ChannelType.GuildText && primaryGeneralChannel) || undefined;
 
         const ticketThreadChannel = await guild.channels.fetch(config.channel.ticketThread).catch(() => undefined);
-        Logger.info(ticketThreadChannel);
         this.verificationThreadChannel =
           (ticketThreadChannel && ticketThreadChannel.type === ChannelType.GuildText && ticketThreadChannel) || undefined;
       })

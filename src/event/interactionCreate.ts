@@ -249,7 +249,7 @@ export default TypedEvent({
                   EmbedUtility.ERROR_COLOR(
                     new EmbedBuilder({
                       title: 'Sorry!',
-                      description: `Your verification request has been declined by ${moderator}\nReason: ${MessageUtility.transformMessage(
+                      description: `Your verification request has been declined by ${moderator}\nReason: ${await MessageUtility.transformMessage(
                         reason
                       )}`
                     })
@@ -387,10 +387,10 @@ export default TypedEvent({
 
           const randomTicketId = await VerificationUtility.getUniqueTicketId();
 
-          const transformedAnswer = answerList.map((answerData) => ({
+          const transformedAnswer = await Promise.all(answerList.map(async (answerData) => ({
             question: answerData.question,
-            answer: MessageUtility.transformMessage(answerData.message)
-          }));
+            answer: await MessageUtility.transformMessage(answerData.message)
+          })));
 
           const verificationData = {
             id: randomTicketId,
@@ -404,7 +404,7 @@ export default TypedEvent({
               GuildUtility.verificationLogChannel,
               verificationData
             );
-            verificationData.logMessageId = (verifyMessage && verifyMessage.id) || 'undefined';
+            verificationData.logMessageId = verifyMessage ? verifyMessage.id : 'undefined';
           }
 
           await VerificationTicket.create(verificationData);
