@@ -29,7 +29,7 @@ export class VerificationUtility {
       if (!message) return;
       message = MessageUtility.disableAllComponent(message);
 
-      let embeds: EmbedBuilder[] = [];
+      let embeds: EmbedBuilder[] | undefined;
 
       if (deletetionData) {
         embeds = message.embeds.map((embed) => {
