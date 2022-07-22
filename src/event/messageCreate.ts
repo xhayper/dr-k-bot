@@ -46,19 +46,23 @@ export default TypedEvent({
     //   return;
     // }
 
-    if (message.channel.id === config.channel['art-channel'] && (0 >= message.attachments.size && !urlRegEx.test(message.content))) {
-      GuildUtility.sendAuditLog({
-        embeds: [
-          EmbedUtility.ERROR_COLOR(
-            EmbedUtility.AUDIT_MESSAGE(
-              message.author,
-              `**${message.author} verbally warned for conversing in ${message.channel}**`
+    if (message.channel.id === config.channel['art-channel']) {
+      const msg = await message.fetch(true);
+
+      if (!(0 < msg.attachments.size || urlRegEx.test(msg.content))) {
+        GuildUtility.sendAuditLog({
+          embeds: [
+            EmbedUtility.ERROR_COLOR(
+              EmbedUtility.AUDIT_MESSAGE(
+                msg.author,
+                `**${msg.author} verbally warned for conversing in ${msg.channel}**`
+              )
             )
-          )
-        ]
-      });
-      await message.author.send('Please do not send messages in the art channel, it is for posting art only.');
-      return message.delete();
+          ]
+        });
+        await msg.author.send('Please do not send messages in the art channel, it is for posting art only.');
+        return msg.delete();
+      }
     }
 
     if (channelList.includes(message.channel.id) && (message.attachments.size > 0 || mediaRegEx.test(message.content))) {
