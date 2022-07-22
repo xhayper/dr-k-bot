@@ -8,7 +8,6 @@ import {
   Client,
   Collection,
   CollectorFilter,
-  CommandInteraction,
   GuildMember,
   Interaction,
   Message,

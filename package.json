@@ -15,9 +15,8 @@
     "discord.js": "^14.0.3",
     "dotenv": "^16.0.1",
     "glob": "^8.0.3",
-    "sequelize": "^6.21.3",
-    "slash-register": "^1.0.5",
-    "sqlite3": "^5.0.10",
+    "sequelize": "^6.21.2",
+    "sqlite3": "^5.0.8",
     "uuid": "^8.3.2",
     "winston": "^3.8.1"
   },
