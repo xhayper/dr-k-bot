@@ -1,43 +1,21 @@
-import Winston from 'winston';
+import pretty from "pino-pretty";
+import pino from "pino";
 import path from 'path';
+import fs from "fs";
 
-// const logger = Winston.createLogger({
-//   level: process.env.DEBUG === 'true' ? 'debug' : 'info',
-//   format: Winston.format.combine(
-//     Winston.format.errors({ stack: true }),
-//     Winston.format.timestamp({
-//       format: 'DD-MM-YYYY HH:MM:SS'
-//     }),
-//     Winston.format.printf((msg) =>
-//       Winston.format
-//         .colorize()
-//         .colorize(msg.level, `[${msg.timestamp}] [${msg.level.toUpperCase()}] ${msg.stack || msg.message}`)
-//     )
-//   ),
-//   transports: [
-//     new Winston.transports.Console(),
-//     // Normal
-//     new Winston.transports.File({
-//       filename: path.join(__dirname, '../logs/latest.log'),
-//       options: { flags: 'w' },
-//       handleExceptions: true
-//     }),
-//     new Winston.transports.File({
-//       filename: path.join(__dirname, `../logs/${new Date().toISOString()}.log`),
-//       handleExceptions: true
-//     })
-//   ]
-
-const logger = {
-  info: (...a: any[]) => {
-    console.log(...a);
-  },
-  error: (...a: any[]) => {
-    console.error(...a);
-  },
-  debug: (...a: any[]) => {
-    console.debug(...a);
+const streams = [
+  { stream: fs.createWriteStream(path.join(__dirname, `../logs/${new Date().toISOString()}.log`)) },
+  {
+    stream: pretty({
+      colorize: true,
+      ignore: 'pid,hostname'
+    })
   }
-}
+] as any
+
+const logger = pino({
+  base: null,
+  sync: true
+}, pino.multistream(streams));
 
 export { logger as Logger };
