@@ -104,14 +104,10 @@ export class VerificationUtility {
     addButton: boolean = true,
     pingVerificationTeam: boolean = true
   ): Promise<Message | void> {
-    const embedData = {
-
-    }
-
     return await channel.send({
       content: pingVerificationTeam ? `<@&${config.role.verificationTeam}> | <@${data.requesterDiscordId}>` : undefined,
       embeds: [await EmbedUtility.VERIFICATION_INFO(data)],
-      components: [
+      components: addButton ? [] : [
         new ActionRowBuilder<ButtonBuilder>().addComponents([
           new ButtonBuilder().setLabel('Accept').setCustomId('verify_accept').setStyle(ButtonStyle.Success),
           new ButtonBuilder().setLabel('Decline').setCustomId('verify_decline').setStyle(ButtonStyle.Danger),

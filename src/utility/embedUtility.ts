@@ -88,17 +88,14 @@ export class EmbedUtility {
       value: `**User**: ${targetUser.tag}\n**Account creation date**: <t:${Math.round(
         targetUser.createdTimestamp / 1000
       )}>\n**Ticket ID**: ${data.id}`
-    }]);
+    }, ...Object.values(data.answers).map(answerData => ({
+      name: answerData.question,
+      value: answerData.answer,
+      inline: true
+    }))
+    ]);
 
     baseEmbed.setThumbnail(targetUser.displayAvatarURL({ extension: "png", size: 4096 }) || targetUser.defaultAvatarURL);
-
-    for (const answerData of Object.values(data.answers)) {
-      baseEmbed.addFields([{
-        name: answerData.question,
-        value: answerData.answer,
-        inline: true
-      }]);
-    }
 
     return this.SUCCESS_COLOR(baseEmbed);
   }
