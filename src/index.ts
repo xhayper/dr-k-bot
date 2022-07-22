@@ -28,7 +28,6 @@ const client = new Client({
 });
 
 const verificationUtility = new VerificationUtility();
-const guildUtility = new GuildUtility(client);
 const embedUtility = new EmbedUtility(client);
 const messageUtility = new MessageUtility();
 const userUtility = new UserUtility();
@@ -38,9 +37,11 @@ const eventManager = new EventManager(client);
 
 (async () => {
   await eventManager.reloadEvents();
-
-  client.login();
 })();
+
+client.login();
+
+const guildUtility = new GuildUtility(client);
 
 export {
   verificationUtility as VerificationUtility,

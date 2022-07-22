@@ -29,16 +29,18 @@ export class CommandManager {
       this.commands.set(commandModule.data.name, commandModule);
     }
 
-    const currentCommand = (await this.#rest.get(
-      Routes.applicationCommands(this.#client.user!.id)
-    )) as APIApplicationCommand[];
+    // const currentCommand = (await this.#rest.get(
+    //   Routes.applicationCommands(this.#client.user!.id)
+    // )) as APIApplicationCommand[];
 
-    for (const command of currentCommand) {
-      await this.#rest.delete(Routes.applicationCommand(this.#client.user!.id, command.id));
-    }
+    // for (const command of currentCommand) {
+    //   await this.#rest.delete(Routes.applicationCommand(this.#client.user!.id, command.id));
+    // }
 
-    this.#rest.put(Routes.applicationCommands(this.#client.user!.id), {
-      body: this.commands.map((slashCommand) => slashCommand.data.toJSON())
-    });
+    // console.log(this.commands.map((slashCommand) => slashCommand.data.toJSON()));
+
+    // this.#rest.put(Routes.applicationCommands(this.#client.user!.id), {
+    //   body: this.commands.map((slashCommand) => slashCommand.data.toJSON())
+    // });
   }
 }
