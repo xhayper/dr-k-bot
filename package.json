@@ -15,10 +15,11 @@
     "discord.js": "^14.0.3",
     "dotenv": "^16.0.1",
     "glob": "^8.0.3",
+    "pino": "^8.3.0",
+    "pino-pretty": "^8.1.0",
     "sequelize": "^6.21.3",
     "sqlite3": "^5.0.10",
-    "uuid": "^8.3.2",
-    "winston": "^3.8.1"
+    "uuid": "^8.3.2"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.6",
