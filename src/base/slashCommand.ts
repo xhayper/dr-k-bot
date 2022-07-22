@@ -1,4 +1,4 @@
-import { CommandInteraction, Snowflake } from 'discord.js';
+import { ChatInputCommandInteraction, Snowflake } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
 export interface SlashCommand {
@@ -6,5 +6,5 @@ export interface SlashCommand {
   guildId?: Snowflake[] | string[];
   permission?: 'BOT_OWNER' | 'ADMINISTRATOR' | 'MODERATOR' | 'INTERN' | 'SECURITY';
   peferEphemeral?: boolean;
-  execute: (commandInteraction: CommandInteraction) => void | Promise<void>;
+  execute: (chatInputCommandInteraction: ChatInputCommandInteraction) => void | Promise<void>;
 }

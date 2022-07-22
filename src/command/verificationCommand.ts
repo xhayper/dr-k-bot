@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from '@discordjs/builders';
-import { CommandInteraction, MessageAttachment, MessageEmbed } from 'discord.js';
+import { ChatInputCommandInteraction, AttachmentBuilder, EmbedBuilder } from 'discord.js';
 import { EmbedUtility, GuildUtility, VerificationUtility } from '..';
 import { SlashCommand } from '../base/slashCommand';
 import { VerificationTicket } from '../database';
@@ -34,10 +34,10 @@ export default {
     .addSubcommand((builder) => builder.setName('list').setDescription('Show unfinished verification tickets')),
   guildId: [config.guildId],
   permission: 'SECURITY',
-  execute: async (commandInteraction: CommandInteraction) => {
+  execute: async (ChatInputCommandInteraction: ChatInputCommandInteraction) => {
     let verificationTicket: VerificationTicket | void;
 
-    const subCommand = commandInteraction.options.getSubcommand(true);
+    const subCommand = ChatInputCommandInteraction.options.getSubcommand(true);
 
     // Checking and setting field
     switch (subCommand) {
@@ -45,10 +45,10 @@ export default {
       case 'decline':
       case 'info': {
         verificationTicket = await VerificationUtility.getTicketFromId(
-          commandInteraction.options.getString('id', true)
+          ChatInputCommandInteraction.options.getString('id', true)
         );
         if (!verificationTicket)
-          return commandInteraction.editReply({
+          return ChatInputCommandInteraction.editReply({
             embeds: [EmbedUtility.CANT_FIND_TICKET()]
           });
         break;
@@ -61,7 +61,7 @@ export default {
         // TODO: Maybe merge this with the one in "interactionCreate"?
         const member = await GuildUtility.getGuildMember(verificationTicket!.requesterDiscordId);
         if (!member)
-          return commandInteraction.editReply({
+          return ChatInputCommandInteraction.editReply({
             embeds: [EmbedUtility.CANT_FIND_USER()]
           });
 
@@ -69,11 +69,11 @@ export default {
 
         await VerificationUtility.deleteTicket(verificationTicket!, {
           deleteType: 'ACCEPTED',
-          who: commandInteraction.user
+          who: ChatInputCommandInteraction.user
         });
 
-        await commandInteraction.editReply({
-          embeds: [EmbedUtility.SUCCESS_COLOR(new MessageEmbed().setDescription(`${member.user} has been accepted!`))]
+        await ChatInputCommandInteraction.editReply({
+          embeds: [EmbedUtility.SUCCESS_COLOR(new EmbedBuilder().setDescription(`${member.user} has been accepted!`))]
         });
 
         await GuildUtility.sendWelcomeMessage(member);
@@ -82,8 +82,8 @@ export default {
 
       case 'decline': {
         // TODO: Maybe merge this with the one in "interactionCreate"?
-        const reason = commandInteraction.options.getString('reason', true);
-        const user = await commandInteraction.client.users
+        const reason = ChatInputCommandInteraction.options.getString('reason', true);
+        const user = await ChatInputCommandInteraction.client.users
           .fetch(verificationTicket!.requesterDiscordId)
           .catch(() => undefined);
         if (user)
@@ -91,9 +91,9 @@ export default {
             .send({
               embeds: [
                 EmbedUtility.ERROR_COLOR(
-                  new MessageEmbed({
+                  new EmbedBuilder({
                     title: 'Sorry!',
-                    description: `Your verification request has been declined by ${commandInteraction.user}\nReason: ${reason}`
+                    description: `Your verification request has been declined by ${ChatInputCommandInteraction.user}\nReason: ${reason}`
                   })
                 )
               ]
@@ -102,13 +102,13 @@ export default {
 
         await VerificationUtility.deleteTicket(verificationTicket!, {
           deleteType: 'DECLINED',
-          who: commandInteraction.user
+          who: ChatInputCommandInteraction.user
         });
 
-        await commandInteraction.editReply({
+        await ChatInputCommandInteraction.editReply({
           embeds: [
             EmbedUtility.SUCCESS_COLOR(
-              new MessageEmbed({
+              new EmbedBuilder({
                 description: `${user} has been declined!`
               })
             )
@@ -117,7 +117,7 @@ export default {
         break;
       }
       case 'info': {
-        commandInteraction.editReply({
+        ChatInputCommandInteraction.editReply({
           embeds: [await EmbedUtility.VERIFICATION_INFO(verificationTicket as VerificationTicket)]
         });
         break;
@@ -125,25 +125,26 @@ export default {
       case 'list': {
         const verificationTicketList = await VerificationTicket.findAll();
         if (verificationTicketList.length == 0)
-          return await commandInteraction.editReply('There are no verification tickets as of right now.');
+          return await ChatInputCommandInteraction.editReply('There are no verification tickets as of right now.');
 
         //TODO: Improve this bit
-        await commandInteraction.editReply({
+        await ChatInputCommandInteraction.editReply({
           content: `There's currently ${verificationTicketList.length} verification ticket(s)!`,
           files: [
-            new MessageAttachment(
+            new AttachmentBuilder(
               Buffer.from(
                 verificationTicketList
                   .map((verificationTicket) => {
-                    return `User ID: ${verificationTicket.requesterDiscordId}\nTicket ID: ${
-                      verificationTicket.id
-                    }\n--------------------------------------------------\n${verificationTicket.answers
-                      .map((answerData) => `${answerData.question}: ${answerData.answer}`)
-                      .join('\n\n')}`;
+                    return `User ID: ${verificationTicket.requesterDiscordId}\nTicket ID: ${verificationTicket.id
+                      }\n--------------------------------------------------\n${verificationTicket.answers
+                        .map((answerData) => `${answerData.question}: ${answerData.answer}`)
+                        .join('\n\n')}`;
                   })
-                  .join('\n\n\n')
+                  .join('\n\n\n'),
               ),
-              'tickets.txt'
+              {
+                name: 'tickets.txt'
+              }
             )
           ]
         });

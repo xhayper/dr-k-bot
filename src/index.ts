@@ -13,17 +13,17 @@ import { CommandManager } from './manager/commandManager';
 import { EventManager } from './manager/eventManager';
 
 // All the required modules
-import { Client } from 'discord.js';
+import { Client, GatewayIntentBits } from 'discord.js';
 
 const client = new Client({
   intents: [
     // DM
-    'DIRECT_MESSAGES',
+    GatewayIntentBits.DirectMessages,
     // Guild
-    'GUILDS',
-    'GUILD_MEMBERS',
-    'GUILD_MESSAGES',
-    'GUILD_MESSAGE_REACTIONS'
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions
   ]
 });
 

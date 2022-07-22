@@ -1,4 +1,4 @@
-import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
+import { ChatInputCommandInteraction, GuildMember, EmbedBuilder } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../base/slashCommand';
 import { EmbedUtility, GuildUtility } from '..';
@@ -11,18 +11,18 @@ export default {
     .addUserOption((option) => option.setName('user').setDescription('-').setRequired(true)),
   guildId: [config.guildId],
   permission: 'SECURITY',
-  execute: async (commandInteraction: CommandInteraction) => {
-    const targetMember = commandInteraction.options.getMember('user', true);
-    await GuildUtility.openThread(commandInteraction.member as GuildMember, targetMember as GuildMember);
+  execute: async (ChatInputCommandInteraction: ChatInputCommandInteraction) => {
+    const targetMember = ChatInputCommandInteraction.options.getMember('user');
+    await GuildUtility.openThread(ChatInputCommandInteraction.member as GuildMember, targetMember as GuildMember);
 
-    await commandInteraction.editReply({
+    await ChatInputCommandInteraction.editReply({
       embeds: [
         EmbedUtility.SUCCESS_COLOR(
           EmbedUtility.USER_AUTHOR(
-            new MessageEmbed({
+            new EmbedBuilder({
               description: `Thread opened with ${targetMember}!`
             }),
-            commandInteraction.user
+            ChatInputCommandInteraction.user
           )
         )
       ]
