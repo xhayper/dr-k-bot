@@ -46,7 +46,7 @@ export default TypedEvent({
     //   return;
     // }
 
-    if (message.channel.id === config.channel['art-channel'] && !(0 < message.attachments.size || urlRegEx.test(message.content))) {
+    if (message.channel.id === config.channel['art-channel'] && (0 >= message.attachments.size && !urlRegEx.test(message.content))) {
       GuildUtility.sendAuditLog({
         embeds: [
           EmbedUtility.ERROR_COLOR(
