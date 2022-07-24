@@ -10,6 +10,7 @@ export default config as {
   };
   role: {
     administrator: string;
+    seniorSecurity: string;
     moderator: string;
     intern: string;
     security: string;

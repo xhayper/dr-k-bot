@@ -85,6 +85,7 @@ export default TypedEvent({
         command.permission &&
         ((command.permission === 'BOT_OWNER' && !GuildUtility.isBotOwner(interaction.member)) ||
           (command.permission === 'ADMINISTRATOR' && !GuildUtility.isAdministrator(interaction.member)) ||
+          (command.permission === 'SENIOR_SECURITY' && !GuildUtility.isSeniorSecurity(interaction.member)) ||
           (command.permission === 'MODERATOR' && !GuildUtility.isModerator(interaction.member)) ||
           (command.permission === 'INTERN' && !GuildUtility.isIntern(interaction.member)) ||
           (command.permission === 'SECURITY' && !GuildUtility.isSecurity(interaction.member)))
