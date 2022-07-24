@@ -17,6 +17,7 @@ import { Client, GatewayIntentBits } from 'discord.js';
 
 const client = new Client({
   intents: [
+    GatewayIntentBits.MessageContent,
     // DM
     GatewayIntentBits.DirectMessages,
     // Guild
