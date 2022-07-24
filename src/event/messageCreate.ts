@@ -47,8 +47,6 @@ export default TypedEvent({
     // }
 
     if (message.channel.id === config.channel['art-channel']) {
-      // const msg = await message.fetch(true);
-
       if (!(0 < message.attachments.size || urlRegEx.test(message.content))) {
         GuildUtility.sendAuditLog({
           embeds: [
