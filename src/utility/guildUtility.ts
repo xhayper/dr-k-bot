@@ -77,9 +77,9 @@ export class GuildUtility {
   async openThread(moderator: GuildMember, member: GuildMember): Promise<void> {
     if (!this.verificationThreadChannel) return;
     const thread = await this.verificationThreadChannel.threads.create({
-      name: `${member.user.username} Ticket`,
+      name: `${member.user.username} Ticket`, 
       // @ts-expect-error
-      type: 'GUILD_PRIVATE_THREAD',
+      type: ChannelType.GuildPrivateThread,
       // @ts-expect-error
       invitable: true,
       autoArchiveDuration: 10080
