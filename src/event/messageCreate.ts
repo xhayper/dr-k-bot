@@ -47,21 +47,21 @@ export default TypedEvent({
     // }
 
     if (message.channel.id === config.channel['art-channel']) {
-      const msg = await message.fetch(true);
+      // const msg = await message.fetch(true);
 
-      if (!(0 < msg.attachments.size || urlRegEx.test(msg.content))) {
+      if (!(0 < message.attachments.size || urlRegEx.test(message.content))) {
         GuildUtility.sendAuditLog({
           embeds: [
             EmbedUtility.ERROR_COLOR(
               EmbedUtility.AUDIT_MESSAGE(
-                msg.author,
-                `**${msg.author} verbally warned for conversing in ${msg.channel}**`
+                message.author,
+                `**${message.author} verbally warned for conversing in ${message.channel}**`
               )
             )
           ]
         });
-        await msg.author.send('Please do not send messages in the art channel, it is for posting art only.');
-        return msg.delete();
+        await message.author.send('Please do not send messages in the art channel, it is for posting art only.');
+        return message.delete();
       }
     }
 
