@@ -1,5 +1,4 @@
-import { SlashCommandBuilder, SlashCommandUserOption } from '@discordjs/builders';
-import { ChatInputCommandInteraction, GuildMember, EmbedBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, GuildMember, EmbedBuilder, SlashCommandBuilder, SlashCommandUserOption } from 'discord.js';
 import { SlashCommand } from '../base/slashCommand';
 import { EmbedUtility } from '..';
 import config from '../config';

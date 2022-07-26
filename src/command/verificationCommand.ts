@@ -1,5 +1,4 @@
-import { SlashCommandBuilder, SlashCommandStringOption } from '@discordjs/builders';
-import { ChatInputCommandInteraction, AttachmentBuilder, EmbedBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, AttachmentBuilder, EmbedBuilder, SlashCommandBuilder, SlashCommandStringOption } from 'discord.js';
 import { EmbedUtility, GuildUtility, VerificationUtility } from '..';
 import { SlashCommand } from '../base/slashCommand';
 import { VerificationTicket } from '../database';

@@ -1,6 +1,5 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../base/slashCommand';
-import { ChatInputCommandInteraction } from 'discord.js';
 import config from '../config';
 
 export default {

@@ -1,6 +1,6 @@
 import { ChannelType, Client, Collection, Message, Snowflake } from 'discord.js';
 import { TypedEvent } from '../base/clientEvent';
-import { EmbedUtility, GuildUtility, MessageUtility } from '..';
+import { EmbedUtility, GuildUtility } from '..';
 import config from '../config';
 import path from 'path';
 import fs from 'fs';
