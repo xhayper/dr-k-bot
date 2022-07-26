@@ -1,5 +1,5 @@
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, Embed, EmbedBuilder, Message, TextBasedChannel, User } from 'discord.js';
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
-import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Colors, Embed, EmbedBuilder, Message, TextBasedChannel, User } from 'discord.js';
 import { VerificationTicket } from '../database';
 import { v4 as uuidv4 } from 'uuid';
 import config from '../config';

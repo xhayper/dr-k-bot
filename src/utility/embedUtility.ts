@@ -1,5 +1,5 @@
-import { PartialVerificationData } from './verifiationUtility';
 import { Client, Colors, EmbedBuilder, User } from 'discord.js';
+import { PartialVerificationData } from './verifiationUtility';
 
 export class EmbedUtility {
   #client: Client;
