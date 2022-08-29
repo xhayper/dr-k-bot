@@ -16,6 +16,9 @@ export default config as {
     security: string;
     verificationTeam: string;
     unverified: string;
+    levelZero: string;
+    levelRoles: string[];
+    patreonRoles: string[];
   };
   channel: {
     auditLog: string;
@@ -30,7 +33,7 @@ export default config as {
   toggleRole: {
     [key: string]: string;
   };
-  questions: string[]; 
+  questions: string[];
   misc: {
     mediaCooldown: number;
     mediaLimit: number;

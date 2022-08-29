@@ -22,7 +22,7 @@ export class EmbedUtility {
       iconURL:
         user.avatarURL({
           size: 4096,
-          extension: "png"
+          extension: 'png'
         }) || user.defaultAvatarURL
     });
   }
@@ -83,19 +83,23 @@ export class EmbedUtility {
     const targetUser = await this.#client.users.fetch(data.requesterDiscordId);
 
     const baseEmbed = new EmbedBuilder();
-    baseEmbed.addFields([{
-      name: `Ticket Information`,
-      value: `**User**: ${targetUser.tag}\n**Account creation date**: <t:${Math.round(
-        targetUser.createdTimestamp / 1000
-      )}>\n**Ticket ID**: ${data.id}`
-    }, ...Object.values(data.answers).map(answerData => ({
-      name: answerData.question,
-      value: answerData.answer,
-      inline: true
-    }))
+    baseEmbed.addFields([
+      {
+        name: `Ticket Information`,
+        value: `**User**: ${targetUser.tag}\n**Account creation date**: <t:${Math.round(
+          targetUser.createdTimestamp / 1000
+        )}>\n**Ticket ID**: ${data.id}`
+      },
+      ...Object.values(data.answers).map((answerData) => ({
+        name: answerData.question,
+        value: answerData.answer,
+        inline: true
+      }))
     ]);
 
-    baseEmbed.setThumbnail(targetUser.displayAvatarURL({ extension: "png", size: 4096 }) || targetUser.defaultAvatarURL);
+    baseEmbed.setThumbnail(
+      targetUser.displayAvatarURL({ extension: 'png', size: 4096 }) || targetUser.defaultAvatarURL
+    );
 
     return this.SUCCESS_COLOR(baseEmbed);
   }

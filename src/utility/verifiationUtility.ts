@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, Embed, EmbedBuilder, Message, TextBasedChannel, User } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, Message, TextBasedChannel, User } from 'discord.js';
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
 import { VerificationTicket } from '../database';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,7 +27,7 @@ export class VerificationUtility {
         .fetch(ticket.logMessageId)
         .catch(() => undefined);
       if (!message) return;
-      message = MessageUtility.disableAllComponent(message);
+      message = MessageUtility.disableAllComponent(message) as Message<true>;
 
       let embeds: EmbedBuilder[] | undefined;
 
