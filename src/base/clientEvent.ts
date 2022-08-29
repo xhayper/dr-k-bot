@@ -1,4 +1,4 @@
-import { Client, ClientEvents } from "discord.js";
+import { Client, ClientEvents } from 'discord.js';
 
 export type ClientEventName = keyof ClientEvents;
 
@@ -13,6 +13,4 @@ export interface ClientEvent<T extends ClientEventName> {
   once?: ClientEventListener<T>;
 }
 
-export const TypedEvent = <T extends ClientEventName>(
-  clientEvent: ClientEvent<T>
-) => clientEvent;
+export const TypedEvent = <T extends ClientEventName>(clientEvent: ClientEvent<T>) => clientEvent;

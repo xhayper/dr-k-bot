@@ -20,9 +20,9 @@ export default TypedEvent({
         EmbedUtility.ERROR_COLOR(
           EmbedUtility.AUDIT_MESSAGE(
             message.author,
-            `**🗑 Message sent by ${message.author} deleted in ${message.channel}**\n${await MessageUtility.transformMessage(
-              message
-            )}`
+            `**🗑 Message sent by ${message.author} deleted in ${
+              message.channel
+            }**\n${await MessageUtility.transformMessage(message)}`
           ).setFooter({
             text: `Message ID: ${message.id}`
           })
