@@ -1,4 +1,13 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, Message, TextBasedChannel, User } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  Colors,
+  EmbedBuilder,
+  Message,
+  TextBasedChannel,
+  User
+} from 'discord.js';
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
 import { VerificationTicket } from '../database';
 import { v4 as uuidv4 } from 'uuid';
@@ -37,8 +46,9 @@ export class VerificationUtility {
           embedBuilder.setFooter({
             text:
               deletetionData.deleteType != 'LEAVE'
-                ? `Ticket ${deletetionData.deleteType === 'DECLINED' ? 'declined' : 'accepted'} by ${deletetionData.who!.tag
-                }`
+                ? `Ticket ${deletetionData.deleteType === 'DECLINED' ? 'declined' : 'accepted'} by ${
+                    deletetionData.who!.tag
+                  }`
                 : `User left the server, Ticket deleted`
           });
           embedBuilder.setColor(['DECLINED', 'LEAVE'].includes(deletetionData.deleteType) ? Colors.Red : Colors.Green);
@@ -107,13 +117,15 @@ export class VerificationUtility {
     return await channel.send({
       content: pingVerificationTeam ? `<@&${config.role.verificationTeam}> | <@${data.requesterDiscordId}>` : undefined,
       embeds: [await EmbedUtility.VERIFICATION_INFO(data)],
-      components: addButton ? [
-        new ActionRowBuilder<ButtonBuilder>().addComponents([
-          new ButtonBuilder().setLabel('Accept').setCustomId('verify_accept').setStyle(ButtonStyle.Success),
-          new ButtonBuilder().setLabel('Decline').setCustomId('verify_decline').setStyle(ButtonStyle.Danger),
-          new ButtonBuilder().setLabel('Ticket').setCustomId('verify_ticket').setStyle(ButtonStyle.Secondary)
-        ])
-      ] : []
+      components: addButton
+        ? [
+            new ActionRowBuilder<ButtonBuilder>().addComponents([
+              new ButtonBuilder().setLabel('Accept').setCustomId('verify_accept').setStyle(ButtonStyle.Success),
+              new ButtonBuilder().setLabel('Decline').setCustomId('verify_decline').setStyle(ButtonStyle.Danger),
+              new ButtonBuilder().setLabel('Ticket').setCustomId('verify_ticket').setStyle(ButtonStyle.Secondary)
+            ])
+          ]
+        : []
     });
   }
 }

@@ -43,7 +43,8 @@ export default {
       embeds: [
         EmbedUtility.AUDIT_MESSAGE(
           chatInputCommandInteraction.user,
-          `**${removeRole ? '⛔️' : '✅'} Role ${removeRole ? 'removed' : 'added'} ${removeRole ? 'from' : 'to'
+          `**${removeRole ? '⛔️' : '✅'} Role ${removeRole ? 'removed' : 'added'} ${
+            removeRole ? 'from' : 'to'
           } ${member}!**`
         )
           .addFields([{ name: `**Role ${removeRole ? 'removed' : 'added'}**`, value: `<@&${roleId}>` }])

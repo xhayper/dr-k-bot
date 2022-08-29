@@ -1,4 +1,10 @@
-import { ChatInputCommandInteraction, AttachmentBuilder, EmbedBuilder, SlashCommandBuilder, SlashCommandStringOption } from 'discord.js';
+import {
+  ChatInputCommandInteraction,
+  AttachmentBuilder,
+  EmbedBuilder,
+  SlashCommandBuilder,
+  SlashCommandStringOption
+} from 'discord.js';
 import { EmbedUtility, GuildUtility, VerificationUtility } from '..';
 import { SlashCommand } from '../base/slashCommand';
 import { VerificationTicket } from '../database';
@@ -134,12 +140,13 @@ export default {
               Buffer.from(
                 verificationTicketList
                   .map((verificationTicket) => {
-                    return `User ID: ${verificationTicket.requesterDiscordId}\nTicket ID: ${verificationTicket.id
-                      }\n--------------------------------------------------\n${verificationTicket.answers
-                        .map((answerData) => `${answerData.question}: ${answerData.answer}`)
-                        .join('\n\n')}`;
+                    return `User ID: ${verificationTicket.requesterDiscordId}\nTicket ID: ${
+                      verificationTicket.id
+                    }\n--------------------------------------------------\n${verificationTicket.answers
+                      .map((answerData) => `${answerData.question}: ${answerData.answer}`)
+                      .join('\n\n')}`;
                   })
-                  .join('\n\n\n'),
+                  .join('\n\n\n')
               ),
               {
                 name: 'tickets.txt'
