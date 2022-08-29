@@ -33,21 +33,25 @@ export class GuildUtility {
         this.guild = guild;
 
         const auditLogChannel = await guild.channels.fetch(config.channel.auditLog).catch(() => undefined);
-        this.auditLogChannel = (auditLogChannel && auditLogChannel.type === ChannelType.GuildText && auditLogChannel) || undefined;
+        this.auditLogChannel =
+          (auditLogChannel && auditLogChannel.type === ChannelType.GuildText && auditLogChannel) || undefined;
 
         const verificationLogChannel = await guild.channels
           .fetch(config.channel.verificationLog)
           .catch(() => undefined);
         this.verificationLogChannel =
-          (verificationLogChannel && verificationLogChannel.type === ChannelType.GuildText && verificationLogChannel) || undefined;
+          (verificationLogChannel && verificationLogChannel.type === ChannelType.GuildText && verificationLogChannel) ||
+          undefined;
 
         const primaryGeneralChannel = await guild.channels.fetch(config.channel['general-1']).catch(() => undefined);
         this.primaryGeneralChannel =
-          (primaryGeneralChannel && primaryGeneralChannel.type === ChannelType.GuildText && primaryGeneralChannel) || undefined;
+          (primaryGeneralChannel && primaryGeneralChannel.type === ChannelType.GuildText && primaryGeneralChannel) ||
+          undefined;
 
         const ticketThreadChannel = await guild.channels.fetch(config.channel.ticketThread).catch(() => undefined);
         this.verificationThreadChannel =
-          (ticketThreadChannel && ticketThreadChannel.type === ChannelType.GuildText && ticketThreadChannel) || undefined;
+          (ticketThreadChannel && ticketThreadChannel.type === ChannelType.GuildText && ticketThreadChannel) ||
+          undefined;
       })
       .catch(() => null);
   }
@@ -63,7 +67,7 @@ export class GuildUtility {
             thumbnail: {
               url:
                 member.user.avatarURL({
-                  extension: "png",
+                  extension: 'png',
                   size: 4096
                 }) || member.user.defaultAvatarURL
             },
@@ -77,7 +81,7 @@ export class GuildUtility {
   async openThread(moderator: GuildMember, member: GuildMember): Promise<void> {
     if (!this.verificationThreadChannel) return;
     const thread = await this.verificationThreadChannel.threads.create({
-      name: `${member.user.username} Ticket`, 
+      name: `${member.user.username} Ticket`,
       // @ts-expect-error
       type: ChannelType.GuildPrivateThread,
       // @ts-expect-error
@@ -86,7 +90,7 @@ export class GuildUtility {
     });
 
     await thread.send({
-      content: `<@150337210225393665> | ${moderator} ${member.user}` // ${config.user.botOwner.map((id) => `<@${id}>`).join(' ')} | 
+      content: `<@150337210225393665> | ${moderator} ${member.user}` // ${config.user.botOwner.map((id) => `<@${id}>`).join(' ')} |
     });
 
     return;
@@ -113,7 +117,7 @@ export class GuildUtility {
   isAdministrator(member: GuildMember): boolean {
     return member.roles.cache.has(config.role.administrator) || this.isBotOwner(member);
   }
-  
+
   isSeniorSecurity(member: GuildMember): boolean {
     return member.roles.cache.has(config.role.seniorSecurity) || this.isAdministrator(member);
   }
@@ -125,7 +129,7 @@ export class GuildUtility {
   isIntern(member: GuildMember): boolean {
     return member.roles.cache.has(config.role.intern) || this.isModerator(member);
   }
-  
+
   isSecurity(member: GuildMember): boolean {
     return member.roles.cache.has(config.role.security) || this.isIntern(member);
   }

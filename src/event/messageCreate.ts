@@ -17,7 +17,7 @@ const userTimeMap = new Collection<Snowflake, Collection<Snowflake, Date>>();
 const userWarnCount = new Collection<Snowflake, number>(); // REMINDER: Change to something that can actually be saved past bot resets
 
 const urlRegEx = /(?:http\:|www\.|https\:)/gi;
-const mediaRegEx = /(?:http\:|www\.|https\:)(?:.*\.gif|.*\.png|.*\.mp4|.*\.jpg|.*\.jpeg|.*\.webm)/gi
+const mediaRegEx = /(?:http\:|www\.|https\:)(?:.*\.gif|.*\.png|.*\.mp4|.*\.jpg|.*\.jpeg|.*\.webm)/gi;
 
 export default TypedEvent({
   eventName: 'messageCreate',
@@ -63,7 +63,10 @@ export default TypedEvent({
       }
     }
 
-    if (channelList.includes(message.channel.id) && (message.attachments.size > 0 || mediaRegEx.test(message.content))) {
+    if (
+      channelList.includes(message.channel.id) &&
+      (message.attachments.size > 0 || mediaRegEx.test(message.content))
+    ) {
       const timeMap = userTimeMap.get(message.channel.id) || new Collection<Snowflake, Date>();
       const countMap = userMediaCount.get(message.channel.id) || new Collection<Snowflake, number>();
 
@@ -97,9 +100,7 @@ export default TypedEvent({
           ]
         });
 
-        await message.reply(
-          'Your limit for media have been exceeded. Please move to a more appropriate channel.'
-        );
+        await message.reply('Your limit for media have been exceeded. Please move to a more appropriate channel.');
         return message.delete();
       }
     }

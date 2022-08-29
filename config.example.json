@@ -1,9 +1,7 @@
 {
   "guildId": "",
   "user": {
-    "botOwner": [
-      ""
-    ]
+    "botOwner": [""]
   },
   "role": {
     "administrator": "",
@@ -12,7 +10,10 @@
     "intern": "",
     "security": "",
     "verificationTeam": "",
-    "unverified": ""
+    "unverified": "",
+    "levelZero": "",
+    "levelRoles": [""],
+    "patreonRoles": [""]
   },
   "channel": {
     "audit": "",
@@ -27,9 +28,7 @@
   "toggleRole": {
     "": ""
   },
-  "questions": [
-    ""
-  ],
+  "questions": [""],
   "misc": {
     "mediaCooldown": 0,
     "mediaLimit": 0

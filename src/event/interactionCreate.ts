@@ -388,10 +388,12 @@ export default TypedEvent({
 
           const randomTicketId = await VerificationUtility.getUniqueTicketId();
 
-          const transformedAnswer = await Promise.all(answerList.map(async (answerData) => ({
-            question: answerData.question,
-            answer: await MessageUtility.transformMessage(answerData.message)
-          })));
+          const transformedAnswer = await Promise.all(
+            answerList.map(async (answerData) => ({
+              question: answerData.question,
+              answer: await MessageUtility.transformMessage(answerData.message)
+            }))
+          );
 
           const verificationData = {
             id: randomTicketId,

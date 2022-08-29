@@ -1,7 +1,7 @@
-import pretty from "pino-pretty";
-import pino from "pino";
+import pretty from 'pino-pretty';
+import pino from 'pino';
 import path from 'path';
-import fs from "fs";
+import fs from 'fs';
 
 const streams = [
   { stream: fs.createWriteStream(path.join(__dirname, `../logs/${new Date().toISOString()}.log`)) },
@@ -11,11 +11,14 @@ const streams = [
       ignore: 'pid,hostname'
     })
   }
-] as any
+] as any;
 
-const logger = pino({
-  base: null,
-  sync: true
-}, pino.multistream(streams));
+const logger = pino(
+  {
+    base: null,
+    sync: true
+  },
+  pino.multistream(streams)
+);
 
 export { logger as Logger };
