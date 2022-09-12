@@ -11,15 +11,15 @@
   },
   "dependencies": {
     "@discordjs/rest": "^1.1.0",
-    "discord-api-types": "^0.37.5",
+    "discord-api-types": "^0.37.8",
     "discord.js": "^14.3.0",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.2",
     "glob": "^8.0.3",
-    "pino": "^8.4.2",
+    "pino": "^8.5.0",
     "pino-pretty": "^9.1.0",
-    "sequelize": "^6.21.4",
+    "sequelize": "^6.21.6",
     "sqlite3": "^5.0.11",
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.6",
@@ -28,13 +28,14 @@
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "@types/glob": "^7.2.0",
-    "@types/node": "^18.7.13",
+    "@types/glob": "^8.0.0",
+    "@types/node": "^18.7.16",
     "@types/uuid": "^8.3.4",
     "rimraf": "^3.0.2",
-    "typescript": "^4.8.2"
+    "typescript": "^4.8.3"
   },
   "engines": {
     "node": ">=16.9.0"
-  }
+  },
+  "packageManager": "yarn@3.2.3"
 }
