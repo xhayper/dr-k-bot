@@ -175,9 +175,5 @@ config.json
 *.sqlite
 *.sqlite3
 
-# No insult for you
+# Make your own insult smh
 insult.json
-
-# idk
-package-lock.json
-yarn.lock
