@@ -66,7 +66,7 @@ async function handleQuestion(
 export default TypedEvent({
   eventName: 'interactionCreate',
   on: async (client: Client, interaction: Interaction) => {
-    if (!interaction.member || !(interaction.member instanceof GuildMember)) return;
+    // if (!interaction.member || !(interaction.member instanceof GuildMember)) return;
 
     if (interaction.isModalSubmit()) {
       switch (interaction.customId) {
@@ -114,20 +114,30 @@ export default TypedEvent({
           embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_USE_HERE(), interaction.user)]
         });
 
-      if (
-        command.permission &&
-        ((command.permission === 'BOT_OWNER' && !GuildUtility.isBotOwner(interaction.member)) ||
+      if (command.permission) {
+        if (!interaction.member || !(interaction.member instanceof GuildMember))
+          return interaction.editReply({
+            embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_USE_HERE(), interaction.user)]
+          });
+
+        if (
+          (command.permission === 'BOT_OWNER' && !GuildUtility.isBotOwner(interaction.member)) ||
           (command.permission === 'ADMINISTRATOR' && !GuildUtility.isAdministrator(interaction.member)) ||
           (command.permission === 'SENIOR_SECURITY' && !GuildUtility.isSeniorSecurity(interaction.member)) ||
           (command.permission === 'MODERATOR' && !GuildUtility.isModerator(interaction.member)) ||
           (command.permission === 'INTERN' && !GuildUtility.isIntern(interaction.member)) ||
-          (command.permission === 'SECURITY' && !GuildUtility.isSecurity(interaction.member)))
-      )
-        return interaction.editReply({
-          embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.NO_PERMISSION(), interaction.user)]
-        });
+          (command.permission === 'SECURITY' && !GuildUtility.isSecurity(interaction.member))
+        )
+          return interaction.editReply({
+            embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.NO_PERMISSION(), interaction.user)]
+          });
+      }
 
-      Logger.info(`${interaction.member.user.tag} used command ${command.data.name}`);
+      Logger.info(
+        `${(interaction.member?.user ?? interaction.user).username}#${
+          (interaction.member?.user ?? interaction.user).discriminator
+        } used command ${command.data.name}`
+      );
       command.execute(chatInputCommandInteraction);
     } else if (interaction.isButton()) {
       if (!interaction.guild || interaction.guild.id != config.guildId) return;
