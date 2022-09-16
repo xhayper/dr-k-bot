@@ -1,19 +1,17 @@
-import { APIApplicationCommand, Routes } from 'discord-api-types/v9';
 import { SlashCommand } from '../base/slashCommand';
 import { Client, Collection } from 'discord.js';
-import { REST } from '@discordjs/rest';
 import glob from 'glob';
 import path from 'path';
+import { EqualUtility } from '../utility/equalUtility';
+import { Logger } from '../logger';
 
 export class CommandManager {
-  #client: Client;
-  #rest: REST;
+  private client: Client;
 
   commands: Collection<string, SlashCommand> = new Collection();
 
   constructor(client: Client) {
-    this.#client = client;
-    this.#rest = new REST({ version: '9' }).setToken(client.token!);
+    this.client = client;
   }
 
   async reloadCommands() {
@@ -29,16 +27,58 @@ export class CommandManager {
       this.commands.set(commandModule.data.name, commandModule);
     }
 
-    const currentCommand = (await this.#rest.get(
-      Routes.applicationCommands(this.#client.user!.id)
-    )) as APIApplicationCommand[];
+    if (!this.client.isReady()) return;
 
-    for (const command of currentCommand) {
-      await this.#rest.delete(Routes.applicationCommand(this.#client.user!.id, command.id));
+    const application = await this.client.application?.fetch();
+    const fetchedGlobalCommands = await application.commands.fetch();
+
+    for (const commandModule of this.commands.values()) {
+      const globalAPICommand = fetchedGlobalCommands?.find((command) => command.name === commandModule.data.name);
+
+      if (commandModule.guildId && commandModule.guildId.length > 0) {
+        for (const guildId of commandModule.guildId) {
+          const guild = await this.client.guilds.fetch(guildId);
+          if (!guild) continue;
+
+          Logger.info(`Checking guild command "${commandModule.data.name}" for guild "${guild.name}"`);
+
+          const guildAPICommandList = await guild.commands.fetch();
+          const guildAPICommand = guildAPICommandList.find((command) => command.name === commandModule.data.name);
+
+          if (!guildAPICommand) {
+            Logger.info(`Creating guild command "${commandModule.data.name}" for guild "${guild.name}"`);
+            await guild.commands.create(commandModule.data);
+          } else if (!EqualUtility.isCommandEqual(guildAPICommand, commandModule.data.toJSON())) {
+            Logger.info(`Updating guild command "${commandModule.data.name}" for guild "${guild.name}"`);
+            await guild.commands.edit(guildAPICommand.id, commandModule.data);
+          }
+
+          guildAPICommandList.forEach((guildCommand) => {
+            const mod = this.commands.get(guildCommand.name);
+            if (mod && mod.guildId && mod.guildId.includes(guildId)) return;
+            Logger.info(`Deleting guild command "${guildCommand.name}" for guild "${guild.name}"`);
+            guildCommand.delete();
+          });
+        }
+
+        if (globalAPICommand) await globalAPICommand.delete();
+      } else {
+        Logger.info(`Checking global command "${commandModule.data.name}"`);
+
+        if (!globalAPICommand) {
+          Logger.info(`Creating global command "${commandModule.data.name}"`);
+          await application.commands.create(commandModule.data);
+        } else if (!EqualUtility.isCommandEqual(globalAPICommand, commandModule.data.toJSON())) {
+          Logger.info(`Updating global command "${commandModule.data.name}"`);
+          await application.commands.edit(globalAPICommand.id, commandModule.data);
+        }
+      }
     }
 
-    this.#rest.put(Routes.applicationCommands(this.#client.user!.id), {
-      body: this.commands.map((slashCommand) => slashCommand.data.toJSON())
+    fetchedGlobalCommands?.forEach((globalCommand) => {
+      if (this.commands.get(globalCommand.name)) return;
+      Logger.info(`Deleting global command "${globalCommand.name}"`);
+      globalCommand.delete();
     });
   }
 }

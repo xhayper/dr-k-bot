@@ -4,14 +4,14 @@ import path from 'path';
 import glob from 'glob';
 
 export class EventManager {
-  #client: Client;
+  private client: Client;
 
   constructor(client: Client) {
-    this.#client = client;
+    this.client = client;
   }
 
   public async reloadEvents() {
-    this.#client.removeAllListeners();
+    this.client.removeAllListeners();
 
     const eventPathList = glob.sync(path.join(__dirname, '../event/*.+(js|ts)'));
 
@@ -25,9 +25,9 @@ export class EventManager {
         //@ts-expect-error
         if (!eventModule[functionName] || typeof eventModule[functionName] != 'function') return;
         // @ts-expect-error
-        this.#client[functionName](eventModule.eventName, (...args: any[]) =>
+        this.client[functionName](eventModule.eventName, (...args: any[]) =>
           // @ts-expect-error
-          eventModule[functionName](this.#client, ...args)
+          eventModule[functionName](this.client, ...args)
         );
       });
     }
