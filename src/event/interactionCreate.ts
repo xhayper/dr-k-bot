@@ -1,4 +1,5 @@
 import { CommandManager, EmbedUtility, GuildUtility, MessageUtility, VerificationUtility } from '..';
+import { ModalUtility, questions } from '../utility/modalUtility';
 import { TypedEvent } from '../base/clientEvent';
 import { VerificationTicket } from '../database';
 import { Logger } from '../logger';
@@ -22,7 +23,6 @@ import {
 } from 'discord.js';
 
 const questionAskCollection = new Collection<Snowflake, User>();
-const verificationCollection = new Collection<User, boolean>();
 
 async function handleQuestion(
   textChannel: TextBasedChannel,
@@ -68,7 +68,40 @@ export default TypedEvent({
   on: async (client: Client, interaction: Interaction) => {
     if (!interaction.member || !(interaction.member instanceof GuildMember)) return;
 
-    if (interaction.type == InteractionType.ApplicationCommand) {
+    if (interaction.isModalSubmit()) {
+      switch (interaction.customId) {
+        case 'verification': {
+          await interaction.deferReply({ ephemeral: true });
+
+          const randomTicketId = await VerificationUtility.getUniqueTicketId();
+
+          const transformedAnswer = questions.map((quest, index) => ({
+            question: quest.label,
+            answer: interaction.fields.getTextInputValue(`question-${index + 1}`)
+          }));
+
+          const verificationData = {
+            id: randomTicketId,
+            requesterDiscordId: interaction.user.id,
+            logMessageId: 'undefined',
+            answers: transformedAnswer
+          };
+
+          if (GuildUtility.verificationLogChannel) {
+            const verifyMessage = await VerificationUtility.sendTicketInformation(
+              GuildUtility.verificationLogChannel,
+              verificationData
+            );
+            verificationData.logMessageId = verifyMessage ? verifyMessage.id : 'undefined';
+          }
+
+          await VerificationTicket.create(verificationData);
+
+          await interaction.editReply({ content: 'Your submission was received successfully!' });
+          break;
+        }
+      }
+    } else if (interaction.type == InteractionType.ApplicationCommand) {
       const chatInputCommandInteraction = interaction as ChatInputCommandInteraction;
       const command = CommandManager.commands.get(chatInputCommandInteraction.commandName);
       if (!command) return;
@@ -127,7 +160,6 @@ export default TypedEvent({
           break;
         }
         case 'verify': {
-          await buttonInteraction.deferReply({ ephemeral: true });
           break;
         }
         default: {
@@ -313,111 +345,8 @@ export default TypedEvent({
           break;
         }
         case 'verify': {
-          if (verificationCollection.has(buttonInteraction.user))
-            return buttonInteraction.editReply({ embeds: [EmbedUtility.ALREADY_IN_SESSION()] });
-
-          verificationCollection.set(buttonInteraction.user, true);
-
-          const dmChannel = interaction.user.dmChannel || (await interaction.user.createDM());
-
-          try {
-            await dmChannel.send({
-              embeds: [
-                EmbedUtility.SUCCESS_COLOR(
-                  new EmbedBuilder({
-                    description:
-                      'Before we can grant you access to the rest of the server, we needs you to answer some questions. The answers will __**NOT**__ be used for any other purposes, please answer all the following questions with honesty. Thanks!'
-                  })
-                )
-              ]
-            });
-          } catch (e: any) {
-            verificationCollection.delete(buttonInteraction.user);
-            if (e.code === 50007) return buttonInteraction.editReply({ embeds: [EmbedUtility.CANT_DM()] });
-            else throw e;
-          }
-
-          buttonInteraction.editReply({
-            embeds: [
-              EmbedUtility.SUCCESS_COLOR(
-                new EmbedBuilder({
-                  description: 'Please check your Direct Message!'
-                })
-              )
-            ]
-          });
-
-          const answerList = [];
-
-          for (const [index, value] of Object.entries(config.questions)) {
-            const currentIndex = parseInt(index);
-            await dmChannel
-              .send({
-                embeds: [
-                  EmbedUtility.SUCCESS_COLOR(
-                    new EmbedBuilder({
-                      title: `Question ${currentIndex + 1}`,
-                      description: value,
-                      footer: {
-                        text: `Respond within 5 minutes! | Say 'cancel' to exit! | Question ${currentIndex + 1}/${
-                          config.questions.length
-                        }`
-                      }
-                    })
-                  )
-                ]
-              })
-              .catch(async () => {
-                verificationCollection.delete(buttonInteraction.user);
-                return await dmChannel.send({ embeds: [EmbedUtility.DIDNT_RESPOND_IN_TIME()] }).catch(() => undefined);
-              });
-
-            const answer = await handleQuestion(dmChannel);
-            if (!answer) {
-              verificationCollection.delete(buttonInteraction.user);
-              return;
-            } else {
-              answerList.push({
-                question: value,
-                message: answer
-              });
-            }
-          }
-
-          verificationCollection.delete(buttonInteraction.user);
-
-          const randomTicketId = await VerificationUtility.getUniqueTicketId();
-
-          const transformedAnswer = await Promise.all(
-            answerList.map(async (answerData) => ({
-              question: answerData.question,
-              answer: await MessageUtility.transformMessage(answerData.message)
-            }))
-          );
-
-          const verificationData = {
-            id: randomTicketId,
-            requesterDiscordId: buttonInteraction.user.id,
-            logMessageId: 'undefined',
-            answers: transformedAnswer
-          };
-
-          if (GuildUtility.verificationLogChannel) {
-            const verifyMessage = await VerificationUtility.sendTicketInformation(
-              GuildUtility.verificationLogChannel,
-              verificationData
-            );
-            verificationData.logMessageId = verifyMessage ? verifyMessage.id : 'undefined';
-          }
-
-          await VerificationTicket.create(verificationData);
-
-          await dmChannel
-            .send({
-              embeds: [EmbedUtility.SUCCESS_COLOR(EmbedUtility.VERIFICATION_SUCCESS(randomTicketId))]
-            })
-            .catch(() => undefined);
-
+          const verificationModal = ModalUtility.createApplicationModal();
+          await interaction.showModal(verificationModal);
           break;
         }
       }
