@@ -6,7 +6,7 @@ import config from '../config';
 export default {
   data: new SlashCommandBuilder()
     .setName('welcome')
-    .setDescription('-')
+    .setDescription('Give the target user a warm welcome~')
     .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true)),
   guildId: [config.guildId],
   permission: 'SECURITY',
