@@ -27,6 +27,7 @@ export default TypedEvent({
       client.user!.setActivity(randomStatus[Math.floor(Math.random() * randomStatus.length)]);
     };
 
+    updateActivity();
     setInterval(updateActivity, 60000);
 
     Logger.info('Alright, Time to do some science.');
