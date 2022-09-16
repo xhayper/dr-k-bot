@@ -21,7 +21,7 @@ const randomStatus: ActivityOptions[] = [
 export default TypedEvent({
   eventName: 'ready',
   on: async (client: Client) => {
-    CommandManager.reloadCommands();
+    await CommandManager.reloadCommands();
 
     setInterval(() => {
       client.user!.setActivity(randomStatus[Math.floor(Math.random() * randomStatus.length)]);

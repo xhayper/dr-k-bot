@@ -16,18 +16,18 @@ import {
 } from 'discord.js';
 
 export class GuildUtility {
-  #client: Client;
+  private client: Client;
 
-  auditLogChannel: TextBasedChannel | undefined;
-  verificationLogChannel: TextBasedChannel | undefined;
-  primaryGeneralChannel: TextBasedChannel | undefined;
-  verificationThreadChannel: TextChannel | NewsChannel | undefined;
+  public auditLogChannel: TextBasedChannel | undefined;
+  public verificationLogChannel: TextBasedChannel | undefined;
+  public primaryGeneralChannel: TextBasedChannel | undefined;
+  public verificationThreadChannel: TextChannel | NewsChannel | undefined;
 
-  guild: Guild | undefined;
+  public guild: Guild | undefined;
 
   constructor(client: Client) {
-    this.#client = client;
-    this.#client.guilds
+    this.client = client;
+    this.client.guilds
       .fetch(config.guildId)
       .then(async (guild) => {
         this.guild = guild;
@@ -56,7 +56,7 @@ export class GuildUtility {
       .catch(() => null);
   }
 
-  async sendWelcomeMessage(member: GuildMember): Promise<void | Message> {
+  public async sendWelcomeMessage(member: GuildMember): Promise<void | Message> {
     if (!this.primaryGeneralChannel) return;
     return await this.primaryGeneralChannel.send({
       content: member.toString(),
@@ -78,12 +78,12 @@ export class GuildUtility {
     });
   }
 
-  async openThread(moderator: GuildMember, member: GuildMember): Promise<void> {
+  public async openThread(moderator: GuildMember, member: GuildMember): Promise<void> {
     if (!this.verificationThreadChannel) return;
     const thread = await this.verificationThreadChannel.threads.create({
       name: `${member.user.username} Ticket`,
       // @ts-expect-error
-      type: ChannelType.GuildPrivateThread,
+      type: ChannelType.PrivateThread,
       // @ts-expect-error
       invitable: true,
       autoArchiveDuration: 10080
@@ -96,41 +96,41 @@ export class GuildUtility {
     return;
   }
 
-  async sendAuditLog(message: string | MessagePayload | MessageOptions): Promise<void | Message> {
+  public async sendAuditLog(message: string | MessagePayload | MessageOptions): Promise<void | Message> {
     if (!this.auditLogChannel) return;
     return await this.auditLogChannel.send(message);
   }
 
-  async sendVerificationLog(message: string | MessagePayload | MessageOptions): Promise<void | Message> {
+  public async sendVerificationLog(message: string | MessagePayload | MessageOptions): Promise<void | Message> {
     if (!this.verificationLogChannel) return;
     return await this.verificationLogChannel.send(message);
   }
 
-  async getGuildMember(user: UserResolvable): Promise<void | GuildMember> {
+  public async getGuildMember(user: UserResolvable): Promise<void | GuildMember> {
     return await this.guild?.members.fetch(user).catch(() => undefined);
   }
 
-  isBotOwner(member: GuildMember): boolean {
+  public isBotOwner(member: GuildMember): boolean {
     return UserUtilty.isBotOwner(member.user);
   }
 
-  isAdministrator(member: GuildMember): boolean {
+  public isAdministrator(member: GuildMember): boolean {
     return member.roles.cache.has(config.role.administrator) || this.isBotOwner(member);
   }
 
-  isSeniorSecurity(member: GuildMember): boolean {
+  public isSeniorSecurity(member: GuildMember): boolean {
     return member.roles.cache.has(config.role.seniorSecurity) || this.isAdministrator(member);
   }
 
-  isModerator(member: GuildMember): boolean {
+  public isModerator(member: GuildMember): boolean {
     return member.roles.cache.has(config.role.moderator) || this.isSeniorSecurity(member);
   }
 
-  isIntern(member: GuildMember): boolean {
+  public isIntern(member: GuildMember): boolean {
     return member.roles.cache.has(config.role.intern) || this.isModerator(member);
   }
 
-  isSecurity(member: GuildMember): boolean {
+  public isSecurity(member: GuildMember): boolean {
     return member.roles.cache.has(config.role.security) || this.isIntern(member);
   }
 }

@@ -1,3 +1,7 @@
+import { EmbedUtility, GuildUtility, MessageUtility } from '..';
+import { VerificationTicket } from '../database';
+import crypto, { randomUUID } from 'node:crypto';
+import config from '../config';
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -8,10 +12,6 @@ import {
   TextBasedChannel,
   User
 } from 'discord.js';
-import { EmbedUtility, GuildUtility, MessageUtility } from '..';
-import { VerificationTicket } from '../database';
-import { v4 as uuidv4 } from 'uuid';
-import config from '../config';
 
 export type PartialVerificationData = {
   id: string;
@@ -23,7 +23,7 @@ export type PartialVerificationData = {
 };
 
 export class VerificationUtility {
-  async deleteTicket(
+  public async deleteTicket(
     ticket: VerificationTicket,
     deletetionData?: {
       deleteType: 'DECLINED' | 'ACCEPTED' | 'LEAVE';
@@ -64,25 +64,25 @@ export class VerificationUtility {
     }
   }
 
-  async getTicketFromId(id: string): Promise<void | VerificationTicket> {
+  public async getTicketFromId(id: string): Promise<void | VerificationTicket> {
     const ticket = await VerificationTicket.findOne({ where: { id } });
     if (!ticket) return;
     return ticket;
   }
 
-  async getTicketFromMessageId(messageId: string): Promise<void | VerificationTicket> {
+  public async getTicketFromMessageId(messageId: string): Promise<void | VerificationTicket> {
     const ticket = await VerificationTicket.findOne({ where: { logMessageId: messageId } });
     if (!ticket) return;
     return ticket;
   }
 
-  async getTicketsFromUserId(userId: string): Promise<void | VerificationTicket[]> {
+  public async getTicketsFromUserId(userId: string): Promise<void | VerificationTicket[]> {
     const ticket = await VerificationTicket.findAll({ where: { requesterDiscordId: userId } });
     if (!ticket) return;
     return ticket;
   }
 
-  async getMessageFromTicketId(ticketId: string): Promise<void | Message> {
+  public async getMessageFromTicketId(ticketId: string): Promise<void | Message> {
     if (!GuildUtility.verificationLogChannel) return;
 
     const ticket = await this.getTicketFromId(ticketId);
@@ -91,7 +91,7 @@ export class VerificationUtility {
     return await this.getMessageFromTicket(ticket);
   }
 
-  async getMessageFromTicket(ticket: VerificationTicket): Promise<void | Message> {
+  public async getMessageFromTicket(ticket: VerificationTicket): Promise<void | Message> {
     if (!GuildUtility.verificationLogChannel) return;
 
     const message = await GuildUtility.verificationLogChannel.messages
@@ -102,13 +102,13 @@ export class VerificationUtility {
     return message;
   }
 
-  async getUniqueTicketId(): Promise<string> {
-    const ticketId = uuidv4();
+  public async getUniqueTicketId(): Promise<string> {
+    const ticketId = randomUUID();
     if (await VerificationTicket.findOne({ where: { id: ticketId } })) return this.getUniqueTicketId();
     return ticketId;
   }
 
-  async sendTicketInformation(
+  public async sendTicketInformation(
     channel: TextBasedChannel,
     data: PartialVerificationData,
     addButton: boolean = true,

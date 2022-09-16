@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 
 export class MessageUtility {
-  async transformMessage(message: Message): Promise<string> {
+  public async transformMessage(message: Message): Promise<string> {
     return `${message.content}${message.content.trim() != '' && message.attachments.size > 0 ? '\n\n' : ''}${Array.from(
       message.attachments.values()
     )
@@ -9,7 +9,7 @@ export class MessageUtility {
       .join('\n')}`;
   }
 
-  disableAllComponent(message: Message): Message {
+  public disableAllComponent(message: Message): Message {
     message.components = [];
     return message;
   }
