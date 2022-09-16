@@ -206,7 +206,7 @@ export default TypedEvent({
                   new EmbedBuilder({
                     description: "What's the reason for declining?",
                     footer: {
-                      text: `Respond within 5 minutes | Say 'cancel'to exit | ${ticket!.id}`
+                      text: `Respond within 5 minutes | Say 'cancel' to exit | ${ticket!.id}`
                     }
                   }),
                   buttonInteraction.user
