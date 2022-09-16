@@ -115,7 +115,11 @@ export default TypedEvent({
         });
 
       if (command.permission) {
-        if (!interaction.member || !(interaction.member instanceof GuildMember))
+        if (
+          !interaction.member ||
+          !(interaction.member instanceof GuildMember) ||
+          interaction.guildId !== config.guildId
+        )
           return interaction.editReply({
             embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_USE_HERE(), interaction.user)]
           });
