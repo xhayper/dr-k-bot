@@ -1,6 +1,6 @@
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
 import { VerificationTicket } from '../database';
-import crypto, { randomUUID } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
 import config from '../config';
 import {
   ActionRowBuilder,

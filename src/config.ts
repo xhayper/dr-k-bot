@@ -33,7 +33,7 @@ export default config as {
   toggleRole: {
     [key: string]: string;
   };
-  questions: string[];
+  // questions: string[];
   misc: {
     mediaCooldown: number;
     mediaLimit: number;
