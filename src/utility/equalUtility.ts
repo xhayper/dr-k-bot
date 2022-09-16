@@ -1,11 +1,7 @@
 import isEqual from 'fast-deep-equal';
 import {
-  APIApplicationCommandBasicOption,
-  APIApplicationCommandIntegerOption,
   APIApplicationCommandOption,
-  APIApplicationCommandStringOption,
   ApplicationCommand,
-  ApplicationCommandOption,
   ApplicationCommandOptionData,
   ApplicationCommandOptionType,
   PermissionsBitField,
