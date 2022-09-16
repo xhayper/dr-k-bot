@@ -1,5 +1,5 @@
 import { SlashCommand } from '../base/slashCommand';
-import { Client, Collection } from 'discord.js';
+import { Client, Collection, RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord.js';
 import glob from 'glob';
 import path from 'path';
 import { EqualUtility } from '../utility/equalUtility';
@@ -48,7 +48,13 @@ export class CommandManager {
           if (!guildAPICommand) {
             Logger.info(`Creating guild command "${commandModule.data.name}" for guild "${guild.name}"`);
             await guild.commands.create(commandModule.data);
-          } else if (!EqualUtility.isCommandEqual(guildAPICommand, commandModule.data.toJSON())) {
+            // TODO: Remove this when it is in stable
+          } else if (
+            !EqualUtility.isCommandEqual(
+              guildAPICommand,
+              commandModule.data.toJSON() as RESTPostAPIChatInputApplicationCommandsJSONBody
+            )
+          ) {
             Logger.info(`Updating guild command "${commandModule.data.name}" for guild "${guild.name}"`);
             await guild.commands.edit(guildAPICommand.id, commandModule.data);
           }
@@ -68,7 +74,13 @@ export class CommandManager {
         if (!globalAPICommand) {
           Logger.info(`Creating global command "${commandModule.data.name}"`);
           await application.commands.create(commandModule.data);
-        } else if (!EqualUtility.isCommandEqual(globalAPICommand, commandModule.data.toJSON())) {
+          // TODO: Remove this when it is in stable
+        } else if (
+          !EqualUtility.isCommandEqual(
+            globalAPICommand,
+            commandModule.data.toJSON() as RESTPostAPIChatInputApplicationCommandsJSONBody
+          )
+        ) {
           Logger.info(`Updating global command "${commandModule.data.name}"`);
           await application.commands.edit(globalAPICommand.id, commandModule.data);
         }

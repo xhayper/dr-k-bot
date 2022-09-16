@@ -5,7 +5,7 @@ import {
   ApplicationCommandOptionData,
   ApplicationCommandOptionType,
   PermissionsBitField,
-  RESTPostAPIApplicationCommandsJSONBody
+  RESTPostAPIChatInputApplicationCommandsJSONBody
 } from 'discord.js';
 
 export class EqualUtility {
@@ -92,13 +92,14 @@ export class EqualUtility {
     return true;
   }
 
-  static isCommandEqual(command1: ApplicationCommand, command2: RESTPostAPIApplicationCommandsJSONBody): boolean {
-    if (command1.name != 'verification') return true;
-
+  static isCommandEqual(
+    command1: ApplicationCommand,
+    command2: RESTPostAPIChatInputApplicationCommandsJSONBody
+  ): boolean {
     let defaultMemberPermissions = null;
     let dmPermission = command2.dm_permission;
 
-    if ('default_member_permissions' in command2) {
+    if (command2.default_member_permissions) {
       defaultMemberPermissions = command2.default_member_permissions
         ? new PermissionsBitField(BigInt(command2.default_member_permissions)).bitfield
         : null;
@@ -107,7 +108,7 @@ export class EqualUtility {
     // Check top level parameters
     if (
       command2.name !== command1.name ||
-      ('description' in command2 && command2.description !== command1.description) ||
+      command2.description !== command1.description ||
       (command2.type && command2.type !== command1.type) ||
       // Future proof for options being nullable
       // TODO: remove ?? 0 on each when nullable
