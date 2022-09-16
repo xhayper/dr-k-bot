@@ -23,9 +23,11 @@ export default TypedEvent({
   on: async (client: Client) => {
     await CommandManager.reloadCommands();
 
-    setInterval(() => {
+    const updateActivity = () => {
       client.user!.setActivity(randomStatus[Math.floor(Math.random() * randomStatus.length)]);
-    }, 60000);
+    };
+
+    setInterval(updateActivity, 60000);
 
     Logger.info('Alright, Time to do some science.');
   }
