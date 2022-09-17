@@ -1,7 +1,7 @@
 import { VerificationTicket, verificationTicketDataTypes } from './model/VerificationTicket';
 import { Sequelize } from 'sequelize';
 import { Logger } from './logger';
-import path from 'path';
+import path from 'node:path';
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',

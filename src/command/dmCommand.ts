@@ -1,3 +1,6 @@
+import { SlashCommand } from '../base/slashCommand';
+import { EmbedUtility } from '..';
+import config from '../config';
 import {
   ChatInputCommandInteraction,
   GuildMember,
@@ -5,9 +8,6 @@ import {
   SlashCommandBuilder,
   SlashCommandUserOption
 } from 'discord.js';
-import { SlashCommand } from '../base/slashCommand';
-import { EmbedUtility } from '..';
-import config from '../config';
 
 const memberOption = (option: SlashCommandUserOption, description = '-') =>
   option.setName('member').setDescription(description).setRequired(true);
