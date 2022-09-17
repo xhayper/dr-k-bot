@@ -30,7 +30,7 @@ export const questions: (Partial<TextInputComponentData> & { label: string })[] 
     style: TextInputStyle.Paragraph
   },
   {
-    label: "Who's your second favorite character?",
+    label: "Who's your 2nd favorite character? and why?",
     required: true,
     minLength: 100,
     maxLength: 1024,
