@@ -61,7 +61,7 @@ export class CommandManager {
 
                     for (const guildCommand of guildAPICommandList.values()) {
                         const mod = this.commands.get(guildCommand.name);
-                        if (mod && mod.guildId && mod.guildId.includes(guildId)) return;
+                        if (mod && mod.guildId && mod.guildId.includes(guildId)) continue;
                         Logger.info(`Deleting guild command "${guildCommand.name}" for guild "${guild.name}"`);
                         await guildCommand.delete();
                     }
@@ -88,7 +88,7 @@ export class CommandManager {
         }
 
         for (const globalCommand of fetchedGlobalCommands.values()) {
-            if (this.commands.get(globalCommand.name)) return;
+            if (this.commands.get(globalCommand.name)) continue;
             Logger.info(`Deleting global command "${globalCommand.name}"`);
             await globalCommand.delete();
         }
