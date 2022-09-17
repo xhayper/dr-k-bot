@@ -23,7 +23,7 @@ export default TypedEvent({
             message.author,
             `**🗑 Message sent by ${message.author} deleted in ${
               message.channel
-            }**\n${await MessageUtility.transformMessage(message)}`
+            }**\n${await MessageUtility.transformMessage(message, true)}`
           ).setFooter({
             text: `Message ID: ${message.id}`
           })

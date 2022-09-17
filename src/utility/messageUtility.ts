@@ -13,9 +13,12 @@ export class MessageUtility {
     });
   }
 
-  public async transformMessage(message: Message): Promise<string> {
-    return `${message.content}${message.content.trim() != '' && message.attachments.size > 0 ? '\n\n' : ''}${(
-      await this.transformToPermenantImage(Array.from(message.attachments.values()))
+  public async transformMessage(message: Message, transformToPermenant: boolean = false): Promise<string> {
+    return `${message.content}${
+      message.content.trim() != '' && message.attachments.size > 0 ? '\n\n' : ''
+    }${(transformToPermenant
+      ? await this.transformToPermenantImage(Array.from(message.attachments.values()))
+      : Array.from(message.attachments.values())
     )
       .map((attachment, index) => `[| Attachment ${index + 1} | ${attachment.name} |](${attachment.proxyURL})`)
       .join('\n')}`;
