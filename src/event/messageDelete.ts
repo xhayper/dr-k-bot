@@ -10,6 +10,7 @@ export default TypedEvent({
       message.partial ||
       message.author.bot ||
       message.channel.id == config.channel.auditLog ||
+      message.channel.id == config.channel['image-storage'] ||
       !message.guild ||
       message.guild.id != config.guildId
     )

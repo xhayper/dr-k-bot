@@ -29,6 +29,7 @@ export default config as {
     'general-2': string;
     'role-selection': string;
     'art-channel': string;
+    'image-storage': string;
   };
   toggleRole: {
     [key: string]: string;
