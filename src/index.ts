@@ -30,7 +30,6 @@ const client = new Client({
 
 const verificationUtility = new VerificationUtility();
 const embedUtility = new EmbedUtility(client);
-const messageUtility = new MessageUtility();
 const userUtility = new UserUtility();
 
 const commandManager = new CommandManager(client);
@@ -42,6 +41,7 @@ const eventManager = new EventManager(client);
 
 client.login();
 
+const messageUtility = new MessageUtility(client);
 const guildUtility = new GuildUtility(client);
 
 export {
