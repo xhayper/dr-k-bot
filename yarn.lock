@@ -607,7 +607,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dr-k-bot@workspace:."
   dependencies:
-    "@discordjs/rest": ^1.1.0
     "@types/glob": ^8.0.0
     "@types/node": ^18.7.18
     bufferutil: ^4.0.6
