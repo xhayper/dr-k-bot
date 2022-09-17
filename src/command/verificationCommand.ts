@@ -1,3 +1,7 @@
+import { EmbedUtility, GuildUtility, VerificationUtility } from '..';
+import { SlashCommand } from '../base/slashCommand';
+import { VerificationTicket } from '../database';
+import config from '../config';
 import {
   ChatInputCommandInteraction,
   AttachmentBuilder,
@@ -5,10 +9,6 @@ import {
   SlashCommandBuilder,
   SlashCommandStringOption
 } from 'discord.js';
-import { EmbedUtility, GuildUtility, VerificationUtility } from '..';
-import { SlashCommand } from '../base/slashCommand';
-import { VerificationTicket } from '../database';
-import config from '../config';
 
 const verificationTicketIdOption = (option: SlashCommandStringOption) => {
   return option.setName('id').setDescription('The ticket id').setRequired(true);

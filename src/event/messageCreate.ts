@@ -2,8 +2,8 @@ import { ChannelType, Client, Collection, Message, Snowflake } from 'discord.js'
 import { TypedEvent } from '../base/clientEvent';
 import { EmbedUtility, GuildUtility } from '..';
 import config from '../config';
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
 
 const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, '../../insult.json'), 'utf8')) as string[];
 

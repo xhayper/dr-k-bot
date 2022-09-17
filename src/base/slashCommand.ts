@@ -1,5 +1,4 @@
-import { ChatInputCommandInteraction, Snowflake } from 'discord.js';
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { ChatInputCommandInteraction, Snowflake, SlashCommandBuilder } from 'discord.js';
 
 export interface SlashCommand {
   data: SlashCommandBuilder;

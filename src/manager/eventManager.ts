@@ -1,6 +1,6 @@
 import { ClientEvent } from '../base/clientEvent';
 import { Client } from 'discord.js';
-import path from 'path';
+import path from 'node:path';
 import glob from 'glob';
 
 export class EventManager {

@@ -1,7 +1,7 @@
 import pretty from 'pino-pretty';
+import path from 'node:path';
+import fs from 'node:fs';
 import pino from 'pino';
-import path from 'path';
-import fs from 'fs';
 
 const streams = [
   { stream: fs.createWriteStream(path.join(__dirname, `../logs/${new Date().toISOString()}.log`)) },
