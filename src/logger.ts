@@ -3,6 +3,8 @@ import path from 'node:path';
 import fs from 'node:fs';
 import pino from 'pino';
 
+if (!fs.existsSync(path.join(__dirname, 'logs'))) fs.mkdirSync(path.join(__dirname, 'logs'));
+
 const streams = [
   { stream: fs.createWriteStream(path.join(__dirname, `../logs/${new Date().toISOString()}.log`)) },
   {
