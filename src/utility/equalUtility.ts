@@ -94,7 +94,8 @@ export class EqualUtility {
 
   static isCommandEqual(
     command1: ApplicationCommand,
-    command2: RESTPostAPIChatInputApplicationCommandsJSONBody
+    command2: RESTPostAPIChatInputApplicationCommandsJSONBody,
+    enforceOptionOrder = false
   ): boolean {
     let defaultMemberPermissions = null;
     let dmPermission = command2.dm_permission;
@@ -122,7 +123,7 @@ export class EqualUtility {
     }
 
     if (command2.options) {
-      return this.optionsEqual(command1.options, command2.options, true);
+      return this.optionsEqual(command1.options, command2.options, enforceOptionOrder);
     }
     return true;
   }

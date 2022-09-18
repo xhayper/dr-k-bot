@@ -52,7 +52,8 @@ export class CommandManager {
           } else if (
             !EqualUtility.isCommandEqual(
               guildAPICommand,
-              commandModule.data.toJSON() as RESTPostAPIChatInputApplicationCommandsJSONBody
+              commandModule.data.toJSON() as RESTPostAPIChatInputApplicationCommandsJSONBody,
+              true
             )
           ) {
             Logger.info(`Updating guild command "${commandModule.data.name}" for guild "${guild.name}"`);
@@ -78,7 +79,8 @@ export class CommandManager {
         } else if (
           !EqualUtility.isCommandEqual(
             globalAPICommand,
-            commandModule.data.toJSON() as RESTPostAPIChatInputApplicationCommandsJSONBody
+            commandModule.data.toJSON() as RESTPostAPIChatInputApplicationCommandsJSONBody,
+            true
           )
         ) {
           Logger.info(`Updating global command "${commandModule.data.name}"`);
