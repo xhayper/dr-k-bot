@@ -3,7 +3,7 @@ import pretty from 'pino-pretty';
 import path from 'node:path';
 import fs from 'node:fs';
 
-if (!fs.existsSync(path.join(__dirname, 'logs'))) fs.mkdirSync(path.join(__dirname, 'logs'));
+if (!fs.existsSync(path.join(__dirname, '../logs'))) fs.mkdirSync(path.join(__dirname, '../logs'));
 
 const streams = [
   {
