@@ -1,19 +1,25 @@
+import pino, { DestinationStream, StreamEntry } from 'pino';
 import pretty from 'pino-pretty';
 import path from 'node:path';
 import fs from 'node:fs';
-import pino from 'pino';
 
 if (!fs.existsSync(path.join(__dirname, 'logs'))) fs.mkdirSync(path.join(__dirname, 'logs'));
 
 const streams = [
-  { stream: fs.createWriteStream(path.join(__dirname, `../logs/${new Date().toISOString()}.log`)) },
+  {
+    stream: pretty({
+      destination: fs.createWriteStream(path.join(__dirname, `../logs/${new Date().toISOString()}.log`)),
+      colorize: false,
+      ignore: 'pid,hostname'
+    })
+  },
   {
     stream: pretty({
       colorize: true,
       ignore: 'pid,hostname'
     })
   }
-] as any;
+] as (DestinationStream | StreamEntry)[] | DestinationStream | StreamEntry;
 
 const logger = pino(
   {
