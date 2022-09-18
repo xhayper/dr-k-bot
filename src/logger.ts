@@ -21,4 +21,14 @@ const logger = pino(
   pino.multistream(streams)
 );
 
+process.on('uncaughtException', (err) => {
+  logger.error(err);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (err) => {
+  logger.error(err);
+  process.exit(1);
+});
+
 export { logger as Logger };
