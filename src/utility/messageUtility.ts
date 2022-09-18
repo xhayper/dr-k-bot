@@ -25,6 +25,7 @@ export class MessageUtility {
   }
 
   public async transformToPermenantImage(attachment: Attachment[]): Promise<Attachment[]> {
+    if (attachment.length === 0) return attachment;
     if (!this.imageStorageChannel) return attachment;
 
     const message = await this.imageStorageChannel.send({
