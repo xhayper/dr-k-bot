@@ -4,7 +4,7 @@ export const questions: (Partial<TextInputComponentData> & { label: string })[] 
   {
     label: 'Where did you obtain the invite from?',
     required: true,
-    minLength: 100,
+    minLength: 25,
     maxLength: 1024,
     style: TextInputStyle.Paragraph
   },
@@ -18,21 +18,21 @@ export const questions: (Partial<TextInputComponentData> & { label: string })[] 
   {
     label: 'How do you know about Changed? (Be specific)',
     required: true,
-    minLength: 100,
+    minLength: 50,
     maxLength: 1024,
     style: TextInputStyle.Paragraph
   },
   {
     label: 'Why do you like Changed? (Be Specific)',
     required: true,
-    minLength: 100,
+    minLength: 50,
     maxLength: 1024,
     style: TextInputStyle.Paragraph
   },
   {
     label: "Who's your 2nd favorite character? and why?",
     required: true,
-    minLength: 100,
+    minLength: 50,
     maxLength: 1024,
     style: TextInputStyle.Paragraph
   }
