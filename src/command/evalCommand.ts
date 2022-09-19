@@ -31,7 +31,7 @@ export default {
             const result = await clean(eval(code));
             chatInputCommandInteraction.editReply(`\`\`\`\n${result}\n\`\`\`` ?? 'No output');
         } catch (e: any) {
-            chatInputCommandInteraction.editReply(`\`\`\`\n${clean(e)}\n\`\`\``);
+            chatInputCommandInteraction.editReply(`\`\`\`\n${await clean(e)}\n\`\`\``);
         }
     }
 } as SlashCommand;
