@@ -6,7 +6,7 @@ import {
   GuildMember,
   Message,
   EmbedBuilder,
-  MessageOptions,
+  BaseMessageOptions,
   MessagePayload,
   NewsChannel,
   TextBasedChannel,
@@ -96,12 +96,12 @@ export class GuildUtility {
     return;
   }
 
-  public async sendAuditLog(message: string | MessagePayload | MessageOptions): Promise<void | Message> {
+  public async sendAuditLog(message: string | MessagePayload | BaseMessageOptions): Promise<void | Message> {
     if (!this.auditLogChannel) return;
     return await this.auditLogChannel.send(message);
   }
 
-  public async sendVerificationLog(message: string | MessagePayload | MessageOptions): Promise<void | Message> {
+  public async sendVerificationLog(message: string | MessagePayload | BaseMessageOptions): Promise<void | Message> {
     if (!this.verificationLogChannel) return;
     return await this.verificationLogChannel.send(message);
   }

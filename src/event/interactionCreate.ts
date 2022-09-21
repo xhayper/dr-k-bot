@@ -14,7 +14,7 @@ import {
   Message,
   EmbedBuilder,
   MessageMentionOptions,
-  MessageOptions,
+  BaseMessageOptions,
   Snowflake,
   TextBasedChannel,
   User,
@@ -27,7 +27,7 @@ const questionAskCollection = new Collection<Snowflake, User>();
 async function handleQuestion(
   textChannel: TextBasedChannel,
   filter?: CollectorFilter<[Message<boolean>]>,
-  cancelMessage: string | MessageOptions | null = {
+  cancelMessage: string | BaseMessageOptions | null = {
     embeds: [EmbedUtility.OPERATION_CANCELLED()]
   }
 ): Promise<Message | void> {
@@ -138,8 +138,7 @@ export default TypedEvent({
       }
 
       Logger.info(
-        `${(interaction.member?.user ?? interaction.user).username}#${
-          (interaction.member?.user ?? interaction.user).discriminator
+        `${(interaction.member?.user ?? interaction.user).username}#${(interaction.member?.user ?? interaction.user).discriminator
         } used command ${command.data.name}`
       );
       command.execute(chatInputCommandInteraction);
