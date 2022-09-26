@@ -1,4 +1,4 @@
-import { ChannelType, Client, Collection, Message, Snowflake } from 'discord.js';
+import { ChannelType, Client, Collection, DiscordAPIError, Message, Snowflake } from 'discord.js';
 import { TypedEvent } from '../base/clientEvent';
 import { EmbedUtility, GuildUtility } from '..';
 import config from '../config';
@@ -58,7 +58,29 @@ export default TypedEvent({
             )
           ]
         });
-        await message.author.send('Please do not send messages in the art channel, it is for posting art only.');
+        
+        const err = await message.author
+          .send('Please do not send messages in the art channel, it is for posting art only.')
+          .catch((err) => err);
+
+        if (err instanceof DiscordAPIError) {
+          if (err.code === 50007) {
+            const msg = await message
+              .reply({
+                content: 'Please do not send messages in the art channel, it is for posting art only.',
+                allowedMentions: {
+                  repliedUser: true
+                }
+              })
+              .catch(() => null);
+
+            if (msg)
+              setTimeout(() => {
+                msg.delete();
+              }, 3000);
+          }
+        }
+
         return message.delete();
       }
     }
