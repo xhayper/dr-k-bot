@@ -60,13 +60,13 @@ export class VerificationUtility {
   }
 
   public async getTicketFromId(id: string): Promise<void | VerificationTicketType> {
-    const ticket = await VerificationTicket.findFirst({ where: { id } });
+    const ticket = await VerificationTicket.findUnique({ where: { id } });
     if (!ticket) return;
     return ticket;
   }
 
   public async getTicketFromMessageId(messageId: string): Promise<void | VerificationTicketType> {
-    const ticket = await VerificationTicket.findFirst({ where: { messageId } });
+    const ticket = await VerificationTicket.findUnique({ where: { messageId } });
     if (!ticket) return;
     return ticket;
   }
@@ -97,7 +97,7 @@ export class VerificationUtility {
 
   public async getUniqueTicketId(): Promise<string> {
     const ticketId = randomUUID();
-    if (await VerificationTicket.findFirst({ where: { id: ticketId } })) return this.getUniqueTicketId();
+    if (await VerificationTicket.findUnique({ where: { id: ticketId } })) return this.getUniqueTicketId();
     return ticketId;
   }
 
