@@ -14,13 +14,15 @@ import { EmbedUtility } from './utility/embedUtility';
 import { GuildUtility } from './utility/guildUtility';
 import { UserUtility } from './utility/userUtility';
 
-// All the required modules
-import { SapphireClient } from '@sapphire/framework';
+import { LogLevel, SapphireClient } from '@sapphire/framework';
 
 const client = new SapphireClient({
   defaultPrefix: 'drk!',
   loadMessageCommandListeners: true,
   typing: true,
+  logger: {
+    level: process.env.NODE_ENV === 'development' ? LogLevel.Debug : LogLevel.Info
+  },
   hmr: {
     enabled: process.env.NODE_ENV === 'development'
   },
