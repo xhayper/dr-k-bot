@@ -1,5 +1,5 @@
+import { VerificationTicket, VerificationTicketType } from '../database';
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
-import { VerificationTicket } from '../database';
 import { randomUUID } from 'node:crypto';
 import config from '../config';
 import {
@@ -15,26 +15,21 @@ import {
 
 export type PartialVerificationData = {
   id: string;
-  requesterDiscordId: string;
-  answers: {
-    question: string;
-    answer: string;
-  }[];
+  discordId: string;
+  answers: string;
 };
 
 export class VerificationUtility {
   public async deleteTicket(
-    ticket: VerificationTicket,
+    ticket: VerificationTicketType,
     deletetionData?: {
       deleteType: 'DECLINED' | 'ACCEPTED' | 'LEAVE';
       who?: User;
     }
   ): Promise<void> {
-    await ticket.destroy();
-    if (ticket.logMessageId != 'undefinded' && GuildUtility.verificationLogChannel) {
-      let message = await GuildUtility.verificationLogChannel.messages
-        .fetch(ticket.logMessageId)
-        .catch(() => undefined);
+    await VerificationTicket.delete({ where: { id: ticket.id } });
+    if (ticket.messageId != 'undefinded' && GuildUtility.verificationLogChannel) {
+      let message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.messageId!).catch(() => undefined);
       if (!message) return;
       message = MessageUtility.disableAllComponent(message) as Message<true>;
 
@@ -64,20 +59,20 @@ export class VerificationUtility {
     }
   }
 
-  public async getTicketFromId(id: string): Promise<void | VerificationTicket> {
-    const ticket = await VerificationTicket.findOne({ where: { id } });
+  public async getTicketFromId(id: string): Promise<void | VerificationTicketType> {
+    const ticket = await VerificationTicket.findFirst({ where: { id } });
     if (!ticket) return;
     return ticket;
   }
 
-  public async getTicketFromMessageId(messageId: string): Promise<void | VerificationTicket> {
-    const ticket = await VerificationTicket.findOne({ where: { logMessageId: messageId } });
+  public async getTicketFromMessageId(messageId: string): Promise<void | VerificationTicketType> {
+    const ticket = await VerificationTicket.findFirst({ where: { messageId } });
     if (!ticket) return;
     return ticket;
   }
 
-  public async getTicketsFromUserId(userId: string): Promise<void | VerificationTicket[]> {
-    const ticket = await VerificationTicket.findAll({ where: { requesterDiscordId: userId } });
+  public async getTicketsFromUserId(userId: string): Promise<void | VerificationTicketType[]> {
+    const ticket = await VerificationTicket.findMany({ where: { discordId: userId } });
     if (!ticket) return;
     return ticket;
   }
@@ -91,12 +86,10 @@ export class VerificationUtility {
     return await this.getMessageFromTicket(ticket);
   }
 
-  public async getMessageFromTicket(ticket: VerificationTicket): Promise<void | Message> {
+  public async getMessageFromTicket(ticket: VerificationTicketType): Promise<void | Message> {
     if (!GuildUtility.verificationLogChannel) return;
 
-    const message = await GuildUtility.verificationLogChannel.messages
-      .fetch(ticket.logMessageId)
-      .catch(() => undefined);
+    const message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.messageId!).catch(() => undefined);
     if (!message) return;
 
     return message;
@@ -104,7 +97,7 @@ export class VerificationUtility {
 
   public async getUniqueTicketId(): Promise<string> {
     const ticketId = randomUUID();
-    if (await VerificationTicket.findOne({ where: { id: ticketId } })) return this.getUniqueTicketId();
+    if (await VerificationTicket.findFirst({ where: { id: ticketId } })) return this.getUniqueTicketId();
     return ticketId;
   }
 
@@ -115,7 +108,7 @@ export class VerificationUtility {
     pingVerificationTeam: boolean = true
   ): Promise<Message | void> {
     return await channel.send({
-      content: pingVerificationTeam ? `<@&${config.role.verificationTeam}> | <@${data.requesterDiscordId}>` : undefined,
+      content: pingVerificationTeam ? `<@&${config.role.verificationTeam}> | <@${data.discordId}>` : undefined,
       embeds: [await EmbedUtility.VERIFICATION_INFO(data)],
       components: addButton
         ? [

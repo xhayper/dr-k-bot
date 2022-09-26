@@ -13,7 +13,7 @@ export class EventManager {
   public async reloadEvents() {
     this.client.removeAllListeners();
 
-    const eventPathList = glob.sync(path.join(__dirname, '../event/*.+(js|ts)'));
+    const eventPathList = glob.sync(path.join(__dirname, `../event/*.+(js|ts)`).replaceAll("\\", "/"));
 
     for (const event of eventPathList) {
       delete require.cache[require.resolve(event)];

@@ -1,7 +1,7 @@
 import { CommandManager, EmbedUtility, GuildUtility, MessageUtility, VerificationUtility } from '..';
+import { VerificationTicket, VerificationTicketType } from '../database';
 import { ModalUtility, questions } from '../utility/modalUtility';
 import { TypedEvent } from '../base/clientEvent';
-import { VerificationTicket } from '../database';
 import { Logger } from '../logger';
 import config from '../config';
 import {
@@ -82,9 +82,9 @@ export default TypedEvent({
 
           const verificationData = {
             id: randomTicketId,
-            requesterDiscordId: interaction.user.id,
-            logMessageId: 'undefined',
-            answers: transformedAnswer
+            discordId: interaction.user.id,
+            messageId: 'undefined',
+            answers: JSON.stringify(transformedAnswer)
           };
 
           if (GuildUtility.verificationLogChannel) {
@@ -92,10 +92,10 @@ export default TypedEvent({
               GuildUtility.verificationLogChannel,
               verificationData
             );
-            verificationData.logMessageId = verifyMessage ? verifyMessage.id : 'undefined';
+            verificationData.messageId = verifyMessage ? verifyMessage.id : 'undefined';
           }
 
-          await VerificationTicket.create(verificationData);
+          await VerificationTicket.create({ data: verificationData });
 
           await interaction.editReply({ content: 'Your submission was received successfully!' });
           break;
@@ -138,7 +138,8 @@ export default TypedEvent({
       }
 
       Logger.info(
-        `${(interaction.member?.user ?? interaction.user).username}#${(interaction.member?.user ?? interaction.user).discriminator
+        `${(interaction.member?.user ?? interaction.user).username}#${
+          (interaction.member?.user ?? interaction.user).discriminator
         } used command ${command.data.name}`
       );
       command.execute(chatInputCommandInteraction);
@@ -147,7 +148,7 @@ export default TypedEvent({
       const buttonInteraction = interaction as ButtonInteraction;
 
       let moderator: GuildMember | void;
-      let ticket: VerificationTicket | void;
+      let ticket: VerificationTicketType | void;
       let verificationMessage: Message | void;
 
       // Check for permission, set fields and set up
@@ -193,7 +194,7 @@ export default TypedEvent({
       // The actual logic
       switch (buttonInteraction.customId) {
         case 'verify_accept': {
-          const member = await GuildUtility.getGuildMember(ticket!.requesterDiscordId);
+          const member = await GuildUtility.getGuildMember(ticket!.discordId);
           if (!member)
             return buttonInteraction.editReply({
               embeds: [
@@ -287,7 +288,7 @@ export default TypedEvent({
             return;
           }
 
-          const user = await client.users.fetch(ticket!.requesterDiscordId).catch(() => undefined);
+          const user = await client.users.fetch(ticket!.discordId).catch(() => undefined);
           if (user)
             user
               .send({
@@ -328,7 +329,7 @@ export default TypedEvent({
           break;
         }
         case 'verify_ticket': {
-          const member = await GuildUtility.getGuildMember(ticket!.requesterDiscordId);
+          const member = await GuildUtility.getGuildMember(ticket!.discordId);
           if (!member)
             return buttonInteraction.editReply({
               embeds: [

@@ -1,17 +1,16 @@
-import { VerificationTicket, verificationTicketDataTypes } from './model/VerificationTicket';
-import { Sequelize } from 'sequelize';
+import { PrismaClient, VerificationTicket as VerificationTicketType } from '@prisma/client';
 import { Logger } from './logger';
-import path from 'node:path';
 
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: path.join(__dirname, '../database.sqlite'),
-  logging: (sql: string, timing?: number) => {
-    Logger.debug(`${sql} ${timing ? `(${timing.toString()}ms)` : ''}`);
-  }
+const prisma = new PrismaClient({
+  log: [{ emit: 'event', level: 'query' }]
 });
 
-VerificationTicket.init(verificationTicketDataTypes, { sequelize });
-VerificationTicket.sync();
+prisma.$on('query', (event) => {
+  Logger.debug('-- Database Query --');
+  Logger.debug(`Query: ${event.query}`);
+  Logger.debug(`Params: ${event.params}`);
+  Logger.debug(`Duration: ${event.duration}ms`);
+});
 
-export { VerificationTicket };
+export const VerificationTicket = prisma.verificationTicket;
+export { VerificationTicketType };

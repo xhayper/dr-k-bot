@@ -40,39 +40,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gar/promisify@npm:^1.0.1, @gar/promisify@npm:^1.1.3":
+"@gar/promisify@npm:^1.1.3":
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
   checksum: 4059f790e2d07bf3c3ff3e0fec0daa8144fe35c1f6e0111c9921bd32106adaa97a4ab096ad7dab1e28ee6a9060083c4d1a4ada42a7f5f3f7a96b8812e2b757c1
-  languageName: node
-  linkType: hard
-
-"@mapbox/node-pre-gyp@npm:^1.0.0":
-  version: 1.0.10
-  resolution: "@mapbox/node-pre-gyp@npm:1.0.10"
-  dependencies:
-    detect-libc: ^2.0.0
-    https-proxy-agent: ^5.0.0
-    make-dir: ^3.1.0
-    node-fetch: ^2.6.7
-    nopt: ^5.0.0
-    npmlog: ^5.0.1
-    rimraf: ^3.0.2
-    semver: ^7.3.5
-    tar: ^6.1.11
-  bin:
-    node-pre-gyp: bin/node-pre-gyp
-  checksum: 1a98db05d955b74dad3814679593df293b9194853698f3f5f1ed00ecd93128cdd4b14fb8767fe44ac6981ef05c23effcfdc88710e7c1de99ccb6f647890597c8
-  languageName: node
-  linkType: hard
-
-"@npmcli/fs@npm:^1.0.0":
-  version: 1.1.1
-  resolution: "@npmcli/fs@npm:1.1.1"
-  dependencies:
-    "@gar/promisify": ^1.0.1
-    semver: ^7.3.5
-  checksum: f5ad92f157ed222e4e31c352333d0901df02c7c04311e42a81d8eb555d4ec4276ea9c635011757de20cc476755af33e91622838de573b17e52e2e7703f0a9965
   languageName: node
   linkType: hard
 
@@ -86,16 +57,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/move-file@npm:^1.0.1":
-  version: 1.1.2
-  resolution: "@npmcli/move-file@npm:1.1.2"
-  dependencies:
-    mkdirp: ^1.0.4
-    rimraf: ^3.0.2
-  checksum: c96381d4a37448ea280951e46233f7e541058cf57a57d4094dd4bdcaae43fa5872b5f2eb6bfb004591a68e29c5877abe3cdc210cb3588cbf20ab2877f31a7de7
-  languageName: node
-  linkType: hard
-
 "@npmcli/move-file@npm:^2.0.0":
   version: 2.0.1
   resolution: "@npmcli/move-file@npm:2.0.1"
@@ -103,6 +64,34 @@ __metadata:
     mkdirp: ^1.0.4
     rimraf: ^3.0.2
   checksum: 52dc02259d98da517fae4cb3a0a3850227bdae4939dda1980b788a7670636ca2b4a01b58df03dd5f65c1e3cb70c50fa8ce5762b582b3f499ec30ee5ce1fd9380
+  languageName: node
+  linkType: hard
+
+"@prisma/client@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "@prisma/client@npm:4.3.1"
+  dependencies:
+    "@prisma/engines-version": 4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: 2e3e6319bb0974f9ab67ab4620b775f82c54e00c4690db59bbd4736967c1afae7b4487ac54a78d221b7f898287b387422c7e8de026dfd66e97c1ca1e79eb06f7
+  languageName: node
+  linkType: hard
+
+"@prisma/engines-version@npm:4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b":
+  version: 4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b
+  resolution: "@prisma/engines-version@npm:4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b"
+  checksum: 268eb72da6ef70f3e0ce9c43f1b1500af3df24adb0589972f2fbbb949e5f3847c0c2377998537ad425995f78ad59cd06e65e1b07040d0ea937cefe02e441a5d1
+  languageName: node
+  linkType: hard
+
+"@prisma/engines@npm:4.3.1":
+  version: 4.3.1
+  resolution: "@prisma/engines@npm:4.3.1"
+  checksum: a407ecb8e15373890d82fc01682ddb1c473c7a5e81e07b603bdf3064bad936ee7cfa9d3ac68d5c4b845f476df53b92b705e7ec6a24a7364354ac78eb9084cbcc
   languageName: node
   linkType: hard
 
@@ -137,26 +126,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tootallnate/once@npm:1":
-  version: 1.1.2
-  resolution: "@tootallnate/once@npm:1.1.2"
-  checksum: e1fb1bbbc12089a0cb9433dc290f97bddd062deadb6178ce9bcb93bb7c1aecde5e60184bc7065aec42fe1663622a213493c48bbd4972d931aae48315f18e1be9
-  languageName: node
-  linkType: hard
-
 "@tootallnate/once@npm:2":
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
   checksum: ad87447820dd3f24825d2d947ebc03072b20a42bfc96cbafec16bff8bbda6c1a81fcb0be56d5b21968560c5359a0af4038a68ba150c3e1694fe4c109a063bed8
-  languageName: node
-  linkType: hard
-
-"@types/debug@npm:^4.1.7":
-  version: 4.1.7
-  resolution: "@types/debug@npm:4.1.7"
-  dependencies:
-    "@types/ms": "*"
-  checksum: 0a7b89d8ed72526858f0b61c6fd81f477853e8c4415bb97f48b1b5545248d2ae389931680b94b393b993a7cfe893537a200647d93defe6d87159b96812305adc
   languageName: node
   linkType: hard
 
@@ -184,13 +157,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ms@npm:*":
-  version: 0.7.31
-  resolution: "@types/ms@npm:0.7.31"
-  checksum: daadd354aedde024cce6f5aa873fefe7b71b22cd0e28632a69e8b677aeb48ae8caa1c60e5919bb781df040d116b01cb4316335167a3fc0ef6a63fa3614c0f6da
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:*":
   version: 18.7.18
   resolution: "@types/node@npm:18.7.18"
@@ -202,13 +168,6 @@ __metadata:
   version: 18.7.21
   resolution: "@types/node@npm:18.7.21"
   checksum: 9e0558dd44766fb3b1b26815e9877849d8f1188115e0d2bee540cee2c5a11f90e4c00ee059edae8ea018e7f66217e4bf53271536c9a6fd05e33f713b8daa4c66
-  languageName: node
-  linkType: hard
-
-"@types/validator@npm:^13.7.1":
-  version: 13.7.6
-  resolution: "@types/validator@npm:13.7.6"
-  checksum: f860dd87bc5f90cc33d2802cf2a4da307ddac63c86d86b858a85dd62d457c8fa42fc8756e05b5d24e741376debc13d46ed14bc700006bf7d0cb910118022492b
   languageName: node
   linkType: hard
 
@@ -246,7 +205,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"agentkeepalive@npm:^4.1.3, agentkeepalive@npm:^4.2.1":
+"agentkeepalive@npm:^4.2.1":
   version: 4.2.1
   resolution: "agentkeepalive@npm:4.2.1"
   dependencies:
@@ -287,16 +246,6 @@ __metadata:
   version: 2.0.0
   resolution: "aproba@npm:2.0.0"
   checksum: 5615cadcfb45289eea63f8afd064ab656006361020e1735112e346593856f87435e02d8dcc7ff0d11928bc7d425f27bc7c2a84f6c0b35ab0ff659c814c138a24
-  languageName: node
-  linkType: hard
-
-"are-we-there-yet@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "are-we-there-yet@npm:2.0.0"
-  dependencies:
-    delegates: ^1.0.0
-    readable-stream: ^3.6.0
-  checksum: 6c80b4fd04ecee6ba6e737e0b72a4b41bdc64b7d279edfc998678567ff583c8df27e27523bc789f2c99be603ffa9eaa612803da1d886962d2086e7ff6fa90c7c
   languageName: node
   linkType: hard
 
@@ -383,32 +332,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cacache@npm:^15.2.0":
-  version: 15.3.0
-  resolution: "cacache@npm:15.3.0"
-  dependencies:
-    "@npmcli/fs": ^1.0.0
-    "@npmcli/move-file": ^1.0.1
-    chownr: ^2.0.0
-    fs-minipass: ^2.0.0
-    glob: ^7.1.4
-    infer-owner: ^1.0.4
-    lru-cache: ^6.0.0
-    minipass: ^3.1.1
-    minipass-collect: ^1.0.2
-    minipass-flush: ^1.0.5
-    minipass-pipeline: ^1.2.2
-    mkdirp: ^1.0.3
-    p-map: ^4.0.0
-    promise-inflight: ^1.0.1
-    rimraf: ^3.0.2
-    ssri: ^8.0.1
-    tar: ^6.0.2
-    unique-filename: ^1.1.1
-  checksum: a07327c27a4152c04eb0a831c63c00390d90f94d51bb80624a66f4e14a6b6360bbf02a84421267bd4d00ca73ac9773287d8d7169e8d2eafe378d2ce140579db8
-  languageName: node
-  linkType: hard
-
 "cacache@npm:^16.1.0":
   version: 16.1.3
   resolution: "cacache@npm:16.1.3"
@@ -475,7 +398,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-support@npm:^1.1.2, color-support@npm:^1.1.3":
+"color-support@npm:^1.1.3":
   version: 1.1.3
   resolution: "color-support@npm:1.1.3"
   bin:
@@ -498,7 +421,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"console-control-strings@npm:^1.0.0, console-control-strings@npm:^1.1.0":
+"console-control-strings@npm:^1.1.0":
   version: 1.1.0
   resolution: "console-control-strings@npm:1.1.0"
   checksum: 8755d76787f94e6cf79ce4666f0c5519906d7f5b02d4b884cf41e11dcd759ed69c57da0670afd9236d229a46e0f9cf519db0cd829c6dca820bb5a5c3def584ed
@@ -549,13 +472,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"detect-libc@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "detect-libc@npm:2.0.1"
-  checksum: ccb05fcabbb555beb544d48080179c18523a343face9ee4e1a86605a8715b4169f94d663c21a03c310ac824592f2ba9a5270218819bb411ad7be578a527593d7
-  languageName: node
-  linkType: hard
-
 "discord-api-types@npm:^0.37.10, discord-api-types@npm:^0.37.3":
   version: 0.37.10
   resolution: "discord-api-types@npm:0.37.10"
@@ -589,17 +505,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dottie@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "dottie@npm:2.0.2"
-  checksum: 046a5818033725a5a12b60270473cd9a19b0e88bd007a0c9a66be36983e53626de949aee9d0290fbfe0275aa31837491adbbbb8bf74ef09f78d21598793d6268
-  languageName: node
-  linkType: hard
-
 "dr-k-bot@workspace:.":
   version: 0.0.0-use.local
   resolution: "dr-k-bot@workspace:."
   dependencies:
+    "@prisma/client": ^4.3.1
     "@types/glob": ^8.0.0
     "@types/node": ^18.7.21
     bufferutil: ^4.0.6
@@ -613,9 +523,8 @@ __metadata:
     pino-pretty: ^9.1.0
     prettier: ^2.7.1
     pretty-quick: ^3.1.3
+    prisma: ^4.3.1
     rimraf: ^3.0.2
-    sequelize: ^6.23.1
-    sqlite3: ^5.1.1
     typescript: ^4.8.3
     utf-8-validate: ^5.0.9
     zlib-sync: ^0.1.7
@@ -638,7 +547,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"encoding@npm:^0.1.12, encoding@npm:^0.1.13":
+"encoding@npm:^0.1.13":
   version: 0.1.13
   resolution: "encoding@npm:0.1.13"
   dependencies:
@@ -776,23 +685,6 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"gauge@npm:^3.0.0":
-  version: 3.0.2
-  resolution: "gauge@npm:3.0.2"
-  dependencies:
-    aproba: ^1.0.3 || ^2.0.0
-    color-support: ^1.1.2
-    console-control-strings: ^1.0.0
-    has-unicode: ^2.0.1
-    object-assign: ^4.1.1
-    signal-exit: ^3.0.0
-    string-width: ^4.2.3
-    strip-ansi: ^6.0.1
-    wide-align: ^1.1.2
-  checksum: 81296c00c7410cdd48f997800155fbead4f32e4f82109be0719c63edc8560e6579946cc8abd04205297640691ec26d21b578837fd13a4e96288ab4b40b1dc3e9
-  languageName: node
-  linkType: hard
-
 "gauge@npm:^4.0.3":
   version: 4.0.4
   resolution: "gauge@npm:4.0.4"
@@ -880,17 +772,6 @@ erlpack@discord/erlpack:
   version: 4.1.0
   resolution: "http-cache-semantics@npm:4.1.0"
   checksum: 974de94a81c5474be07f269f9fd8383e92ebb5a448208223bfb39e172a9dbc26feff250192ecc23b9593b3f92098e010406b0f24bd4d588d631f80214648ed42
-  languageName: node
-  linkType: hard
-
-"http-proxy-agent@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "http-proxy-agent@npm:4.0.1"
-  dependencies:
-    "@tootallnate/once": 1
-    agent-base: 6
-    debug: 4
-  checksum: c6a5da5a1929416b6bbdf77b1aca13888013fe7eb9d59fc292e25d18e041bb154a8dfada58e223fc7b76b9b2d155a87e92e608235201f77d34aa258707963a82
   languageName: node
   linkType: hard
 
@@ -984,13 +865,6 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"inflection@npm:^1.13.2":
-  version: 1.13.2
-  resolution: "inflection@npm:1.13.2"
-  checksum: e7ad0559384ed7c526813404bde843f8f17941d47625ad60fc3b09e46efde873dd9840818007c6bd4dbe388e6248fa033d5a8c405c5fc62738c51b118a0e940f
-  languageName: node
-  linkType: hard
-
 "inflight@npm:^1.0.4":
   version: 1.0.6
   resolution: "inflight@npm:1.0.6"
@@ -1073,13 +947,6 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.21":
-  version: 4.17.21
-  resolution: "lodash@npm:4.17.21"
-  checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
-  languageName: node
-  linkType: hard
-
 "lru-cache@npm:^6.0.0":
   version: 6.0.0
   resolution: "lru-cache@npm:6.0.0"
@@ -1093,15 +960,6 @@ erlpack@discord/erlpack:
   version: 7.14.0
   resolution: "lru-cache@npm:7.14.0"
   checksum: efdd329f2c1bb790b71d497c6c59272e6bc2d7dd060ba55fc136becd3dd31fc8346edb446275504d94cb60d3c8385dbf5267b79b23789e409b2bdf302d13f0d7
-  languageName: node
-  linkType: hard
-
-"make-dir@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "make-dir@npm:3.1.0"
-  dependencies:
-    semver: ^6.0.0
-  checksum: 484200020ab5a1fdf12f393fe5f385fc8e4378824c940fba1729dcd198ae4ff24867bc7a5646331e50cead8abff5d9270c456314386e629acec6dff4b8016b78
   languageName: node
   linkType: hard
 
@@ -1126,30 +984,6 @@ erlpack@discord/erlpack:
     socks-proxy-agent: ^7.0.0
     ssri: ^9.0.0
   checksum: 2332eb9a8ec96f1ffeeea56ccefabcb4193693597b132cd110734d50f2928842e22b84cfa1508e921b8385cdfd06dda9ad68645fed62b50fff629a580f5fb72c
-  languageName: node
-  linkType: hard
-
-"make-fetch-happen@npm:^9.1.0":
-  version: 9.1.0
-  resolution: "make-fetch-happen@npm:9.1.0"
-  dependencies:
-    agentkeepalive: ^4.1.3
-    cacache: ^15.2.0
-    http-cache-semantics: ^4.1.0
-    http-proxy-agent: ^4.0.1
-    https-proxy-agent: ^5.0.0
-    is-lambda: ^1.0.1
-    lru-cache: ^6.0.0
-    minipass: ^3.1.3
-    minipass-collect: ^1.0.2
-    minipass-fetch: ^1.3.2
-    minipass-flush: ^1.0.5
-    minipass-pipeline: ^1.2.4
-    negotiator: ^0.6.2
-    promise-retry: ^2.0.1
-    socks-proxy-agent: ^6.0.0
-    ssri: ^8.0.0
-  checksum: 0eb371c85fdd0b1584fcfdf3dc3c62395761b3c14658be02620c310305a9a7ecf1617a5e6fb30c1d081c5c8aaf177fa133ee225024313afabb7aa6a10f1e3d04
   languageName: node
   linkType: hard
 
@@ -1201,21 +1035,6 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"minipass-fetch@npm:^1.3.2":
-  version: 1.4.1
-  resolution: "minipass-fetch@npm:1.4.1"
-  dependencies:
-    encoding: ^0.1.12
-    minipass: ^3.1.0
-    minipass-sized: ^1.0.3
-    minizlib: ^2.0.0
-  dependenciesMeta:
-    encoding:
-      optional: true
-  checksum: ec93697bdb62129c4e6c0104138e681e30efef8c15d9429dd172f776f83898471bc76521b539ff913248cc2aa6d2b37b652c993504a51cc53282563640f29216
-  languageName: node
-  linkType: hard
-
 "minipass-fetch@npm:^2.0.3":
   version: 2.1.2
   resolution: "minipass-fetch@npm:2.1.2"
@@ -1240,7 +1059,7 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"minipass-pipeline@npm:^1.2.2, minipass-pipeline@npm:^1.2.4":
+"minipass-pipeline@npm:^1.2.4":
   version: 1.2.4
   resolution: "minipass-pipeline@npm:1.2.4"
   dependencies:
@@ -1258,7 +1077,7 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"minipass@npm:^3.0.0, minipass@npm:^3.1.0, minipass@npm:^3.1.1, minipass@npm:^3.1.3, minipass@npm:^3.1.6":
+"minipass@npm:^3.0.0, minipass@npm:^3.1.1, minipass@npm:^3.1.6":
   version: 3.3.5
   resolution: "minipass@npm:3.3.5"
   dependencies:
@@ -1267,7 +1086,7 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"minizlib@npm:^2.0.0, minizlib@npm:^2.1.1, minizlib@npm:^2.1.2":
+"minizlib@npm:^2.1.1, minizlib@npm:^2.1.2":
   version: 2.1.2
   resolution: "minizlib@npm:2.1.2"
   dependencies:
@@ -1283,22 +1102,6 @@ erlpack@discord/erlpack:
   bin:
     mkdirp: bin/cmd.js
   checksum: a96865108c6c3b1b8e1d5e9f11843de1e077e57737602de1b82030815f311be11f96f09cce59bd5b903d0b29834733e5313f9301e3ed6d6f6fba2eae0df4298f
-  languageName: node
-  linkType: hard
-
-"moment-timezone@npm:^0.5.34":
-  version: 0.5.37
-  resolution: "moment-timezone@npm:0.5.37"
-  dependencies:
-    moment: ">= 2.9.0"
-  checksum: b3fc24848a396ee3801331a4b5511591df0e22241e59f55200a475603f23a8429f01887294c7a0c005dae25b8e4bef20472fbc875ff20080f26fded066559f1a
-  languageName: node
-  linkType: hard
-
-"moment@npm:>= 2.9.0, moment@npm:^2.29.1":
-  version: 2.29.4
-  resolution: "moment@npm:2.29.4"
-  checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
   languageName: node
   linkType: hard
 
@@ -1345,33 +1148,10 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"negotiator@npm:^0.6.2, negotiator@npm:^0.6.3":
+"negotiator@npm:^0.6.3":
   version: 0.6.3
   resolution: "negotiator@npm:0.6.3"
   checksum: b8ffeb1e262eff7968fc90a2b6767b04cfd9842582a9d0ece0af7049537266e7b2506dfb1d107a32f06dd849ab2aea834d5830f7f4d0e5cb7d36e1ae55d021d9
-  languageName: node
-  linkType: hard
-
-"node-addon-api@npm:^4.2.0":
-  version: 4.3.0
-  resolution: "node-addon-api@npm:4.3.0"
-  dependencies:
-    node-gyp: latest
-  checksum: 3de396e23cc209f539c704583e8e99c148850226f6e389a641b92e8967953713228109f919765abc1f4355e801e8f41842f96210b8d61c7dcc10a477002dcf00
-  languageName: node
-  linkType: hard
-
-"node-fetch@npm:^2.6.7":
-  version: 2.6.7
-  resolution: "node-fetch@npm:2.6.7"
-  dependencies:
-    whatwg-url: ^5.0.0
-  peerDependencies:
-    encoding: ^0.1.0
-  peerDependenciesMeta:
-    encoding:
-      optional: true
-  checksum: 8d816ffd1ee22cab8301c7756ef04f3437f18dace86a1dae22cf81db8ef29c0bf6655f3215cb0cdb22b420b6fe141e64b26905e7f33f9377a7fa59135ea3e10b
   languageName: node
   linkType: hard
 
@@ -1383,26 +1163,6 @@ erlpack@discord/erlpack:
     node-gyp-build-optional: optional.js
     node-gyp-build-test: build-test.js
   checksum: d888bae0fb88335f69af1b57a2294a931c5042f36e413d8d364c992c9ebfa0b96ffe773179a5a2c8f04b73856e8634e09cce108dbb9804396d3cc8c5455ff2db
-  languageName: node
-  linkType: hard
-
-"node-gyp@npm:8.x":
-  version: 8.4.1
-  resolution: "node-gyp@npm:8.4.1"
-  dependencies:
-    env-paths: ^2.2.0
-    glob: ^7.1.4
-    graceful-fs: ^4.2.6
-    make-fetch-happen: ^9.1.0
-    nopt: ^5.0.0
-    npmlog: ^6.0.0
-    rimraf: ^3.0.2
-    semver: ^7.3.5
-    tar: ^6.1.2
-    which: ^2.0.2
-  bin:
-    node-gyp: bin/node-gyp.js
-  checksum: 341710b5da39d3660e6a886b37e210d33f8282047405c2e62c277bcc744c7552c5b8b972ebc3a7d5c2813794e60cc48c3ebd142c46d6e0321db4db6c92dd0355
   languageName: node
   linkType: hard
 
@@ -1446,18 +1206,6 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"npmlog@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "npmlog@npm:5.0.1"
-  dependencies:
-    are-we-there-yet: ^2.0.0
-    console-control-strings: ^1.1.0
-    gauge: ^3.0.0
-    set-blocking: ^2.0.0
-  checksum: 516b2663028761f062d13e8beb3f00069c5664925871a9b57989642ebe09f23ab02145bf3ab88da7866c4e112cafff72401f61a672c7c8a20edc585a7016ef5f
-  languageName: node
-  linkType: hard
-
 "npmlog@npm:^6.0.0":
   version: 6.0.2
   resolution: "npmlog@npm:6.0.2"
@@ -1467,13 +1215,6 @@ erlpack@discord/erlpack:
     gauge: ^4.0.3
     set-blocking: ^2.0.0
   checksum: ae238cd264a1c3f22091cdd9e2b106f684297d3c184f1146984ecbe18aaa86343953f26b9520dedd1b1372bc0316905b736c1932d778dbeb1fcf5a1001390e2a
-  languageName: node
-  linkType: hard
-
-"object-assign@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "object-assign@npm:4.1.1"
-  checksum: fcc6e4ea8c7fe48abfbb552578b1c53e0d194086e2e6bbbf59e0a536381a292f39943c6e9628af05b5528aa5e3318bb30d6b2e53cadaf5b8fe9e12c4b69af23f
   languageName: node
   linkType: hard
 
@@ -1561,13 +1302,6 @@ erlpack@discord/erlpack:
   version: 5.0.0
   resolution: "peek-readable@npm:5.0.0"
   checksum: bef5ceb50586eb42e14efba274ac57ffe97f0ed272df9239ce029f688f495d9bf74b2886fa27847c706a9db33acda4b7d23bbd09a2d21eb4c2a54da915117414
-  languageName: node
-  linkType: hard
-
-"pg-connection-string@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "pg-connection-string@npm:2.5.0"
-  checksum: a6f3a068f7c9416a5b33a326811caf0dfaaee045c225b7c628b4c9b4e9a2b25bdd12a21e4c48940e1000ea223a4e608ca122d2ff3dd08c8b1db0fc9f5705133a
   languageName: node
   linkType: hard
 
@@ -1660,6 +1394,18 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
+"prisma@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "prisma@npm:4.3.1"
+  dependencies:
+    "@prisma/engines": 4.3.1
+  bin:
+    prisma: build/index.js
+    prisma2: build/index.js
+  checksum: f97133c11ecbb09a40c0ec006af50e8789f3b76376e29d5eb041b1592d2c289af22bcb9b5c49789ffb8bbe0b24f470c1ec668a94194c5859e18b601398cf80c8
+  languageName: node
+  linkType: hard
+
 "process-warning@npm:^2.0.0":
   version: 2.0.0
   resolution: "process-warning@npm:2.0.0"
@@ -1737,13 +1483,6 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"retry-as-promised@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "retry-as-promised@npm:6.1.0"
-  checksum: cde3ad5c827d3f51b9161b9453dfd5eb8b8b6c22b6b405f7294eaa1939ef1966f8bd4c8a228ce2d66a24959d1dcc48b113c4c810ecdaddec2968b6d20576329d
-  languageName: node
-  linkType: hard
-
 "retry@npm:^0.12.0":
   version: 0.12.0
   resolution: "retry@npm:0.12.0"
@@ -1790,15 +1529,6 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"semver@npm:^6.0.0":
-  version: 6.3.0
-  resolution: "semver@npm:6.3.0"
-  bin:
-    semver: ./bin/semver.js
-  checksum: 1b26ecf6db9e8292dd90df4e781d91875c0dcc1b1909e70f5d12959a23c7eebb8f01ea581c00783bbee72ceeaad9505797c381756326073850dc36ed284b21b9
-  languageName: node
-  linkType: hard
-
 "semver@npm:^7.3.5":
   version: 7.3.7
   resolution: "semver@npm:7.3.7"
@@ -1807,56 +1537,6 @@ erlpack@discord/erlpack:
   bin:
     semver: bin/semver.js
   checksum: 2fa3e877568cd6ce769c75c211beaed1f9fce80b28338cadd9d0b6c40f2e2862bafd62c19a6cff42f3d54292b7c623277bcab8816a2b5521cf15210d43e75232
-  languageName: node
-  linkType: hard
-
-"sequelize-pool@npm:^7.1.0":
-  version: 7.1.0
-  resolution: "sequelize-pool@npm:7.1.0"
-  checksum: b11d06d02de9e8fc428ba3020b86f05fe7adad764e57f23c5901f924e31867901a5e7a090180337dc3b90de3934b64f34ae552fde37b0f3d37b09c0c8ecbddc7
-  languageName: node
-  linkType: hard
-
-"sequelize@npm:^6.23.1":
-  version: 6.23.1
-  resolution: "sequelize@npm:6.23.1"
-  dependencies:
-    "@types/debug": ^4.1.7
-    "@types/validator": ^13.7.1
-    debug: ^4.3.3
-    dottie: ^2.0.2
-    inflection: ^1.13.2
-    lodash: ^4.17.21
-    moment: ^2.29.1
-    moment-timezone: ^0.5.34
-    pg-connection-string: ^2.5.0
-    retry-as-promised: ^6.1.0
-    semver: ^7.3.5
-    sequelize-pool: ^7.1.0
-    toposort-class: ^1.0.1
-    uuid: ^8.3.2
-    validator: ^13.7.0
-    wkx: ^0.5.0
-  peerDependenciesMeta:
-    ibm_db:
-      optional: true
-    mariadb:
-      optional: true
-    mysql2:
-      optional: true
-    oracledb:
-      optional: true
-    pg:
-      optional: true
-    pg-hstore:
-      optional: true
-    snowflake-sdk:
-      optional: true
-    sqlite3:
-      optional: true
-    tedious:
-      optional: true
-  checksum: cb34d8b6cd4c3aba19bb1d6c6af4904d6526053fab611e1ae39cc5ba8f949b5e0c581806bf02aef07bd4a87782ec7096d6f0df77bcb3c46cc1361ac04818141e
   languageName: node
   linkType: hard
 
@@ -1883,7 +1563,7 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"signal-exit@npm:^3.0.0, signal-exit@npm:^3.0.2, signal-exit@npm:^3.0.7":
+"signal-exit@npm:^3.0.2, signal-exit@npm:^3.0.7":
   version: 3.0.7
   resolution: "signal-exit@npm:3.0.7"
   checksum: a2f098f247adc367dffc27845853e9959b9e88b01cb301658cfe4194352d8d2bb32e18467c786a7fe15f1d44b233ea35633d076d5e737870b7139949d1ab6318
@@ -1894,17 +1574,6 @@ erlpack@discord/erlpack:
   version: 4.2.0
   resolution: "smart-buffer@npm:4.2.0"
   checksum: b5167a7142c1da704c0e3af85c402002b597081dd9575031a90b4f229ca5678e9a36e8a374f1814c8156a725d17008ae3bde63b92f9cfd132526379e580bec8b
-  languageName: node
-  linkType: hard
-
-"socks-proxy-agent@npm:^6.0.0":
-  version: 6.2.1
-  resolution: "socks-proxy-agent@npm:6.2.1"
-  dependencies:
-    agent-base: ^6.0.2
-    debug: ^4.3.3
-    socks: ^2.6.2
-  checksum: 9ca089d489e5ee84af06741135c4b0d2022977dad27ac8d649478a114cdce87849e8d82b7c22b51501a4116e231241592946fc7fae0afc93b65030ee57084f58
   languageName: node
   linkType: hard
 
@@ -1942,35 +1611,6 @@ erlpack@discord/erlpack:
   version: 4.1.0
   resolution: "split2@npm:4.1.0"
   checksum: ec581597cb74c13cdfb5e2047543dd40cb1e8e9803c7b1e0c29ede05f2b4f049b2d6e7f2788a225d544549375719658b8f38e9366364dec35dc7a12edfda5ee5
-  languageName: node
-  linkType: hard
-
-"sqlite3@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "sqlite3@npm:5.1.1"
-  dependencies:
-    "@mapbox/node-pre-gyp": ^1.0.0
-    node-addon-api: ^4.2.0
-    node-gyp: 8.x
-    tar: ^6.1.11
-  peerDependencies:
-    node-gyp: 8.x
-  dependenciesMeta:
-    node-gyp:
-      optional: true
-  peerDependenciesMeta:
-    node-gyp:
-      optional: true
-  checksum: aaedb724b3b3df8c5a5f2df0b1691b8d0c19a93407c792796ef736f173198c28fdd31ddb414e7bd52d82717233abb183fc161ab515b081d6f640c92ce84d3b7a
-  languageName: node
-  linkType: hard
-
-"ssri@npm:^8.0.0, ssri@npm:^8.0.1":
-  version: 8.0.1
-  resolution: "ssri@npm:8.0.1"
-  dependencies:
-    minipass: ^3.1.1
-  checksum: bc447f5af814fa9713aa201ec2522208ae0f4d8f3bda7a1f445a797c7b929a02720436ff7c478fb5edc4045adb02b1b88d2341b436a80798734e2494f1067b36
   languageName: node
   linkType: hard
 
@@ -2045,7 +1685,7 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"tar@npm:^6.0.2, tar@npm:^6.1.11, tar@npm:^6.1.2":
+"tar@npm:^6.1.11, tar@npm:^6.1.2":
   version: 6.1.11
   resolution: "tar@npm:6.1.11"
   dependencies:
@@ -2075,20 +1715,6 @@ erlpack@discord/erlpack:
     "@tokenizer/token": ^0.3.0
     ieee754: ^1.2.1
   checksum: 32780123bc6ce8b6a2231d860445c994a02a720abf38df5583ea957aa6626873cd1c4dd8af62314da4cf16ede00c379a765707a3b06f04b8808c38efdae1c785
-  languageName: node
-  linkType: hard
-
-"toposort-class@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "toposort-class@npm:1.0.1"
-  checksum: c5e3229d4899b23350b09ed26cfb7a28aadd0889550625f1bcadc0da266cdf2790fb0ccc3e92be93ba6ad64f57bc2fd1ab94446cb4ae83054dab263753157f5f
-  languageName: node
-  linkType: hard
-
-"tr46@npm:~0.0.3":
-  version: 0.0.3
-  resolution: "tr46@npm:0.0.3"
-  checksum: 726321c5eaf41b5002e17ffbd1fb7245999a073e8979085dacd47c4b4e8068ff5777142fc6726d6ca1fd2ff16921b48788b87225cbc57c72636f6efa8efbffe3
   languageName: node
   linkType: hard
 
@@ -2133,30 +1759,12 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"unique-filename@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "unique-filename@npm:1.1.1"
-  dependencies:
-    unique-slug: ^2.0.0
-  checksum: cf4998c9228cc7647ba7814e255dec51be43673903897b1786eff2ac2d670f54d4d733357eb08dea969aa5e6875d0e1bd391d668fbdb5a179744e7c7551a6f80
-  languageName: node
-  linkType: hard
-
 "unique-filename@npm:^2.0.0":
   version: 2.0.1
   resolution: "unique-filename@npm:2.0.1"
   dependencies:
     unique-slug: ^3.0.0
   checksum: 807acf3381aff319086b64dc7125a9a37c09c44af7620bd4f7f3247fcd5565660ac12d8b80534dcbfd067e6fe88a67e621386dd796a8af828d1337a8420a255f
-  languageName: node
-  linkType: hard
-
-"unique-slug@npm:^2.0.0":
-  version: 2.0.2
-  resolution: "unique-slug@npm:2.0.2"
-  dependencies:
-    imurmurhash: ^0.1.4
-  checksum: 5b6876a645da08d505dedb970d1571f6cebdf87044cb6b740c8dbb24f0d6e1dc8bdbf46825fd09f994d7cf50760e6f6e063cfa197d51c5902c00a861702eb75a
   languageName: node
   linkType: hard
 
@@ -2186,39 +1794,6 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"uuid@npm:^8.3.2":
-  version: 8.3.2
-  resolution: "uuid@npm:8.3.2"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
-  languageName: node
-  linkType: hard
-
-"validator@npm:^13.7.0":
-  version: 13.7.0
-  resolution: "validator@npm:13.7.0"
-  checksum: 2b83283de1222ca549a7ef57f46e8d49c6669213348db78b7045bce36a3b5843ff1e9f709ebf74574e06223461ee1f264f8cc9a26a0060a79a27de079d8286ef
-  languageName: node
-  linkType: hard
-
-"webidl-conversions@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "webidl-conversions@npm:3.0.1"
-  checksum: c92a0a6ab95314bde9c32e1d0a6dfac83b578f8fa5f21e675bc2706ed6981bc26b7eb7e6a1fab158e5ce4adf9caa4a0aee49a52505d4d13c7be545f15021b17c
-  languageName: node
-  linkType: hard
-
-"whatwg-url@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "whatwg-url@npm:5.0.0"
-  dependencies:
-    tr46: ~0.0.3
-    webidl-conversions: ^3.0.0
-  checksum: b8daed4ad3356cc4899048a15b2c143a9aed0dfae1f611ebd55073310c7b910f522ad75d727346ad64203d7e6c79ef25eafd465f4d12775ca44b90fa82ed9e2c
-  languageName: node
-  linkType: hard
-
 "which@npm:^2.0.1, which@npm:^2.0.2":
   version: 2.0.2
   resolution: "which@npm:2.0.2"
@@ -2230,21 +1805,12 @@ erlpack@discord/erlpack:
   languageName: node
   linkType: hard
 
-"wide-align@npm:^1.1.2, wide-align@npm:^1.1.5":
+"wide-align@npm:^1.1.5":
   version: 1.1.5
   resolution: "wide-align@npm:1.1.5"
   dependencies:
     string-width: ^1.0.2 || 2 || 3 || 4
   checksum: d5fc37cd561f9daee3c80e03b92ed3e84d80dde3365a8767263d03dacfc8fa06b065ffe1df00d8c2a09f731482fcacae745abfbb478d4af36d0a891fad4834d3
-  languageName: node
-  linkType: hard
-
-"wkx@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "wkx@npm:0.5.0"
-  dependencies:
-    "@types/node": "*"
-  checksum: 47b27387de81fbd077528c1c11be996bf5a6dbeb94858ea0e2fa6619c2af626aa2f127f6fee1b4b57057a7cbef8a810b39a67815f2eb54ed33b1790e29db86ee
   languageName: node
   linkType: hard
 
