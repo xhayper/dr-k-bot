@@ -68,7 +68,7 @@ export class CommandHandler extends Command {
 
   public override async messageRun(message: Message, args: Args) {
     const member = await args.pick('member').catch(() => null);
-    const role = await args.rest('string').catch(() => null);
+    const role = await args.rest('string').then((res) => res.trim()).catch(() => null);
 
     if (!member) return reply(message, 'Please provide a member!');
     if (!role) return reply(message, 'Please provide a role!');
