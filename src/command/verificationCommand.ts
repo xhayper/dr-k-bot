@@ -1,6 +1,6 @@
+import { VerificationTicket, VerificationTicketType } from '../database';
 import { EmbedUtility, GuildUtility, VerificationUtility } from '..';
 import { SlashCommand } from '../base/slashCommand';
-import { VerificationTicket } from '../database';
 import config from '../config';
 import {
   ChatInputCommandInteraction,
@@ -40,7 +40,7 @@ export default {
   guildId: [config.guildId],
   permission: 'SECURITY',
   execute: async (ChatInputCommandInteraction: ChatInputCommandInteraction) => {
-    let verificationTicket: VerificationTicket | void;
+    let verificationTicket: VerificationTicketType | void;
 
     const subCommand = ChatInputCommandInteraction.options.getSubcommand(true);
 
@@ -64,7 +64,7 @@ export default {
     switch (subCommand) {
       case 'accept': {
         // TODO: Maybe merge this with the one in "interactionCreate"?
-        const member = await GuildUtility.getGuildMember(verificationTicket!.requesterDiscordId);
+        const member = await GuildUtility.getGuildMember(verificationTicket!.discordId);
         if (!member)
           return ChatInputCommandInteraction.editReply({
             embeds: [EmbedUtility.CANT_FIND_USER()]
@@ -89,7 +89,7 @@ export default {
         // TODO: Maybe merge this with the one in "interactionCreate"?
         const reason = ChatInputCommandInteraction.options.getString('reason', true);
         const user = await ChatInputCommandInteraction.client.users
-          .fetch(verificationTicket!.requesterDiscordId)
+          .fetch(verificationTicket!.discordId)
           .catch(() => undefined);
         if (user)
           user
@@ -123,12 +123,12 @@ export default {
       }
       case 'info': {
         ChatInputCommandInteraction.editReply({
-          embeds: [await EmbedUtility.VERIFICATION_INFO(verificationTicket as VerificationTicket)]
+          embeds: [await EmbedUtility.VERIFICATION_INFO(verificationTicket as VerificationTicketType)]
         });
         break;
       }
       case 'list': {
-        const verificationTicketList = await VerificationTicket.findAll();
+        const verificationTicketList = await VerificationTicket.findMany();
         if (verificationTicketList.length == 0)
           return await ChatInputCommandInteraction.editReply('There are no verification tickets as of right now.');
 
@@ -140,10 +140,13 @@ export default {
               Buffer.from(
                 verificationTicketList
                   .map((verificationTicket) => {
-                    return `User ID: ${verificationTicket.requesterDiscordId}\nTicket ID: ${
+                    return `User ID: ${verificationTicket.discordId}\nTicket ID: ${
                       verificationTicket.id
-                    }\n--------------------------------------------------\n${verificationTicket.answers
-                      .map((answerData) => `${answerData.question}: ${answerData.answer}`)
+                    }\n--------------------------------------------------\n${JSON.parse(verificationTicket.answers)
+                      .map(
+                        (answerData: { question: string; answer: string }) =>
+                          `${answerData.question}: ${answerData.answer}`
+                      )
                       .join('\n\n')}`;
                   })
                   .join('\n\n\n')

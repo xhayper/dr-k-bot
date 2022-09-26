@@ -3,8 +3,8 @@ import { EqualUtility } from '../utility/equalUtility';
 import { SlashCommand } from '../base/slashCommand';
 import { Logger } from '../logger';
 import path from 'node:path';
-
 import glob from 'glob';
+
 export class CommandManager {
   private client: Client;
 
@@ -17,7 +17,7 @@ export class CommandManager {
   async reloadCommands() {
     this.commands.clear();
 
-    const commandPathList = glob.sync(path.join(__dirname, '../command/*.+(js|ts)'));
+    const commandPathList = glob.sync(path.join(__dirname, '../command/*.+(js|ts)').replaceAll("\\", "/"));
 
     for (const command of commandPathList) {
       delete require.cache[require.resolve(command)];

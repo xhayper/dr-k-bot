@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model VerificationTicket {
+  id        String   @id @default(uuid())
+  discordId String
+  messageId String?  @unique
+  answers   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

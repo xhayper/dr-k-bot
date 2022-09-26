@@ -80,7 +80,7 @@ export class EmbedUtility {
   }
 
   public async VERIFICATION_INFO(data: PartialVerificationData): Promise<EmbedBuilder> {
-    const targetUser = await this.client.users.fetch(data.requesterDiscordId);
+    const targetUser = await this.client.users.fetch(data.discordId);
 
     const baseEmbed = new EmbedBuilder();
     baseEmbed.addFields([
@@ -90,7 +90,7 @@ export class EmbedUtility {
           targetUser.createdTimestamp / 1000
         )}>\n**Ticket ID**: ${data.id}`
       },
-      ...Object.values(data.answers).map((answerData) => ({
+      ...(Object.values(JSON.parse(data.answers)) as { question: string; answer: string }[]).map((answerData) => ({
         name: answerData.question,
         value: answerData.answer,
         inline: true
