@@ -6,7 +6,7 @@ import { Message } from 'discord.js';
 @ApplyOptions<Command.Options>({
   description: '-'
 })
-export class UserCommand extends Command {
+export class CommandHandler extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand((builder) =>
       builder //
@@ -18,7 +18,7 @@ export class UserCommand extends Command {
   public override async chatInputRun(interaction: Command.ChatInputInteraction) {
     await interaction.deferReply();
 
-    return interaction.reply("Oh, Pip? He's the most fabulous femboy i ever met.");
+    return interaction.editReply("Oh, Pip? He's the most fabulous femboy i ever met.");
   }
 
   public override async messageRun(message: Message) {

@@ -18,7 +18,7 @@ const clean = async (text: any) => {
   description: '-',
   preconditions: ['BotOwnerOnly']
 })
-export class UserCommand extends Command {
+export class CommandHandler extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand((builder) =>
       builder //
