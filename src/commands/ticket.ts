@@ -20,7 +20,7 @@ export class CommandHandler extends Command {
   }
 
   public override async chatInputRun(interaction: Command.ChatInputInteraction) {
-    interaction.deferReply();
+    await interaction.deferReply();
 
     const targetMember = interaction.options.getMember('user');
     await GuildUtility.openThread(interaction.member as GuildMember, targetMember as GuildMember);

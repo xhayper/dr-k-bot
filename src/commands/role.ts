@@ -28,7 +28,7 @@ export class CommandHandler extends Command {
   }
 
   public override async chatInputRun(interaction: Command.ChatInputInteraction) {
-    interaction.deferReply();
+    await interaction.deferReply();
 
     const member = interaction.options.getMember('member') as GuildMember;
     const role = interaction.options.getString('role', true);

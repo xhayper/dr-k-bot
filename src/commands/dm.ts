@@ -46,9 +46,9 @@ export class CommandHandler extends Subcommand {
   }
 
   public async chatInputNsfw(interaction: Subcommand.ChatInputInteraction) {
-    interaction.deferReply();
+    await interaction.deferReply();
 
-    const member = interaction.options.getMember('user')! as GuildMember;
+    const member = interaction.options.getMember('member')! as GuildMember;
 
     try {
       await member.user.send({
@@ -128,9 +128,9 @@ export class CommandHandler extends Subcommand {
   }
 
   public async chatInputWarn(interaction: Subcommand.ChatInputInteraction) {
-    interaction.deferReply();
+    await interaction.deferReply();
 
-    const member = interaction.options.getMember('user')! as GuildMember;
+    const member = interaction.options.getMember('member')! as GuildMember;
     const reason = interaction.options.getString('reason', true);
 
     try {
@@ -215,9 +215,9 @@ export class CommandHandler extends Subcommand {
   }
 
   public async chatInputCustom(interaction: Subcommand.ChatInputInteraction) {
-    interaction.deferReply();
+    await interaction.deferReply();
 
-    const member = interaction.options.getMember('user')! as GuildMember;
+    const member = interaction.options.getMember('member')! as GuildMember;
     const message = interaction.options.getString('message', true);
 
     try {
