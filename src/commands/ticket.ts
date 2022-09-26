@@ -15,40 +15,46 @@ export class CommandHandler extends Command {
       builder //
         .setName(this.name)
         .setDescription(this.description)
+        .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true))
     );
   }
 
   public override async chatInputRun(interaction: Command.ChatInputInteraction) {
-    await interaction.deferReply();
+    interaction.deferReply();
 
-    const member = interaction.options.getMember('member') as GuildMember;
+    const targetMember = interaction.options.getMember('user');
+    await GuildUtility.openThread(interaction.member as GuildMember, targetMember as GuildMember);
 
-    await GuildUtility.sendWelcomeMessage(member);
     await interaction.editReply({
       embeds: [
         EmbedUtility.SUCCESS_COLOR(
-          new EmbedBuilder({
-            title: 'All done!',
-            description: `I have send welcome message for ${member}!`
-          })
+          EmbedUtility.USER_AUTHOR(
+            new EmbedBuilder({
+              description: `Thread opened with ${targetMember}!`
+            }),
+            interaction.user
+          )
         ).toJSON()
       ]
     });
   }
 
   public override async messageRun(message: Message, args: Args) {
-    const member = await args.pick('member').catch(() => null);
+    const targetMember = await args.pick('member').catch(() => null);
 
-    if (!member) return await reply(message, 'Please specify a member to welcome!');
+    if (!targetMember) return reply(message, 'Please provide a member!');
 
-    await GuildUtility.sendWelcomeMessage(member);
-    await reply(message, {
+    await GuildUtility.openThread(message.member!, targetMember);
+
+    reply(message, {
       embeds: [
         EmbedUtility.SUCCESS_COLOR(
-          new EmbedBuilder({
-            title: 'All done!',
-            description: `I have send welcome message for ${member}!`
-          })
+          EmbedUtility.USER_AUTHOR(
+            new EmbedBuilder({
+              description: `Thread opened with ${targetMember}!`
+            }),
+            message.author
+          )
         ).toJSON()
       ]
     });
