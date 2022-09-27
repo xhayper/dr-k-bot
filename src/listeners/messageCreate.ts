@@ -1,6 +1,6 @@
-import { ChannelType, Client, Collection, DiscordAPIError, Message, Snowflake } from 'discord.js';
-import { TypedEvent } from '../base/clientEvent';
+import { Collection, DiscordAPIError, Message, Snowflake } from 'discord.js';
 import { EmbedUtility, GuildUtility } from '..';
+import { Listener } from '@sapphire/framework';
 import config from '../config';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -19,32 +19,25 @@ const userWarnCount = new Collection<Snowflake, number>(); // REMINDER: Change t
 const urlRegEx = /(?:http\:|www\.|https\:)/gi;
 const mediaRegEx = /(?:http\:|www\.|https\:)(?:.*\.gif|.*\.png|.*\.mp4|.*\.jpg|.*\.jpeg|.*\.webm)/gi;
 
-export default TypedEvent({
-  eventName: 'messageCreate',
-  on: async (client: Client, message: Message) => {
-    if (message.author.bot || message.channel.type == ChannelType.DM) return;
-
+export class UserEvent extends Listener {
+  public async run(message: Message) {
     const splitText = message.content.split(' ');
+    if (
+      message.mentions.users.size === 1 &&
+      splitText.length === 1 &&
+      [`<@${this.container.client.user!.id}>`, `<@!${this.container.client.user!.id}>`].some(
+        (mentionText) => splitText[0] === mentionText
+      )
+    ) {
+      return await message.reply({
+        content: insultList[Math.floor(Math.random() * insultList.length)],
+        allowedMentions: {
+          repliedUser: false
+        }
+      });
+    }
 
-    // if (splitText[0] == '!hayperimergencygiverole') {
-    //   if (!message.member || !GuildUtility.isBotOwner(message.member)) return message.reply("No u");
-    //   await message.member.roles.add('895152300354576394');
-    //   await message.member.roles.add('895152636842627072');
-    //   await message.member.roles.add('900568768667877386');
-    //   await message.member.roles.add('900568107033178162');
-    //   message.reply("Ok, Boomer");
-    //   return;
-    // }
-
-    // if (splitText[0] == '!hayperimergencyremoverole') {
-    //   if (!message.member || !GuildUtility.isBotOwner(message.member)) return message.reply("No u");
-    //   await message.member.roles.remove('895152300354576394');
-    //   await message.member.roles.remove('895152636842627072');
-    //   await message.member.roles.remove('900568768667877386');
-    //   await message.member.roles.remove('900568107033178162');
-    //   message.reply("Ok, Boomer");
-    //   return;
-    // }
+    if (message.author.bot || message.channel.type != 'GUILD_TEXT') return;
 
     if (message.channel.id === config.channel['art-channel']) {
       if (!(0 < message.attachments.size || urlRegEx.test(message.content))) {
@@ -55,10 +48,10 @@ export default TypedEvent({
                 message.author,
                 `**${message.author} verbally warned for conversing in ${message.channel}**`
               )
-            )
+            ).toJSON()
           ]
         });
-        
+
         const err = await message.author
           .send('Please do not send messages in the art channel, it is for posting art only.')
           .catch((err) => err);
@@ -118,7 +111,7 @@ export default TypedEvent({
               ).setFooter({
                 text: `Times warned: ${userWarnCount.get(message.author.id)}`
               })
-            )
+            ).toJSON()
           ]
         });
 
@@ -126,19 +119,5 @@ export default TypedEvent({
         return message.delete();
       }
     }
-
-    if (
-      message.mentions.users.size == 0 ||
-      0 >= splitText.length ||
-      ![`<@${client.user!.id}>`, `<@!${client.user!.id}>`].some((mentionText) => splitText[0].startsWith(mentionText))
-    )
-      return;
-
-    await message.reply({
-      content: insultList[Math.floor(Math.random() * insultList.length)],
-      allowedMentions: {
-        repliedUser: false
-      }
-    });
   }
-});
+}

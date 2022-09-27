@@ -1,17 +1,9 @@
+import { Message, MessageActionRow, MessageButton, TextBasedChannel, User } from 'discord.js';
 import { VerificationTicket, VerificationTicketType } from '../database';
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
+import { EmbedBuilder } from '@discordjs/builders';
 import { randomUUID } from 'node:crypto';
 import config from '../config';
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  Colors,
-  EmbedBuilder,
-  Message,
-  TextBasedChannel,
-  User
-} from 'discord.js';
 
 export type PartialVerificationData = {
   id: string;
@@ -37,8 +29,7 @@ export class VerificationUtility {
 
       if (deletetionData) {
         embeds = message.embeds.map((embed) => {
-          const embedBuilder = EmbedBuilder.from(embed);
-          embedBuilder.setFooter({
+          embed.setFooter({
             text:
               deletetionData.deleteType != 'LEAVE'
                 ? `Ticket ${deletetionData.deleteType === 'DECLINED' ? 'declined' : 'accepted'} by ${
@@ -46,14 +37,14 @@ export class VerificationUtility {
                   }`
                 : `User left the server, Ticket deleted`
           });
-          embedBuilder.setColor(['DECLINED', 'LEAVE'].includes(deletetionData.deleteType) ? Colors.Red : Colors.Green);
-          return embedBuilder;
+          embed.setColor(['DECLINED', 'LEAVE'].includes(deletetionData.deleteType) ? 'RED' : 'GREEN');
+          return new EmbedBuilder(embed.toJSON());
         });
       }
 
       await message.edit({
         content: message.content,
-        embeds: embeds || message.embeds,
+        embeds: embeds?.map((builder) => builder.toJSON()) || message.embeds,
         components: message.components
       });
     }
@@ -109,13 +100,13 @@ export class VerificationUtility {
   ): Promise<Message | void> {
     return await channel.send({
       content: pingVerificationTeam ? `<@&${config.role.verificationTeam}> | <@${data.discordId}>` : undefined,
-      embeds: [await EmbedUtility.VERIFICATION_INFO(data)],
+      embeds: [(await EmbedUtility.VERIFICATION_INFO(data)).toJSON()],
       components: addButton
         ? [
-            new ActionRowBuilder<ButtonBuilder>().addComponents([
-              new ButtonBuilder().setLabel('Accept').setCustomId('verify_accept').setStyle(ButtonStyle.Success),
-              new ButtonBuilder().setLabel('Decline').setCustomId('verify_decline').setStyle(ButtonStyle.Danger),
-              new ButtonBuilder().setLabel('Ticket').setCustomId('verify_ticket').setStyle(ButtonStyle.Secondary)
+            new MessageActionRow<MessageButton>().addComponents([
+              new MessageButton().setLabel('Accept').setCustomId('verify_accept').setStyle('SUCCESS'),
+              new MessageButton().setLabel('Decline').setCustomId('verify_decline').setStyle('DANGER'),
+              new MessageButton().setLabel('Ticket').setCustomId('verify_ticket').setStyle('SECONDARY')
             ])
           ]
         : []

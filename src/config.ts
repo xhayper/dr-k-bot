@@ -9,11 +9,10 @@ export default config as {
     botOwner: string[];
   };
   role: {
-    administrator: string;
+    headSecurity: string;
     seniorSecurity: string;
-    moderator: string;
-    intern: string;
     security: string;
+    intern: string;
     verificationTeam: string;
     unverified: string;
     levelZero: string;

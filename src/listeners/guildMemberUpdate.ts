@@ -1,11 +1,10 @@
-import { Client, GuildMember, PartialGuildMember } from 'discord.js';
-import { TypedEvent } from '../base/clientEvent';
+import { GuildMember, PartialGuildMember } from 'discord.js';
+import { Listener } from '@sapphire/framework';
 import { GuildUtility } from '..';
 import config from '../config';
 
-export default TypedEvent({
-  eventName: 'guildMemberUpdate',
-  on: async (_: Client, oldMember: GuildMember | PartialGuildMember, newMember: GuildMember) => {
+export class UserEvent extends Listener {
+  public async run(oldMember: GuildMember | PartialGuildMember, newMember: GuildMember) {
     if (oldMember.partial || oldMember.user.bot || oldMember.guild.id != config.guildId) return;
     if (oldMember.roles.cache.equals(newMember.roles.cache)) return;
 
@@ -24,4 +23,4 @@ export default TypedEvent({
       await GuildUtility.sendWelcomeMessage(newMember);
     }
   }
-});
+}
