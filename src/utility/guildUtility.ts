@@ -80,7 +80,7 @@ export class GuildUtility {
     const thread = await this.verificationThreadChannel.threads.create({
       name: `${member.user.username} Ticket`,
       // @ts-expect-error
-      type: ChannelType.PrivateThread,
+      type: "GUILD_PRIVATE_THREAD",
       // @ts-expect-error
       invitable: true,
       autoArchiveDuration: 10080
