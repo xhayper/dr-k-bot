@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "rimraf dist && prisma generate && tsc",
+    "build": "prisma generate && rimraf dist && tsc",
     "prepare": "husky install",
     "lint": "prettier --check \"src/**/*\"",
     "format": "prettier --write \"src/**/*\""
