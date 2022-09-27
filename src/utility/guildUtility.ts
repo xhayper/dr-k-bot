@@ -1,22 +1,21 @@
+import { SapphireClient } from '@sapphire/framework';
+import { EmbedBuilder } from '@discordjs/builders';
 import { EmbedUtility, UserUtilty } from '..';
 import config from '../config';
 import {
-  Client,
   Guild,
   GuildMember,
   Message,
-  EmbedBuilder,
-  BaseMessageOptions,
+  MessageOptions,
   MessagePayload,
   NewsChannel,
   TextBasedChannel,
   TextChannel,
-  UserResolvable,
-  ChannelType
+  UserResolvable
 } from 'discord.js';
 
 export class GuildUtility {
-  private client: Client;
+  private client: SapphireClient;
 
   public auditLogChannel: TextBasedChannel | undefined;
   public verificationLogChannel: TextBasedChannel | undefined;
@@ -25,7 +24,7 @@ export class GuildUtility {
 
   public guild: Guild | undefined;
 
-  constructor(client: Client) {
+  constructor(client: SapphireClient) {
     this.client = client;
     this.client.guilds
       .fetch(config.guildId)
@@ -34,24 +33,22 @@ export class GuildUtility {
 
         const auditLogChannel = await guild.channels.fetch(config.channel.auditLog).catch(() => undefined);
         this.auditLogChannel =
-          (auditLogChannel && auditLogChannel.type === ChannelType.GuildText && auditLogChannel) || undefined;
+          (auditLogChannel && auditLogChannel.type === 'GUILD_TEXT' && auditLogChannel) || undefined;
 
         const verificationLogChannel = await guild.channels
           .fetch(config.channel.verificationLog)
           .catch(() => undefined);
         this.verificationLogChannel =
-          (verificationLogChannel && verificationLogChannel.type === ChannelType.GuildText && verificationLogChannel) ||
+          (verificationLogChannel && verificationLogChannel.type === 'GUILD_TEXT' && verificationLogChannel) ||
           undefined;
 
         const primaryGeneralChannel = await guild.channels.fetch(config.channel['general-1']).catch(() => undefined);
         this.primaryGeneralChannel =
-          (primaryGeneralChannel && primaryGeneralChannel.type === ChannelType.GuildText && primaryGeneralChannel) ||
-          undefined;
+          (primaryGeneralChannel && primaryGeneralChannel.type === 'GUILD_TEXT' && primaryGeneralChannel) || undefined;
 
         const ticketThreadChannel = await guild.channels.fetch(config.channel.ticketThread).catch(() => undefined);
         this.verificationThreadChannel =
-          (ticketThreadChannel && ticketThreadChannel.type === ChannelType.GuildText && ticketThreadChannel) ||
-          undefined;
+          (ticketThreadChannel && ticketThreadChannel.type === 'GUILD_TEXT' && ticketThreadChannel) || undefined;
       })
       .catch(() => null);
   }
@@ -67,13 +64,13 @@ export class GuildUtility {
             thumbnail: {
               url:
                 member.user.avatarURL({
-                  extension: 'png',
+                  dynamic: true,
                   size: 4096
                 }) || member.user.defaultAvatarURL
             },
             description: `We're happy to have you here!\nOnce you're level 1, Head over to <#${config.channel['role-selection']}> to get some roles!`
           })
-        )
+        ).toJSON()
       ]
     });
   }
@@ -96,12 +93,12 @@ export class GuildUtility {
     return;
   }
 
-  public async sendAuditLog(message: string | MessagePayload | BaseMessageOptions): Promise<void | Message> {
+  public async sendAuditLog(message: string | MessagePayload | MessageOptions): Promise<void | Message> {
     if (!this.auditLogChannel) return;
     return await this.auditLogChannel.send(message);
   }
 
-  public async sendVerificationLog(message: string | MessagePayload | BaseMessageOptions): Promise<void | Message> {
+  public async sendVerificationLog(message: string | MessagePayload | MessageOptions): Promise<void | Message> {
     if (!this.verificationLogChannel) return;
     return await this.verificationLogChannel.send(message);
   }
@@ -114,23 +111,19 @@ export class GuildUtility {
     return UserUtilty.isBotOwner(member.user);
   }
 
-  public isAdministrator(member: GuildMember): boolean {
-    return member.roles.cache.has(config.role.administrator) || this.isBotOwner(member);
+  public isHeadSecurity(member: GuildMember): boolean {
+    return member.roles.cache.has(config.role.headSecurity);
   }
 
   public isSeniorSecurity(member: GuildMember): boolean {
-    return member.roles.cache.has(config.role.seniorSecurity) || this.isAdministrator(member);
-  }
-
-  public isModerator(member: GuildMember): boolean {
-    return member.roles.cache.has(config.role.moderator) || this.isSeniorSecurity(member);
+    return member.roles.cache.has(config.role.seniorSecurity);
   }
 
   public isIntern(member: GuildMember): boolean {
-    return member.roles.cache.has(config.role.intern) || this.isModerator(member);
+    return member.roles.cache.has(config.role.intern);
   }
 
   public isSecurity(member: GuildMember): boolean {
-    return member.roles.cache.has(config.role.security) || this.isIntern(member);
+    return member.roles.cache.has(config.role.security);
   }
 }

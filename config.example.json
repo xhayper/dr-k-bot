@@ -4,11 +4,10 @@
     "botOwner": [""]
   },
   "role": {
-    "administrator": "",
+    "headSecurity": "",
     "seniorSecurity": "",
-    "moderator": "",
-    "intern": "",
     "security": "",
+    "intern": "",
     "verificationTeam": "",
     "unverified": "",
     "levelZero": "",

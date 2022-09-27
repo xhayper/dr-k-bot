@@ -1,10 +1,9 @@
-import { Client, MessageReaction, PartialMessageReaction, PartialUser, User } from 'discord.js';
-import { TypedEvent } from '../base/clientEvent';
+import { MessageReaction, PartialMessageReaction, User, PartialUser } from 'discord.js';
 import { EmbedUtility, GuildUtility } from '..';
+import { Listener } from '@sapphire/framework';
 
-export default TypedEvent({
-  eventName: 'messageReactionRemove',
-  on: async (_: Client, reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => {
+export class UserEvent extends Listener {
+  public run(reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) {
     if (reaction.partial || user.partial) return;
     GuildUtility.sendAuditLog({
       embeds: [
@@ -18,8 +17,8 @@ export default TypedEvent({
               value: reaction.emoji.url ? `[\:${reaction.emoji.name}\:](${reaction.emoji.url})` : reaction.emoji.name!
             }
           ])
-        )
+        ).toJSON()
       ]
     });
   }
-});
+}

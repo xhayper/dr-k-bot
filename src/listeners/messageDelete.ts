@@ -1,11 +1,10 @@
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
-import { Client, Message, PartialMessage } from 'discord.js';
-import { TypedEvent } from '../base/clientEvent';
+import { Message, PartialMessage } from 'discord.js';
+import { Listener } from '@sapphire/framework';
 import config from '../config';
 
-export default TypedEvent({
-  eventName: 'messageDelete',
-  on: async (_: Client, message: Message | PartialMessage) => {
+export class UserEvent extends Listener {
+  public async run(message: Message | PartialMessage) {
     if (
       message.partial ||
       message.author.bot ||
@@ -27,8 +26,8 @@ export default TypedEvent({
           ).setFooter({
             text: `Message ID: ${message.id}`
           })
-        )
+        ).toJSON()
       ]
     });
   }
-});
+}

@@ -1,25 +1,21 @@
-import { CommandManager, EmbedUtility, GuildUtility, MessageUtility, VerificationUtility } from '..';
+import { VerificationUtility, GuildUtility, EmbedUtility, MessageUtility } from '..';
 import { VerificationTicket, VerificationTicketType } from '../database';
-import { ModalUtility, questions } from '../utility/modalUtility';
-import { TypedEvent } from '../base/clientEvent';
-import { Logger } from '../logger';
+import { questions, ModalUtility } from '../utility/modalUtility';
+import { EmbedBuilder } from '@discordjs/builders';
+import { Listener } from '@sapphire/framework';
 import config from '../config';
 import {
   ButtonInteraction,
-  Client,
   Collection,
   CollectorFilter,
   GuildMember,
   Interaction,
   Message,
-  EmbedBuilder,
   MessageMentionOptions,
-  BaseMessageOptions,
+  MessageOptions,
   Snowflake,
   TextBasedChannel,
-  User,
-  InteractionType,
-  ChatInputCommandInteraction
+  User
 } from 'discord.js';
 
 const questionAskCollection = new Collection<Snowflake, User>();
@@ -27,8 +23,8 @@ const questionAskCollection = new Collection<Snowflake, User>();
 async function handleQuestion(
   textChannel: TextBasedChannel,
   filter?: CollectorFilter<[Message<boolean>]>,
-  cancelMessage: string | BaseMessageOptions | null = {
-    embeds: [EmbedUtility.OPERATION_CANCELLED()]
+  cancelMessage: string | MessageOptions | null = {
+    embeds: [EmbedUtility.OPERATION_CANCELLED().toJSON()]
   }
 ): Promise<Message | void> {
   const message = await textChannel.awaitMessages({
@@ -63,11 +59,8 @@ async function handleQuestion(
   return response;
 }
 
-export default TypedEvent({
-  eventName: 'interactionCreate',
-  on: async (client: Client, interaction: Interaction) => {
-    // if (!interaction.member || !(interaction.member instanceof GuildMember)) return;
-
+export class UserEvent extends Listener {
+  public async run(interaction: Interaction) {
     if (interaction.isModalSubmit()) {
       switch (interaction.customId) {
         case 'verification': {
@@ -101,48 +94,6 @@ export default TypedEvent({
           break;
         }
       }
-    } else if (interaction.type == InteractionType.ApplicationCommand) {
-      const chatInputCommandInteraction = interaction as ChatInputCommandInteraction;
-      const command = CommandManager.commands.get(chatInputCommandInteraction.commandName);
-      if (!command) return;
-
-      if (command.peferEphemeral) await interaction.deferReply({ ephemeral: true });
-      else await interaction.deferReply();
-
-      if (command.guildId && (!interaction.guild || !command.guildId.includes(interaction.guild.id)))
-        return interaction.editReply({
-          embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_USE_HERE(), interaction.user)]
-        });
-
-      if (command.permission) {
-        if (
-          !interaction.member ||
-          !(interaction.member instanceof GuildMember) ||
-          interaction.guildId !== config.guildId
-        )
-          return interaction.editReply({
-            embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_USE_HERE(), interaction.user)]
-          });
-
-        if (
-          (command.permission === 'BOT_OWNER' && !GuildUtility.isBotOwner(interaction.member)) ||
-          (command.permission === 'ADMINISTRATOR' && !GuildUtility.isAdministrator(interaction.member)) ||
-          (command.permission === 'SENIOR_SECURITY' && !GuildUtility.isSeniorSecurity(interaction.member)) ||
-          (command.permission === 'MODERATOR' && !GuildUtility.isModerator(interaction.member)) ||
-          (command.permission === 'INTERN' && !GuildUtility.isIntern(interaction.member)) ||
-          (command.permission === 'SECURITY' && !GuildUtility.isSecurity(interaction.member))
-        )
-          return interaction.editReply({
-            embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.NO_PERMISSION(), interaction.user)]
-          });
-      }
-
-      Logger.info(
-        `${(interaction.member?.user ?? interaction.user).username}#${
-          (interaction.member?.user ?? interaction.user).discriminator
-        } used command ${command.data.name}`
-      );
-      command.execute(chatInputCommandInteraction);
     } else if (interaction.isButton()) {
       if (!interaction.guild || interaction.guild.id != config.guildId) return;
       const buttonInteraction = interaction as ButtonInteraction;
@@ -159,15 +110,20 @@ export default TypedEvent({
           await buttonInteraction.deferReply();
           moderator = await GuildUtility.getGuildMember(buttonInteraction.user.id);
           if (!moderator) throw new Error("This wasn't suppose to happened");
-          if (!GuildUtility.isSecurity(moderator))
+          if (
+            !GuildUtility.isHeadSecurity(moderator) &&
+            !GuildUtility.isSeniorSecurity(moderator) &&
+            !GuildUtility.isSecurity(moderator) &&
+            !GuildUtility.isIntern(moderator)
+          )
             return buttonInteraction.editReply({
-              embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.NO_PERMISSION(), buttonInteraction.user)]
+              embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.NO_PERMISSION(), buttonInteraction.user).toJSON()]
             });
 
           ticket = await VerificationUtility.getTicketFromMessageId(buttonInteraction.message.id);
           if (!ticket)
             return buttonInteraction.editReply({
-              embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_FIND_TICKET(), buttonInteraction.user)]
+              embeds: [EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_FIND_TICKET(), buttonInteraction.user).toJSON()]
             });
 
           if (ticket) verificationMessage = await VerificationUtility.getMessageFromTicket(ticket);
@@ -184,7 +140,7 @@ export default TypedEvent({
                   new EmbedBuilder().setDescription(`No implementation for ${buttonInteraction.customId}!`),
                   buttonInteraction.user
                 )
-              )
+              ).toJSON()
             ]
           });
           break;
@@ -198,9 +154,11 @@ export default TypedEvent({
           if (!member)
             return buttonInteraction.editReply({
               embeds: [
-                EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_FIND_USER(), buttonInteraction.user).setFooter({
-                  text: ticket!.id
-                })
+                EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_FIND_USER(), buttonInteraction.user)
+                  .setFooter({
+                    text: ticket!.id
+                  })
+                  .toJSON()
               ]
             });
 
@@ -220,7 +178,7 @@ export default TypedEvent({
                 ).setFooter({
                   text: ticket!.id
                 })
-              )
+              ).toJSON()
             ]
           });
 
@@ -239,7 +197,7 @@ export default TypedEvent({
                     questionAskCollection.get(verificationMessage!.id)!
                   ),
                   buttonInteraction.user
-                )
+                ).toJSON()
               ]
             });
 
@@ -257,7 +215,7 @@ export default TypedEvent({
                   }),
                   buttonInteraction.user
                 )
-              )
+              ).toJSON()
             ]
           });
 
@@ -268,7 +226,7 @@ export default TypedEvent({
               embeds: [
                 EmbedUtility.TIMESTAMP_NOW(
                   EmbedUtility.USER_AUTHOR(EmbedUtility.OPERATION_CANCELLED(), buttonInteraction.user)
-                )
+                ).toJSON()
               ]
             }
           ).catch(() => {
@@ -277,7 +235,7 @@ export default TypedEvent({
               embeds: [
                 EmbedUtility.ERROR_COLOR(
                   EmbedUtility.USER_AUTHOR(EmbedUtility.DIDNT_RESPOND_IN_TIME(), buttonInteraction.user)
-                )
+                ).toJSON()
               ]
             });
             return;
@@ -288,7 +246,7 @@ export default TypedEvent({
             return;
           }
 
-          const user = await client.users.fetch(ticket!.discordId).catch(() => undefined);
+          const user = await this.container.client.users.fetch(ticket!.discordId).catch(() => undefined);
           if (user)
             user
               .send({
@@ -300,7 +258,7 @@ export default TypedEvent({
                         reason
                       )}`
                     })
-                  )
+                  ).toJSON()
                 ]
               })
               .catch(() => undefined);
@@ -319,7 +277,7 @@ export default TypedEvent({
                   }).setFooter({ text: ticket!.id }),
                   moderator!.user
                 )
-              )
+              ).toJSON()
             ],
             allowedMentions: {
               repliedUser: false
@@ -333,9 +291,11 @@ export default TypedEvent({
           if (!member)
             return buttonInteraction.editReply({
               embeds: [
-                EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_FIND_USER(), buttonInteraction.user).setFooter({
-                  text: ticket!.id
-                })
+                EmbedUtility.USER_AUTHOR(EmbedUtility.CANT_FIND_USER(), buttonInteraction.user)
+                  .setFooter({
+                    text: ticket!.id
+                  })
+                  .toJSON()
               ]
             });
 
@@ -350,20 +310,21 @@ export default TypedEvent({
                   }),
                   moderator!.user
                 )
-              ).setFooter({
-                text: ticket!.id
-              })
+              )
+                .setFooter({
+                  text: ticket!.id
+                })
+                .toJSON()
             ]
           });
 
           break;
         }
         case 'verify': {
-          const verificationModal = ModalUtility.createApplicationModal();
-          await interaction.showModal(verificationModal);
+          await interaction.showModal(ModalUtility.createApplicationModal());
           break;
         }
       }
     }
   }
-});
+}

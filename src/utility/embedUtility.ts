@@ -1,19 +1,21 @@
-import { Client, Colors, EmbedBuilder, User } from 'discord.js';
 import { PartialVerificationData } from './verifiationUtility';
+import { SapphireClient } from '@sapphire/framework';
+import { EmbedBuilder } from '@discordjs/builders';
+import { User } from 'discord.js';
 
 export class EmbedUtility {
-  private client: Client;
+  private client: SapphireClient;
 
-  constructor(client: Client) {
+  constructor(client: SapphireClient) {
     this.client = client;
   }
 
   public ERROR_COLOR(embed: EmbedBuilder): EmbedBuilder {
-    return embed.setColor(Colors.Red);
+    return embed.setColor(0xed4245);
   }
 
   public SUCCESS_COLOR(embed: EmbedBuilder): EmbedBuilder {
-    return embed.setColor(Colors.Green);
+    return embed.setColor(0x57f287);
   }
 
   public USER_AUTHOR(embed: EmbedBuilder, user: User): EmbedBuilder {
@@ -22,7 +24,7 @@ export class EmbedUtility {
       iconURL:
         user.avatarURL({
           size: 4096,
-          extension: 'png'
+          dynamic: true
         }) || user.defaultAvatarURL
     });
   }
@@ -97,9 +99,7 @@ export class EmbedUtility {
       }))
     ]);
 
-    baseEmbed.setThumbnail(
-      targetUser.displayAvatarURL({ extension: 'png', size: 4096 }) || targetUser.defaultAvatarURL
-    );
+    baseEmbed.setThumbnail(targetUser.displayAvatarURL({ dynamic: true, size: 4096 }) || targetUser.defaultAvatarURL);
 
     return this.SUCCESS_COLOR(baseEmbed);
   }

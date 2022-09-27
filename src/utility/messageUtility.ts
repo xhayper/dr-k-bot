@@ -1,14 +1,15 @@
-import { Attachment, AttachmentBuilder, Client, Message, TextBasedChannel } from 'discord.js';
+import { MessageAttachment, Message, TextBasedChannel } from 'discord.js';
+import { SapphireClient } from '@sapphire/framework';
 import config from '../config';
 
 export class MessageUtility {
-  private client: Client;
+  private client: SapphireClient;
   private imageStorageChannel: TextBasedChannel | null = null;
 
-  constructor(client: Client) {
+  constructor(client: SapphireClient) {
     this.client = client;
     this.client.channels.fetch(config.channel['image-storage'], { allowUnknownGuild: true }).then((channel) => {
-      if (!channel?.isTextBased()) return;
+      if (!channel?.isText()) return;
       this.imageStorageChannel = channel;
     });
   }
@@ -24,17 +25,15 @@ export class MessageUtility {
       .join('\n')}`;
   }
 
-  public async transformToPermenantImage(attachment: Attachment[]): Promise<Attachment[]> {
+  public async transformToPermenantImage(attachment: MessageAttachment[]): Promise<MessageAttachment[]> {
     if (attachment.length === 0) return attachment;
     if (!this.imageStorageChannel) return attachment;
 
     const message = await this.imageStorageChannel.send({
-      files: attachment.map(
-        (attachment) =>
-          new AttachmentBuilder(attachment.attachment, {
-            name: attachment.name ?? undefined,
-            description: attachment.description ?? undefined
-          })
+      files: attachment.map((attachment) =>
+        new MessageAttachment(attachment.attachment, attachment.name ?? undefined).setDescription(
+          attachment.description ?? ''
+        )
       )
     });
 
