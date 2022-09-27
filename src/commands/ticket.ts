@@ -4,6 +4,7 @@ import { Args, Command } from '@sapphire/framework';
 import { EmbedBuilder } from '@discordjs/builders';
 import { GuildMember, Message } from 'discord.js';
 import { GuildUtility, EmbedUtility } from '..';
+import config from '../config';
 
 @ApplyOptions<Command.Options>({
   description: '-',
@@ -11,11 +12,15 @@ import { GuildUtility, EmbedUtility } from '..';
 })
 export class CommandHandler extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) =>
-      builder //
-        .setName(this.name)
-        .setDescription(this.description)
-        .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true))
+    registry.registerChatInputCommand(
+      (builder) =>
+        builder //
+          .setName(this.name)
+          .setDescription(this.description)
+          .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true)),
+      {
+        guildIds: [config.guildId]
+      }
     );
   }
 

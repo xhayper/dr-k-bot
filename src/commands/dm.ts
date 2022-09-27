@@ -5,6 +5,7 @@ import { EmbedBuilder } from '@discordjs/builders';
 import { GuildMember, Message } from 'discord.js';
 import { Args } from '@sapphire/framework';
 import { EmbedUtility } from '..';
+import config from '../config';
 
 const memberOption = (option: any, description = '-') =>
   option.setName('member').setDescription(description).setRequired(true);
@@ -23,25 +24,29 @@ const memberOption = (option: any, description = '-') =>
 })
 export class CommandHandler extends Subcommand {
   public override registerApplicationCommands(registry: Subcommand.Registry) {
-    registry.registerChatInputCommand((builder) =>
-      (builder as any)
-        .setName(this.name)
-        .setDescription(this.description)
-        .addSubcommand((builder: any) => builder.setName('nsfw').setDescription('-').addUserOption(memberOption))
-        .addSubcommand((builder: any) =>
-          builder
-            .setName('warn')
-            .setDescription('-')
-            .addUserOption(memberOption)
-            .addStringOption((option: any) => option.setName('reason').setDescription('-').setRequired(true))
-        )
-        .addSubcommand((builder: any) =>
-          builder
-            .setName('custom')
-            .setDescription('-')
-            .addUserOption(memberOption)
-            .addStringOption((option: any) => option.setName('message').setDescription('-').setRequired(true))
-        )
+    registry.registerChatInputCommand(
+      (builder) =>
+        (builder as any)
+          .setName(this.name)
+          .setDescription(this.description)
+          .addSubcommand((builder: any) => builder.setName('nsfw').setDescription('-').addUserOption(memberOption))
+          .addSubcommand((builder: any) =>
+            builder
+              .setName('warn')
+              .setDescription('-')
+              .addUserOption(memberOption)
+              .addStringOption((option: any) => option.setName('reason').setDescription('-').setRequired(true))
+          )
+          .addSubcommand((builder: any) =>
+            builder
+              .setName('custom')
+              .setDescription('-')
+              .addUserOption(memberOption)
+              .addStringOption((option: any) => option.setName('message').setDescription('-').setRequired(true))
+          ),
+      {
+        guildIds: [config.guildId]
+      }
     );
   }
 
