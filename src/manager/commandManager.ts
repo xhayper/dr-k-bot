@@ -68,7 +68,10 @@ export class CommandManager {
           }
         }
 
-        if (globalAPICommand) await globalAPICommand.delete();
+        if (globalAPICommand) {
+          Logger.info(`Deleting global command "${globalAPICommand.name}"`);
+          await globalAPICommand.delete();
+        }
       } else {
         Logger.info(`Checking global command "${commandModule.data.name}"`);
 
