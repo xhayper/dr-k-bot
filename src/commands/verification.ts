@@ -71,29 +71,35 @@ const createVerificationListAttachment = (verificationTickets: VerificationTicke
 })
 export class CommandHandler extends Subcommand {
   public override registerApplicationCommands(registry: Subcommand.Registry) {
-    registry.registerChatInputCommand((builder) =>
-      (builder as any)
-        .setName(this.name)
-        .setDescription(this.description)
-        .addSubcommand((builder: any) =>
-          builder.setName('accept').setDescription('-').addStringOption(verificationTicketIdOption)
-        )
-        .addSubcommand((builder: any) =>
-          builder
-            .setName('decline')
-            .setDescription('-')
-            .addStringOption(verificationTicketIdOption)
-            .addStringOption((option: any) =>
-              option.setName('reason').setDescription('The reason for declining the request').setRequired(true)
-            )
-        )
-        .addSubcommand((builder: any) =>
-          builder
-            .setName('info')
-            .setDescription('Show a specific verification ticket')
-            .addStringOption(verificationTicketIdOption)
-        )
-        .addSubcommand((builder: any) => builder.setName('list').setDescription('Show unfinished verification tickets'))
+    registry.registerChatInputCommand(
+      (builder) =>
+        (builder as any)
+          .setName(this.name)
+          .setDescription(this.description)
+          .addSubcommand((builder: any) =>
+            builder.setName('accept').setDescription('-').addStringOption(verificationTicketIdOption)
+          )
+          .addSubcommand((builder: any) =>
+            builder
+              .setName('decline')
+              .setDescription('-')
+              .addStringOption(verificationTicketIdOption)
+              .addStringOption((option: any) =>
+                option.setName('reason').setDescription('The reason for declining the request').setRequired(true)
+              )
+          )
+          .addSubcommand((builder: any) =>
+            builder
+              .setName('info')
+              .setDescription('Show a specific verification ticket')
+              .addStringOption(verificationTicketIdOption)
+          )
+          .addSubcommand((builder: any) =>
+            builder.setName('list').setDescription('Show unfinished verification tickets')
+          ),
+      {
+        guildIds: [config.guildId]
+      }
     );
   }
 

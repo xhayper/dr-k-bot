@@ -12,18 +12,22 @@ import config from '../config';
 })
 export class CommandHandler extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) =>
-      builder //
-        .setName(this.name)
-        .setDescription(this.description)
-        .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true))
-        .addStringOption((option) =>
-          option
-            .setName('role')
-            .setDescription('-')
-            .setRequired(true)
-            .addChoices(...Object.keys(config.toggleRole).map((roleName) => ({ name: roleName, value: roleName })))
-        )
+    registry.registerChatInputCommand(
+      (builder) =>
+        builder //
+          .setName(this.name)
+          .setDescription(this.description)
+          .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true))
+          .addStringOption((option) =>
+            option
+              .setName('role')
+              .setDescription('-')
+              .setRequired(true)
+              .addChoices(...Object.keys(config.toggleRole).map((roleName) => ({ name: roleName, value: roleName })))
+          ),
+      {
+        guildIds: [config.guildId]
+      }
     );
   }
 
