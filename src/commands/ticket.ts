@@ -7,7 +7,7 @@ import { GuildUtility, EmbedUtility } from '..';
 import config from '../config';
 
 @ApplyOptions<Command.Options>({
-  description: '-',
+  description: 'Open a thread to ask for additional information',
   preconditions: ['ChangedGuildOnly', ['HeadSecurityOnly', 'SeniorSecurityOnly', 'SecurityOnly', 'InternOnly']]
 })
 export class CommandHandler extends Command {

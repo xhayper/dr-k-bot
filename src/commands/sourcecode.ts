@@ -4,7 +4,7 @@ import { Command } from '@sapphire/framework';
 import { Message } from 'discord.js';
 
 @ApplyOptions<Command.Options>({
-  description: '-'
+  description: "Give you the link to the bot's source code"
 })
 export class CommandHandler extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
