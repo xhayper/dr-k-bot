@@ -60,7 +60,7 @@ const createVerificationListAttachment = (verificationTickets: VerificationTicke
 };
 
 @ApplyOptions<Subcommand.Options>({
-  description: '-',
+  description: 'Verification ticket management',
   preconditions: ['ChangedGuildOnly', ['HeadSecurityOnly', 'SeniorSecurityOnly', 'SecurityOnly', 'InternOnly']],
   subcommands: [
     { name: 'accept', messageRun: 'messageAccept', chatInputRun: 'chatInputAccept' },

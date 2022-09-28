@@ -7,7 +7,7 @@ import { GuildUtility, EmbedUtility } from '..';
 import config from '../config';
 
 @ApplyOptions<Command.Options>({
-  description: '-',
+  description: 'Give the target user a warm welcome~',
   preconditions: ['ChangedGuildOnly', ['HeadSecurityOnly', 'SeniorSecurityOnly', 'SecurityOnly', 'InternOnly']]
 })
 export class CommandHandler extends Command {
@@ -16,7 +16,8 @@ export class CommandHandler extends Command {
       (builder) =>
         builder //
           .setName(this.name)
-          .setDescription(this.description),
+          .setDescription(this.description)
+          .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true)),
       {
         guildIds: [config.guildId]
       }
