@@ -17,7 +17,7 @@ exec('npm install --omit=dev --fund=false', { cwd: botFolder });
 log('GENERATING PRISMA FILES!');
 exec('npm install prisma --omit=dev --fund=false', { cwd: botFolder });
 exec('npx prisma generate', { cwd: botFolder });
-exec('npm remove prisma --no-save', { cwd: botFolder });
+exec('npm uninstall prisma', { cwd: botFolder });
 
 // Clean up
 log('CLEANING UP!');
