@@ -19,6 +19,9 @@ export class Handler extends InteractionHandler {
       answer: interaction.fields.getTextInputValue(`question-${index + 1}`)
     }));
 
+    if (transformedAnswer.some((answerData) => !answerData.answer || answerData.answer.length == 0))
+      return void (await interaction.editReply({ content: 'One of your answer is empty!' }));
+
     const verificationData = {
       id: randomTicketId,
       discordId: interaction.user.id,

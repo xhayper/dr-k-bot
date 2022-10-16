@@ -22,7 +22,7 @@
     "@sapphire/plugin-logger": "^3.0.1",
     "@sapphire/plugin-subcommands": "^3.2.3",
     "@sapphire/utilities": "^3.11.0",
-    "discord-api-types": "^0.37.12",
+    "discord-api-types": "^0.37.14",
     "discord.js": "^13.12.0",
     "dotenv": "^16.0.3",
     "glob": "^8.0.3",
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
-    "@types/node": "^18.8.4",
+    "@types/node": "^18.11.0",
     "husky": "^8.0.1",
     "prettier": "^2.7.1",
     "pretty-quick": "^3.1.3",
