@@ -104,9 +104,9 @@ __metadata:
   linkType: hard
 
 "@sapphire/discord-utilities@npm:^2.11.6":
-  version: 2.11.6
-  resolution: "@sapphire/discord-utilities@npm:2.11.6"
-  checksum: aaabbb3558fa9255ab7fd874c6dba845caa6b5b2cbfccc96c6365d828888fc50b95c4fc9cb5f4aa6a7c904d7d9a95e61b80018a90e55bcc5d3779f2fb57926f1
+  version: 2.11.7
+  resolution: "@sapphire/discord-utilities@npm:2.11.7"
+  checksum: 6e8dfb3353c54c37c8be0f50ed60e89b312ccd93d84d93979fc98cf1fb152ed9004f5b753a7c71cc6615b11ef59388ba2585f0966e94e99ed4bdfb3b16133832
   languageName: node
   linkType: hard
 
@@ -312,10 +312,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^18.11.3":
-  version: 18.11.3
-  resolution: "@types/node@npm:18.11.3"
-  checksum: 3a2a9142d891a90a195c296149bf64a69cc0abcc42f543be911ab22b2e0ead85ff077f90af92f0f13f6e3e5e72501469200fd753dfd1101825d4646a89d3ee47
+"@types/node@npm:*, @types/node@npm:^18.11.8":
+  version: 18.11.8
+  resolution: "@types/node@npm:18.11.8"
+  checksum: 60b358f97c1a029722dc785811b217615ef20249c3fbde60a65869cfd7a5cd5b1872ee95c79c187ef70e5a078f4ac7670d2129803985268b1f021ad6e8040af8
   languageName: node
   linkType: hard
 
@@ -686,10 +686,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.37.14":
-  version: 0.37.14
-  resolution: "discord-api-types@npm:0.37.14"
-  checksum: 8f45f202e66acfd7b25624c8f4d225b363d9d8991d766959bcf246761548b99e21c12d9f7eafe00903913af66058595e5e56329dfb219eab8bb75a84f6413983
+"discord-api-types@npm:^0.37.16":
+  version: 0.37.16
+  resolution: "discord-api-types@npm:0.37.16"
+  checksum: bf8fb1d8f83fd26be12173d5a86be0736d411f2dd1a7b5e9e29b5b5880bb96cefd4a253ed4d36b36b58e12105eda29dff53569f0d1d3c51cf05c6789e904e506
   languageName: node
   linkType: hard
 
@@ -731,9 +731,9 @@ __metadata:
     "@sapphire/plugin-subcommands": ^3.2.3
     "@sapphire/utilities": ^3.11.0
     "@types/glob": ^8.0.0
-    "@types/node": ^18.11.3
+    "@types/node": ^18.11.8
     bufferutil: ^4.0.7
-    discord-api-types: ^0.37.14
+    discord-api-types: ^0.37.16
     discord.js: 13.12.0
     dotenv: ^16.0.3
     erlpack: discord/erlpack
@@ -1864,9 +1864,9 @@ erlpack@discord/erlpack:
   linkType: hard
 
 "tslib@npm:2.x, tslib@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "tslib@npm:2.4.0"
-  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
+  version: 2.4.1
+  resolution: "tslib@npm:2.4.1"
+  checksum: 19480d6e0313292bd6505d4efe096a6b31c70e21cf08b5febf4da62e95c265c8f571f7b36fcc3d1a17e068032f59c269fab3459d6cd3ed6949eafecf64315fca
   languageName: node
   linkType: hard
 
@@ -1970,8 +1970,8 @@ erlpack@discord/erlpack:
   linkType: hard
 
 "ws@npm:^8.9.0":
-  version: 8.9.0
-  resolution: "ws@npm:8.9.0"
+  version: 8.10.0
+  resolution: "ws@npm:8.10.0"
   peerDependencies:
     bufferutil: ^4.0.1
     utf-8-validate: ^5.0.2
@@ -1980,7 +1980,7 @@ erlpack@discord/erlpack:
       optional: true
     utf-8-validate:
       optional: true
-  checksum: 23aa0f021b2eb65c108ec4c3e08c0d81ba01f82b500432dfe327fd6be36079c1d81fdb0eac6464d2a0eb49904d34a9ab8c59619d673fa07b8346f83aeb0cbf12
+  checksum: 3a32e15dffe633dd5ce99659793dbcf1440ea25d2da1060c88cbd22efdfb7986a6933e68aaa4b098fc3f1f7870cb386afd378a1ceaca4b31748471576d5a8b52
   languageName: node
   linkType: hard
 
