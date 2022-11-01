@@ -35,8 +35,8 @@
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
-    "@types/node": "^18.11.3",
-    "discord-api-types": "^0.37.14",
+    "@types/node": "^18.11.8",
+    "discord-api-types": "^0.37.16",
     "husky": "^8.0.1",
     "prettier": "^2.7.1",
     "pretty-quick": "^3.1.3",
