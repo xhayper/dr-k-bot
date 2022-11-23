@@ -1,11 +1,11 @@
 import { VerificationTicket, VerificationTicketType } from '../database';
 import { EmbedUtility, GuildUtility, VerificationUtility } from '..';
+import { type Message, MessageAttachment } from 'discord.js';
 import { reply } from '@sapphire/plugin-editable-commands';
 import { Subcommand } from '@sapphire/plugin-subcommands';
-import { Message, MessageAttachment } from 'discord.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import { EmbedBuilder } from '@discordjs/builders';
-import { Args } from '@sapphire/framework';
+import { type Args } from '@sapphire/framework';
 import config from '../config';
 
 const verificationTicketIdOption = (option: any) => {

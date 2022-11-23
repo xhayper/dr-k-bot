@@ -1,4 +1,4 @@
-import { GuildMember, PartialGuildMember } from 'discord.js';
+import { type GuildMember, type PartialGuildMember } from 'discord.js';
 import { Listener } from '@sapphire/framework';
 import { VerificationUtility } from '..';
 import config from '../config';

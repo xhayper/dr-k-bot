@@ -1,4 +1,4 @@
-import { PartialUser, User } from 'discord.js';
+import { type PartialUser, type User } from 'discord.js';
 import config from '../config';
 
 export class UserUtility {

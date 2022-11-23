@@ -1,9 +1,9 @@
+import { type GuildMember, type Message } from 'discord.js';
 import { reply } from '@sapphire/plugin-editable-commands';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { ApplyOptions } from '@sapphire/decorators';
 import { EmbedBuilder } from '@discordjs/builders';
-import { GuildMember, Message } from 'discord.js';
-import { Args } from '@sapphire/framework';
+import { type Args } from '@sapphire/framework';
 import { EmbedUtility } from '..';
 import config from '../config';
 

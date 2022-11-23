@@ -1,4 +1,4 @@
-import { Collection, DiscordAPIError, Message, Snowflake } from 'discord.js';
+import { Collection, DiscordAPIError, type Message, type Snowflake } from 'discord.js';
 import { EmbedUtility, GuildUtility } from '..';
 import { Listener } from '@sapphire/framework';
 import config from '../config';

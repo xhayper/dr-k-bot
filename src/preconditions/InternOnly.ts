@@ -1,4 +1,4 @@
-import type { CommandInteraction, ContextMenuInteraction, Message } from 'discord.js';
+import { type CommandInteraction, type ContextMenuInteraction, type Message } from 'discord.js';
 import { AllFlowsPrecondition } from '@sapphire/framework';
 import { GuildUtility } from '..';
 

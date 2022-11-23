@@ -1,17 +1,17 @@
-import { SapphireClient } from '@sapphire/framework';
+import { type SapphireClient } from '@sapphire/framework';
 import { EmbedBuilder } from '@discordjs/builders';
 import { EmbedUtility, UserUtilty } from '..';
 import config from '../config';
 import {
-  Guild,
-  GuildMember,
-  Message,
-  MessageOptions,
-  MessagePayload,
-  NewsChannel,
-  TextBasedChannel,
-  TextChannel,
-  UserResolvable
+  type Guild,
+  type GuildMember,
+  type Message,
+  type MessageOptions,
+  type MessagePayload,
+  type NewsChannel,
+  type TextBasedChannel,
+  type TextChannel,
+  type UserResolvable
 } from 'discord.js';
 
 export class GuildUtility {

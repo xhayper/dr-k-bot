@@ -1,5 +1,5 @@
-import { Message, MessageActionRow, MessageButton, TextBasedChannel, User } from 'discord.js';
-import { VerificationTicket, VerificationTicketType } from '../database';
+import { MessageActionRow, MessageButton, type Message, type TextBasedChannel, type User } from 'discord.js';
+import { VerificationTicket, type VerificationTicketType } from '../database';
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
 import { EmbedBuilder } from '@discordjs/builders';
 import { randomUUID } from 'node:crypto';
