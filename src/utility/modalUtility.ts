@@ -47,20 +47,6 @@ export const questions: TextInputComponentOptions[] = [
 ];
 
 export class ModalUtility {
-  // static createApplicationModal(): ModalBuilder {
-  //   const modal = new ModalBuilder().setCustomId('verification').setTitle('Verification');
-
-  //   questions.forEach((question, index) => {
-  //     modal.addComponents([
-  //       new ActionRowBuilder<TextInputBuilder>().addComponents(
-  //         new TextInputBuilder(question as any).setCustomId(`question-${index + 1}`)
-  //       )
-  //     ]);
-  //   });
-
-  //   return modal;
-  // }
-
   static createApplicationModal(): ModalOptions {
     const components:
       | MessageActionRow<ModalActionRowComponent>[]
