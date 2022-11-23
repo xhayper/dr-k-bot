@@ -4,7 +4,7 @@ import { Args, Command } from '@sapphire/framework';
 import { Message } from 'discord.js';
 import { inspect } from 'node:util';
 
-const clean = async (text: any) => {
+const clean = async (text: any | Promise<any>) => {
   if (text && text.constructor.name == 'Promise') text = await text;
 
   if (typeof text !== 'string') text = inspect(text, { depth: 1 });
