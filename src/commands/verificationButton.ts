@@ -35,7 +35,9 @@ export class CommandHandler extends Command {
       ]
     });
 
-    await interaction.deleteReply();
+    await interaction.editReply({
+      content: 'Verification button sent!'
+    });
   }
 
   public override async messageRun(message: Message) {
