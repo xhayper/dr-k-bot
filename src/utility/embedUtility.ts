@@ -33,6 +33,12 @@ export class EmbedUtility {
     return this.ERROR_COLOR(embed).setDescription(`${user} is already working on this ticket!`);
   }
 
+  public VERIFICATION_BUTTON(): EmbedBuilder {
+    return this.SUCCESS_COLOR(
+      new EmbedBuilder().setDescription(`Click the button below to start the verification process!`)
+    );
+  }
+
   public TIMESTAMP_NOW(embed: EmbedBuilder): EmbedBuilder {
     return embed.setTimestamp(Date.now());
   }
