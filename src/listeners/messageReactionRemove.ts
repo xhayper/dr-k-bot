@@ -1,4 +1,4 @@
-import { MessageReaction, PartialMessageReaction, User, PartialUser } from 'discord.js';
+import { type MessageReaction, type PartialMessageReaction, type User, type PartialUser } from 'discord.js';
 import { EmbedUtility, GuildUtility } from '..';
 import { Listener } from '@sapphire/framework';
 

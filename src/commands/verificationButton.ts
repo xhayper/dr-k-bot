@@ -1,8 +1,7 @@
-import { Message, MessageActionRow, MessageButton, MessageButtonOptions } from 'discord.js';
+import { type Message, MessageActionRow, MessageButton } from 'discord.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { EmbedUtility } from '..';
-import { ButtonStyle } from 'discord-api-types/v10';
 
 @ApplyOptions<Command.Options>({
   description: 'Replies with the verification button in current channel',

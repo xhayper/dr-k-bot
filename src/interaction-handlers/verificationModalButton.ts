@@ -1,7 +1,7 @@
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import { ModalUtility } from '../utility/modalUtility';
 import { ApplyOptions } from '@sapphire/decorators';
-import { ButtonInteraction } from 'discord.js';
+import { type ButtonInteraction } from 'discord.js';
 
 @ApplyOptions<InteractionHandler.Options>({
   interactionHandlerType: InteractionHandlerTypes.Button

@@ -1,5 +1,5 @@
+import { type ActivityOptions } from 'discord.js';
 import { Listener } from '@sapphire/framework';
-import { ActivityOptions } from 'discord.js';
 
 const randomStatus: ActivityOptions[] = [
   {

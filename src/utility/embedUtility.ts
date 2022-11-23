@@ -1,7 +1,7 @@
-import { PartialVerificationData } from './verifiationUtility';
-import { SapphireClient } from '@sapphire/framework';
+import { type PartialVerificationData } from './verifiationUtility';
+import { type SapphireClient } from '@sapphire/framework';
 import { EmbedBuilder } from '@discordjs/builders';
-import { User } from 'discord.js';
+import { type User } from 'discord.js';
 
 export class EmbedUtility {
   private client: SapphireClient;

@@ -1,5 +1,5 @@
-import { MessageAttachment, Message, TextBasedChannel } from 'discord.js';
-import { SapphireClient } from '@sapphire/framework';
+import { MessageAttachment, type Message, type TextBasedChannel } from 'discord.js';
+import { type SapphireClient } from '@sapphire/framework';
 import config from '../config';
 
 export class MessageUtility {

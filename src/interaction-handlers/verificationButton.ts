@@ -5,16 +5,16 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { EmbedBuilder } from '@discordjs/builders';
 import config from '../config';
 import {
-  ButtonInteraction,
   Collection,
-  CollectorFilter,
-  GuildMember,
-  Message,
-  MessageMentionOptions,
-  MessageOptions,
-  Snowflake,
-  TextBasedChannel,
-  User
+  type ButtonInteraction,
+  type CollectorFilter,
+  type GuildMember,
+  type Message,
+  type MessageMentionOptions,
+  type MessageOptions,
+  type Snowflake,
+  type TextBasedChannel,
+  type User
 } from 'discord.js';
 
 const validCustomId = ['verify_accept', 'verify_decline', 'verify_ticket'];

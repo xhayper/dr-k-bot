@@ -28,6 +28,7 @@
   "toggleRole": {
     "": ""
   },
+  "questions": [{}],
   "misc": {
     "mediaCooldown": 0,
     "mediaLimit": 0

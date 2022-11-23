@@ -1,5 +1,5 @@
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
-import { Message, PartialMessage } from 'discord.js';
+import { type Message, type PartialMessage } from 'discord.js';
 import { Listener } from '@sapphire/framework';
 import config from '../config';
 
