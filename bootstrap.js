@@ -23,7 +23,7 @@ exec('yarn remove prisma', { cwd: botFolder });
 log('CLEANING UP!');
 exec('rm -r -f node_modules');
 exec('rm -r -f .cache');
-exec('rm -r -f .npm');
+exec('rm -r -f .yarn');
 
 log('END!');
 
