@@ -11,13 +11,13 @@ const exec = (cmd, options) => execSync(cmd, { ...options, stdio: 'inherit' });
 
 // We install packages
 log('INSTALLING PACKAGES!');
-exec('npm install --omit=dev --fund=false', { cwd: botFolder });
+exec('yarn install', { cwd: botFolder });
 
 // Then generate prisma files
 log('GENERATING PRISMA FILES!');
-exec('npm install prisma --omit=dev --fund=false', { cwd: botFolder });
+exec('yarn add prisma', { cwd: botFolder });
 exec('npx prisma generate', { cwd: botFolder });
-exec('npm uninstall prisma --fund=false', { cwd: botFolder });
+exec('yarn remove prisma', { cwd: botFolder });
 
 // Clean up
 log('CLEANING UP!');
