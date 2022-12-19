@@ -1,37 +1,41 @@
-const { fork } = require('node:child_process'),
-  util = require('node:util'),
+const { execSync, fork } = require('node:child_process'),
   path = require('node:path');
 
-const exec = util.promisify(require('node:child_process').exec);
+/**
+ * @param {string} command The command to run.
+ * @param {import("node:child_process").ExecSyncOptions} [options]
+ * @returns {string | Buffer} The stdout from the command.
+ */
+const run = (command, options) => execSync(command, { ...(options ?? {}), stdio: 'inherit' });
 
-const run = (cmd, options) => exec(cmd, { ...options, stdio: 'inherit' });
+/**
+ *
+ * @param  {...string} message
+ */
+const log = (...message) => void console.log('BOOTSTRAP:', ...message);
 
-const log = (...msg) => console.log('BOOTSTRAP:', ...msg);
+const botFolder = path.join(__dirname, 'bot');
 
-(async () => {
-  log('START!');
+log('START!');
 
-  const botFolder = path.join(__dirname, 'bot');
+// We install packages
+log('INSTALLING PACKAGES!');
+run('yarn install', { cwd: botFolder });
 
-  // We install packages
-  log('INSTALLING PACKAGES!');
-  await run('yarn install', { cwd: botFolder });
+// Then generate prisma files
+log('GENERATING PRISMA FILES!');
+run('yarn add prisma', { cwd: botFolder });
+run('npx prisma generate', { cwd: botFolder });
+run('yarn remove prisma', { cwd: botFolder });
 
-  // Then generate prisma files
-  log('GENERATING PRISMA FILES!');
-  await run('yarn add prisma', { cwd: botFolder });
-  await run('npx prisma generate', { cwd: botFolder });
-  await run('yarn remove prisma', { cwd: botFolder });
+// Clean up
+log('CLEANING UP!');
+run('rm -r -f node_modules');
+run('rm -r -f .cache');
+run('rm -r -f .yarn');
+run('rm -r -f .npm');
 
-  // Clean up
-  log('CLEANING UP!');
-  await run('rm -r -f node_modules');
-  await run('rm -r -f .cache');
-  await run('rm -r -f .yarn');
-  await run('rm -r -f .npm');
+log('END!');
 
-  log('END!');
-
-  // Then run the bot
-  fork(path.join(botFolder, 'dist', 'index.js'), process.argv, { cwd: botFolder, stdio: 'inherit' });
-})();
+// Then run the bot
+fork(path.join(botFolder, 'dist', 'index.js'), process.argv, { cwd: botFolder, stdio: 'inherit' });
