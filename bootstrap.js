@@ -24,6 +24,7 @@ log('CLEANING UP!');
 exec('rm -r -f node_modules');
 exec('rm -r -f .cache');
 exec('rm -r -f .yarn');
+exec('rm -r -f .npm');
 
 log('END!');
 
