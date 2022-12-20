@@ -28,19 +28,19 @@ log('START!');
 
 // We install packages
 log('INSTALLING PACKAGES!');
-run('yarn install', { cwd: botFolder });
+run('pnpm install', { cwd: botFolder });
 
 // Then generate prisma files
 log('GENERATING PRISMA FILES!');
-run(`yarn add -D prisma${prismaVersion ? '@' + prismaVersion : ''}`, { cwd: botFolder });
+run(`pnpm install -D prisma${prismaVersion ? '@' + prismaVersion : ''}`, { cwd: botFolder });
 run('npx prisma generate', { cwd: botFolder });
-run('yarn remove prisma', { cwd: botFolder });
+run('pnpm remove prisma', { cwd: botFolder });
 
 // Clean up
 log('CLEANING UP!');
 run('rm -r -f node_modules');
 run('rm -r -f .cache');
-run('rm -r -f .yarn');
+run('rm -r -f .pnpm');
 run('rm -r -f .npm');
 
 log('END!');
