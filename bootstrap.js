@@ -1,6 +1,8 @@
 const { execSync, fork } = require('node:child_process'),
   path = require('node:path');
 
+const package = require('./bot/package.json');
+
 /**
  * @param {string} command The command to run.
  * @param {import("node:child_process").ExecSyncOptions} [options]
@@ -24,7 +26,7 @@ run('yarn install', { cwd: botFolder });
 
 // Then generate prisma files
 log('GENERATING PRISMA FILES!');
-run('yarn add prisma', { cwd: botFolder });
+run(`yarn add prisma@${package.dependencies['@prisma/client']}`, { cwd: botFolder });
 run('npx prisma generate', { cwd: botFolder });
 run('yarn remove prisma', { cwd: botFolder });
 
