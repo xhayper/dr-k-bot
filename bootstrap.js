@@ -25,23 +25,21 @@ const prismaVersion = (
 ).replaceAll(/[^\d.]/g, '');
 
 log('START!');
-run('npm install -g pnpm', { cwd: botFolder });
 
 // We install packages
 log('INSTALLING PACKAGES!');
-run('pnpm install', { cwd: botFolder });
+run('npm install --omit=dev', { cwd: botFolder });
 
 // Then generate prisma files
 log('GENERATING PRISMA FILES!');
-run(`pnpm install -D prisma${prismaVersion ? '@' + prismaVersion : ''}`, { cwd: botFolder });
+run(`npm install -D prisma${prismaVersion ? '@' + prismaVersion : ''}`, { cwd: botFolder });
 run('npx prisma generate', { cwd: botFolder });
-run('pnpm remove prisma', { cwd: botFolder });
+run('npm remove prisma', { cwd: botFolder });
 
 // Clean up
 log('CLEANING UP!');
 run('rm -r -f node_modules');
 run('rm -r -f .cache');
-run('rm -r -f .pnpm');
 run('rm -r -f .npm');
 
 log('END!');
