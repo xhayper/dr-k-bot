@@ -25,6 +25,7 @@ const prismaVersion = (
 ).replaceAll(/[^\d.]/g, '');
 
 log('START!');
+run('npm install -g pnpm', { cwd: botFolder });
 
 // We install packages
 log('INSTALLING PACKAGES!');
