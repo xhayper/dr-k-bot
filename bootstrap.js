@@ -18,7 +18,11 @@ const log = (...message) => void console.log('BOOTSTRAP:', ...message);
 
 const botFolder = path.join(__dirname, 'bot');
 
-const prismaVersion = package.dependencies['@prisma/client'] ?? package.devDependencies['@prisma/client'];
+const prismaVersion = (
+  package.dependencies['@prisma/client'] ??
+  package.devDependencies['@prisma/client'] ??
+  ''
+).replaceAll(/[^\d.]/g, '');
 
 log('START!');
 
@@ -28,7 +32,7 @@ run('yarn install', { cwd: botFolder });
 
 // Then generate prisma files
 log('GENERATING PRISMA FILES!');
-run(`yarn add prisma${prismaVersion ? '@' + prismaVersion : ''}`, { cwd: botFolder });
+run(`yarn add -D prisma${prismaVersion ? '@' + prismaVersion : ''}`, { cwd: botFolder });
 run('npx prisma generate', { cwd: botFolder });
 run('yarn remove prisma', { cwd: botFolder });
 
