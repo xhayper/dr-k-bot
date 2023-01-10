@@ -30,6 +30,6 @@ export class UserEvent extends Listener {
       ]
     });
 
-    if (auditMessage && imageMessage) imageMessage.edit(`For ${auditMessage.url}`);
+    if (auditMessage && imageMessage) imageMessage.edit(`For this log: <${auditMessage.url}>`);
   }
 }
