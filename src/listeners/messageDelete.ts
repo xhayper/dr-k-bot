@@ -22,7 +22,7 @@ export class UserEvent extends Listener {
             message.author,
             `**🗑 Message sent by ${message.author} deleted in ${
               message.channel
-            }**\n${await MessageUtility.transformMessage(message, true)}`
+            }**\n${await MessageUtility.transformMessage(message, true, true)}`
           ).setFooter({
             text: `Message ID: ${message.id}`
           })

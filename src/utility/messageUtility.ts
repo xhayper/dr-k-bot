@@ -14,11 +14,18 @@ export class MessageUtility {
     });
   }
 
-  public async transformMessage(message: Message, transformToPermenant: boolean = false): Promise<string> {
+  public async transformMessage(
+    message: Message,
+    transformToPermenant: boolean = false,
+    exposeOrigin: boolean = false
+  ): Promise<string> {
     return `${message.content}${
       message.content.trim() != '' && message.attachments.size > 0 ? '\n\n' : ''
     }${(transformToPermenant
-      ? await this.transformToPermenantImage(Array.from(message.attachments.values()), message)
+      ? await this.transformToPermenantImage(
+          Array.from(message.attachments.values()),
+          exposeOrigin ? message : undefined
+        )
       : Array.from(message.attachments.values())
     )
       .map((attachment, index) => `[| Attachment ${index + 1} | ${attachment.name} |](${attachment.proxyURL})`)
