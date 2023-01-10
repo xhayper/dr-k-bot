@@ -5,7 +5,7 @@ import { type Message } from 'discord.js';
 import { inspect } from 'node:util';
 
 const clean = async (text: any): Promise<string> => {
-  if (text && text.constructor.name == 'Promise') text = await text;
+  if (text && text.constructor.name === 'Promise') text = await text;
 
   if (typeof text !== 'string') text = inspect(text, { depth: 1 });
 
@@ -28,7 +28,7 @@ export class CommandHandler extends Command {
     );
   }
 
-  public override async chatInputRun(interaction: Command.ChatInputInteraction) {
+  public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
     await interaction.deferReply({ ephemeral: true });
 
     const code = interaction.options.getString('code', true);

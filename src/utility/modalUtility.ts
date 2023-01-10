@@ -1,31 +1,21 @@
+import { ModalBuilder, TextInputBuilder, ActionRowBuilder } from 'discord.js';
 import config from '../config';
-import {
-  MessageActionRow,
-  TextInputComponent,
-  type MessageActionRowOptions,
-  type ModalActionRowComponent,
-  type ModalActionRowComponentResolvable,
-  type ModalOptions
-} from 'discord.js';
 
 export class ModalUtility {
-  static createApplicationModal(): ModalOptions {
-    const components:
-      | MessageActionRow<ModalActionRowComponent>[]
-      | MessageActionRowOptions<ModalActionRowComponentResolvable>[] = [] as any;
+  static createApplicationModal(): ModalBuilder {
+    const modal = new ModalBuilder();
+
+    modal.setCustomId('verification');
+    modal.setTitle('Verification');
 
     config.questions.forEach((question, index) => {
-      components.push(
-        new MessageActionRow<TextInputComponent>().addComponents([
-          new TextInputComponent(question).setCustomId(`question-${index + 1}`)
+      modal.addComponents([
+        new ActionRowBuilder<TextInputBuilder>().addComponents([
+          new TextInputBuilder(question).setCustomId(`question-${index + 1}`)
         ])
-      );
+      ]);
     });
 
-    return {
-      customId: 'verification',
-      title: 'Verification',
-      components
-    };
+    return modal;
   }
 }

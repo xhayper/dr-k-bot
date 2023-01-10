@@ -1,14 +1,14 @@
 import { type SapphireClient } from '@sapphire/framework';
-import { EmbedBuilder } from '@discordjs/builders';
 import { EmbedUtility, UserUtilty } from '..';
 import config from '../config';
 import {
+  ChannelType,
+  EmbedBuilder,
+  MessageCreateOptions,
   type Guild,
   type GuildMember,
   type Message,
-  type MessageOptions,
   type MessagePayload,
-  type NewsChannel,
   type TextBasedChannel,
   type TextChannel,
   type UserResolvable
@@ -20,7 +20,7 @@ export class GuildUtility {
   public auditLogChannel: TextBasedChannel | undefined;
   public verificationLogChannel: TextBasedChannel | undefined;
   public primaryGeneralChannel: TextBasedChannel | undefined;
-  public verificationThreadChannel: TextChannel | NewsChannel | undefined;
+  public verificationThreadChannel: TextChannel | undefined;
 
   public guild: Guild | undefined;
 
@@ -33,22 +33,24 @@ export class GuildUtility {
 
         const auditLogChannel = await guild.channels.fetch(config.channel.auditLog).catch(() => undefined);
         this.auditLogChannel =
-          (auditLogChannel && auditLogChannel.type === 'GUILD_TEXT' && auditLogChannel) || undefined;
+          (auditLogChannel && auditLogChannel.type === ChannelType.GuildText && auditLogChannel) || undefined;
 
         const verificationLogChannel = await guild.channels
           .fetch(config.channel.verificationLog)
           .catch(() => undefined);
         this.verificationLogChannel =
-          (verificationLogChannel && verificationLogChannel.type === 'GUILD_TEXT' && verificationLogChannel) ||
+          (verificationLogChannel && verificationLogChannel.type === ChannelType.GuildText && verificationLogChannel) ||
           undefined;
 
         const primaryGeneralChannel = await guild.channels.fetch(config.channel['general-1']).catch(() => undefined);
         this.primaryGeneralChannel =
-          (primaryGeneralChannel && primaryGeneralChannel.type === 'GUILD_TEXT' && primaryGeneralChannel) || undefined;
+          (primaryGeneralChannel && primaryGeneralChannel.type === ChannelType.GuildText && primaryGeneralChannel) ||
+          undefined;
 
         const ticketThreadChannel = await guild.channels.fetch(config.channel.ticketThread).catch(() => undefined);
         this.verificationThreadChannel =
-          (ticketThreadChannel && ticketThreadChannel.type === 'GUILD_TEXT' && ticketThreadChannel) || undefined;
+          (ticketThreadChannel && ticketThreadChannel.type === ChannelType.GuildText && ticketThreadChannel) ||
+          undefined;
       })
       .catch(() => null);
   }
@@ -64,9 +66,8 @@ export class GuildUtility {
             thumbnail: {
               url:
                 member.user.avatarURL({
-                  dynamic: true,
                   size: 4096
-                }) || member.user.defaultAvatarURL
+                }) ?? member.user.defaultAvatarURL
             },
             description: `We're happy to have you here!\nOnce you're level 1, Head over to <#${config.channel['role-selection']}> to get some roles!`
           })
@@ -79,9 +80,7 @@ export class GuildUtility {
     if (!this.verificationThreadChannel) return;
     const thread = await this.verificationThreadChannel.threads.create({
       name: `${member.user.username} Ticket`,
-      // @ts-expect-error
-      type: 'GUILD_PRIVATE_THREAD',
-      // @ts-expect-error
+      type: ChannelType.PrivateThread,
       invitable: true,
       autoArchiveDuration: 10080
     });
@@ -93,12 +92,12 @@ export class GuildUtility {
     return;
   }
 
-  public async sendAuditLog(message: string | MessagePayload | MessageOptions): Promise<void | Message> {
+  public async sendAuditLog(message: string | MessagePayload | MessageCreateOptions): Promise<void | Message> {
     if (!this.auditLogChannel) return;
     return await this.auditLogChannel.send(message);
   }
 
-  public async sendVerificationLog(message: string | MessagePayload | MessageOptions): Promise<void | Message> {
+  public async sendVerificationLog(message: string | MessagePayload | MessageCreateOptions): Promise<void | Message> {
     if (!this.verificationLogChannel) return;
     return await this.verificationLogChannel.send(message);
   }

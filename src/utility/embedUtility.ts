@@ -1,7 +1,6 @@
 import { type PartialVerificationData } from './verifiationUtility';
 import { type SapphireClient } from '@sapphire/framework';
-import { EmbedBuilder } from '@discordjs/builders';
-import { type User } from 'discord.js';
+import { type User, EmbedBuilder } from 'discord.js';
 
 export class EmbedUtility {
   private client: SapphireClient;
@@ -23,9 +22,8 @@ export class EmbedUtility {
       name: `${user.tag}`,
       iconURL:
         user.avatarURL({
-          size: 4096,
-          dynamic: true
-        }) || user.defaultAvatarURL
+          size: 4096
+        }) ?? user.defaultAvatarURL
     });
   }
 
@@ -105,7 +103,7 @@ export class EmbedUtility {
       }))
     ]);
 
-    baseEmbed.setThumbnail(targetUser.displayAvatarURL({ dynamic: true, size: 4096 }) || targetUser.defaultAvatarURL);
+    baseEmbed.setThumbnail(targetUser.displayAvatarURL({ size: 4096 }) ?? targetUser.defaultAvatarURL);
 
     return this.SUCCESS_COLOR(baseEmbed);
   }

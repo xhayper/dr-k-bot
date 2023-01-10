@@ -15,7 +15,7 @@ export class CommandHandler extends Command {
     );
   }
 
-  public override async chatInputRun(interaction: Command.ChatInputInteraction) {
+  public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
     await interaction.deferReply({ ephemeral: true });
 
     return interaction.editReply('https://github.com/xhayper/dr-k-bot');

@@ -1,10 +1,9 @@
 import { VerificationTicket, VerificationTicketType } from '../database';
 import { EmbedUtility, GuildUtility, VerificationUtility } from '..';
-import { type Message, MessageAttachment } from 'discord.js';
+import { type Message, EmbedBuilder, AttachmentBuilder } from 'discord.js';
 import { reply } from '@sapphire/plugin-editable-commands';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { ApplyOptions } from '@sapphire/decorators';
-import { EmbedBuilder } from '@discordjs/builders';
 import { type Args } from '@sapphire/framework';
 import config from '../config';
 
@@ -13,7 +12,7 @@ const verificationTicketIdOption = (option: any) => {
 };
 
 const getTicketFromInteraction = async (
-  interaction: Subcommand.ChatInputInteraction
+  interaction: Subcommand.ChatInputCommandInteraction
 ): Promise<VerificationTicketType | null> => {
   const ticket = await VerificationUtility.getTicketFromId(interaction.options.getString('id', true));
 
@@ -42,8 +41,8 @@ const getTicketFromArgs = async (message: Message, args: Args): Promise<Verifica
   return ticket;
 };
 
-const createVerificationListAttachment = (verificationTickets: VerificationTicketType[]): MessageAttachment => {
-  return new MessageAttachment(
+const createVerificationListAttachment = (verificationTickets: VerificationTicketType[]): AttachmentBuilder => {
+  return new AttachmentBuilder(
     Buffer.from(
       verificationTickets
         .map((ticket) => {
@@ -55,7 +54,9 @@ const createVerificationListAttachment = (verificationTickets: VerificationTicke
         })
         .join('\n\n\n')
     ),
-    'verification-tickets.txt'
+    {
+      name: 'verification-tickets.txt'
+    }
   );
 };
 
@@ -129,7 +130,7 @@ export class CommandHandler extends Subcommand {
     await GuildUtility.sendWelcomeMessage(member);
   }
 
-  public async chatInputAccept(interaction: Subcommand.ChatInputInteraction) {
+  public async chatInputAccept(interaction: Subcommand.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
     const ticket = await getTicketFromInteraction(interaction);
@@ -196,7 +197,7 @@ export class CommandHandler extends Subcommand {
     });
   }
 
-  public async chatInputDecline(interaction: Subcommand.ChatInputInteraction) {
+  public async chatInputDecline(interaction: Subcommand.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
     const ticket = await getTicketFromInteraction(interaction);
@@ -244,7 +245,7 @@ export class CommandHandler extends Subcommand {
     });
   }
 
-  public async chatInputInfo(interaction: Subcommand.ChatInputInteraction) {
+  public async chatInputInfo(interaction: Subcommand.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
     const ticket = await getTicketFromInteraction(interaction);
@@ -255,10 +256,10 @@ export class CommandHandler extends Subcommand {
     });
   }
 
-  public async messageList(message: Message, args: Args) {
+  public async messageList(message: Message, _: Args) {
     const verificationTickets = await VerificationTicket.findMany();
 
-    if (verificationTickets.length == 0)
+    if (verificationTickets.length === 0)
       return await reply(message, 'There are no verification tickets as of right now.');
 
     await reply(message, {
@@ -267,12 +268,12 @@ export class CommandHandler extends Subcommand {
     });
   }
 
-  public async chatInputList(interaction: Subcommand.ChatInputInteraction) {
+  public async chatInputList(interaction: Subcommand.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
     const verificationTickets = await VerificationTicket.findMany();
 
-    if (verificationTickets.length == 0)
+    if (verificationTickets.length === 0)
       return await interaction.editReply('There are no verification tickets as of right now.');
 
     await interaction.editReply({

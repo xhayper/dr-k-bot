@@ -1,4 +1,4 @@
-import { type Message, MessageActionRow, MessageButton } from 'discord.js';
+import { type Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { EmbedUtility } from '..';
@@ -16,16 +16,16 @@ export class CommandHandler extends Command {
     );
   }
 
-  public override async chatInputRun(interaction: Command.ChatInputInteraction) {
+  public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
     await interaction.deferReply({ ephemeral: true });
 
     await interaction.channel?.send({
       embeds: [EmbedUtility.VERIFICATION_BUTTON().toJSON()],
       components: [
-        new MessageActionRow<MessageButton>({
+        new ActionRowBuilder<ButtonBuilder>({
           components: [
-            new MessageButton({
-              style: 'SUCCESS',
+            new ButtonBuilder({
+              style: ButtonStyle.Success,
               label: 'Verify',
               customId: 'verify'
             })
@@ -44,10 +44,10 @@ export class CommandHandler extends Command {
     return message.channel?.send({
       embeds: [EmbedUtility.VERIFICATION_BUTTON().toJSON()],
       components: [
-        new MessageActionRow<MessageButton>({
+        new ActionRowBuilder<ButtonBuilder>({
           components: [
-            new MessageButton({
-              style: 'SUCCESS',
+            new ButtonBuilder({
+              style: ButtonStyle.Success,
               label: 'Verify',
               customId: 'verify'
             })

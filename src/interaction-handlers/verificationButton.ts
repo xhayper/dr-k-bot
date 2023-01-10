@@ -2,19 +2,19 @@ import { GuildUtility, EmbedUtility, VerificationUtility, MessageUtility } from 
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import { VerificationTicketType } from '../database';
 import { ApplyOptions } from '@sapphire/decorators';
-import { EmbedBuilder } from '@discordjs/builders';
 import config from '../config';
 import {
-  Collection,
   type ButtonInteraction,
   type CollectorFilter,
   type GuildMember,
   type Message,
   type MessageMentionOptions,
-  type MessageOptions,
+  type MessageCreateOptions,
   type Snowflake,
   type TextBasedChannel,
-  type User
+  type User,
+  EmbedBuilder,
+  Collection
 } from 'discord.js';
 
 const validCustomId = ['verify_accept', 'verify_decline', 'verify_ticket'];
@@ -24,7 +24,7 @@ const questionAskCollection = new Collection<Snowflake, User>();
 async function handleQuestion(
   textChannel: TextBasedChannel,
   filter?: CollectorFilter<[Message<boolean>]>,
-  cancelMessage: string | MessageOptions | null = {
+  cancelMessage: string | MessageCreateOptions | null = {
     embeds: [EmbedUtility.OPERATION_CANCELLED().toJSON()]
   }
 ): Promise<Message | void> {
