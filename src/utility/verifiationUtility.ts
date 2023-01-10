@@ -1,9 +1,16 @@
-import { MessageActionRow, MessageButton, type Message, type TextBasedChannel, type User } from 'discord.js';
-import { VerificationTicket, type VerificationTicketType } from '../database';
+import { type VerificationTicketType, VerificationTicket } from '../database';
 import { EmbedUtility, GuildUtility, MessageUtility } from '..';
-import { EmbedBuilder } from '@discordjs/builders';
 import { randomUUID } from 'node:crypto';
 import config from '../config';
+import {
+  type Message,
+  type TextBasedChannel,
+  type User,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  EmbedBuilder
+} from 'discord.js';
 
 export type PartialVerificationData = {
   id: string;
@@ -29,7 +36,9 @@ export class VerificationUtility {
 
       if (deletetionData) {
         embeds = message.embeds.map((embed) => {
-          embed.setFooter({
+          const builder = new EmbedBuilder(embed.data);
+
+          builder.setFooter({
             text:
               deletetionData.deleteType != 'LEAVE'
                 ? `Ticket ${deletetionData.deleteType === 'DECLINED' ? 'declined' : 'accepted'} by ${
@@ -37,14 +46,16 @@ export class VerificationUtility {
                   }`
                 : `User left the server, Ticket deleted`
           });
-          embed.setColor(['DECLINED', 'LEAVE'].includes(deletetionData.deleteType) ? 'RED' : 'GREEN');
-          return new EmbedBuilder(embed.toJSON());
+
+          builder.setColor(['DECLINED', 'LEAVE'].includes(deletetionData.deleteType) ? [255, 75, 75] : [75, 255, 75]);
+
+          return builder;
         });
       }
 
       await message.edit({
         content: message.content,
-        embeds: embeds?.map((builder) => builder.toJSON()) || message.embeds,
+        embeds: embeds?.map((builder) => builder.toJSON()) ?? message.embeds,
         components: message.components
       });
     }
@@ -103,10 +114,10 @@ export class VerificationUtility {
       embeds: [(await EmbedUtility.VERIFICATION_INFO(data)).toJSON()],
       components: addButton
         ? [
-            new MessageActionRow<MessageButton>().addComponents([
-              new MessageButton().setLabel('Accept').setCustomId('verify_accept').setStyle('SUCCESS'),
-              new MessageButton().setLabel('Decline').setCustomId('verify_decline').setStyle('DANGER'),
-              new MessageButton().setLabel('Ticket').setCustomId('verify_ticket').setStyle('SECONDARY')
+            new ActionRowBuilder<ButtonBuilder>().addComponents([
+              new ButtonBuilder().setLabel('Accept').setCustomId('verify_accept').setStyle(ButtonStyle.Success),
+              new ButtonBuilder().setLabel('Decline').setCustomId('verify_decline').setStyle(ButtonStyle.Danger),
+              new ButtonBuilder().setLabel('Ticket').setCustomId('verify_ticket').setStyle(ButtonStyle.Secondary)
             ])
           ]
         : []

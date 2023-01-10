@@ -1,8 +1,7 @@
-import { type GuildMember, type Message } from 'discord.js';
+import { type GuildMember, type Message, EmbedBuilder } from 'discord.js';
 import { reply } from '@sapphire/plugin-editable-commands';
 import { type Args, Command } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
-import { EmbedBuilder } from '@discordjs/builders';
 import { GuildUtility, EmbedUtility } from '..';
 import config from '../config';
 
@@ -24,7 +23,7 @@ export class CommandHandler extends Command {
     );
   }
 
-  public override async chatInputRun(interaction: Command.ChatInputInteraction) {
+  public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
     const member = interaction.options.getMember('member') as GuildMember;

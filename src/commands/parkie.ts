@@ -15,7 +15,7 @@ export class CommandHandler extends Command {
     );
   }
 
-  public override async chatInputRun(interaction: Command.ChatInputInteraction) {
+  public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
     return interaction.editReply(

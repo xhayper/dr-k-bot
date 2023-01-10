@@ -30,14 +30,14 @@ const client = new SapphireClient({
     enabled: process.env.NODE_ENV === 'development'
   },
   intents: [
-    'MESSAGE_CONTENT',
+    'MessageContent',
     // DM
-    'DIRECT_MESSAGES',
+    'DirectMessages',
     // Guild
-    'GUILDS',
-    'GUILD_MEMBERS',
-    'GUILD_MESSAGES',
-    'GUILD_MESSAGE_REACTIONS'
+    'Guilds',
+    'GuildMembers',
+    'GuildMessages',
+    'GuildMessageReactions'
   ]
 });
 

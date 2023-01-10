@@ -1,4 +1,4 @@
-import { type CommandInteraction, type ContextMenuInteraction, type Message } from 'discord.js';
+import { type CommandInteraction, type ContextMenuCommandInteraction, type Message } from 'discord.js';
 import { AllFlowsPrecondition } from '@sapphire/framework';
 import { GuildUtility } from '..';
 
@@ -11,7 +11,7 @@ export class UserPrecondition extends AllFlowsPrecondition {
     return this.checkUser(interaction.user.id);
   }
 
-  public override async contextMenuRun(interaction: ContextMenuInteraction) {
+  public override async contextMenuRun(interaction: ContextMenuCommandInteraction) {
     return this.checkUser(interaction.user.id);
   }
 

@@ -10,16 +10,16 @@
     "build": "prisma generate && rimraf dist && tsc"
   },
   "dependencies": {
-    "@prisma/client": "^4.8.0",
-    "@sapphire/decorators": "^5.0.0",
-    "@sapphire/discord.js-utilities": "^5.1.2",
-    "@sapphire/framework": "^3.1.4",
-    "@sapphire/plugin-editable-commands": "^2.0.1",
+    "@prisma/client": "^4.8.1",
+    "@sapphire/decorators": "^6.0.0",
+    "@sapphire/discord.js-utilities": "^6.0.0",
+    "@sapphire/framework": "^4.0.0",
+    "@sapphire/plugin-editable-commands": "^3.0.0",
     "@sapphire/plugin-hmr": "^2.0.0",
     "@sapphire/plugin-logger": "^3.0.1",
-    "@sapphire/plugin-subcommands": "^3.2.4",
+    "@sapphire/plugin-subcommands": "^4.0.0",
     "@sapphire/utilities": "^3.11.0",
-    "discord.js": "13.12.0",
+    "discord.js": "14.7.1",
     "dotenv": "^16.0.3",
     "glob": "^8.0.3",
     "source-map-support": "^0.5.21"
@@ -27,19 +27,19 @@
   "optionalDependencies": {
     "bufferutil": "^4.0.7",
     "erlpack": "discord/erlpack",
-    "utf-8-validate": "^5.0.10",
+    "utf-8-validate": "^6.0.0",
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
-    "@types/node": "^18.11.17",
-    "discord-api-types": "^0.37.24",
-    "prisma": "^4.8.0",
+    "@types/node": "^18.11.18",
+    "discord-api-types": "^0.37.27",
+    "prisma": "^4.8.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.9.4"
   },
   "engines": {
     "node": ">=16.9.0"
   },
-  "packageManager": "pnpm@7.18.2"
+  "packageManager": "pnpm@7.23.0"
 }

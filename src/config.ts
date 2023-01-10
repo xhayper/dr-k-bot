@@ -1,4 +1,4 @@
-import { type TextInputComponentOptions } from 'discord.js';
+import { type TextInputComponentData } from 'discord.js';
 import path from 'node:path';
 import fs from 'node:fs';
 
@@ -34,7 +34,7 @@ export default config as {
   toggleRole: {
     [key: string]: string;
   };
-  questions: TextInputComponentOptions[];
+  questions: TextInputComponentData[];
   misc: {
     mediaCooldown: number;
     mediaLimit: number;

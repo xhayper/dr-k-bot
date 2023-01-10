@@ -1,8 +1,7 @@
-import { type GuildMember, type Message } from 'discord.js';
+import { type GuildMember, type Message, EmbedBuilder } from 'discord.js';
 import { reply } from '@sapphire/plugin-editable-commands';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { ApplyOptions } from '@sapphire/decorators';
-import { EmbedBuilder } from '@discordjs/builders';
 import { type Args } from '@sapphire/framework';
 import { EmbedUtility } from '..';
 import config from '../config';
@@ -50,7 +49,7 @@ export class CommandHandler extends Subcommand {
     );
   }
 
-  public async chatInputNsfw(interaction: Subcommand.ChatInputInteraction) {
+  public async chatInputNsfw(interaction: Subcommand.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
     const member = interaction.options.getMember('member')! as GuildMember;
@@ -132,7 +131,7 @@ export class CommandHandler extends Subcommand {
     }
   }
 
-  public async chatInputWarn(interaction: Subcommand.ChatInputInteraction) {
+  public async chatInputWarn(interaction: Subcommand.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
     const member = interaction.options.getMember('member')! as GuildMember;
@@ -219,7 +218,7 @@ export class CommandHandler extends Subcommand {
     }
   }
 
-  public async chatInputCustom(interaction: Subcommand.ChatInputInteraction) {
+  public async chatInputCustom(interaction: Subcommand.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
     const member = interaction.options.getMember('member')! as GuildMember;

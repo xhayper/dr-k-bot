@@ -1,4 +1,4 @@
-import { Collection, DiscordAPIError, type Message, type Snowflake } from 'discord.js';
+import { type Message, type Snowflake, ChannelType, Collection, DiscordAPIError } from 'discord.js';
 import { EmbedUtility, GuildUtility } from '..';
 import { Listener } from '@sapphire/framework';
 import config from '../config';
@@ -37,7 +37,7 @@ export class UserEvent extends Listener {
       });
     }
 
-    if (message.author.bot || message.channel.type != 'GUILD_TEXT') return;
+    if (message.author.bot || message.channel.type != ChannelType.GuildText) return;
 
     if (message.channel.id === config.channel['art-channel']) {
       if (!(0 < message.attachments.size || urlRegEx.test(message.content))) {
@@ -82,8 +82,8 @@ export class UserEvent extends Listener {
       channelList.includes(message.channel.id) &&
       (message.attachments.size > 0 || mediaRegEx.test(message.content))
     ) {
-      const timeMap = userTimeMap.get(message.channel.id) || new Collection<Snowflake, Date>();
-      const countMap = userMediaCount.get(message.channel.id) || new Collection<Snowflake, number>();
+      const timeMap = userTimeMap.get(message.channel.id) ?? new Collection<Snowflake, Date>();
+      const countMap = userMediaCount.get(message.channel.id) ?? new Collection<Snowflake, number>();
 
       const timePassed = timeMap.has(message.author.id)
         ? (new Date().getTime() - timeMap.get(message.author.id)!.getTime()) * 1000
