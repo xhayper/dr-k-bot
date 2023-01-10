@@ -39,7 +39,7 @@ export class MessageUtility {
         message.content.trim() !== '' && imageAttachments.length > 0 ? '\n\n' : ''
       }${imageAttachments
         .map((attachment, index) => `[| Attachment ${index + 1} | ${attachment.name} |](${attachment.proxyURL})`)
-        .join('\n')}}`,
+        .join('\n')}`,
       imageMessage
     };
   }
