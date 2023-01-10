@@ -18,18 +18,19 @@ export class MessageUtility {
     return `${message.content}${
       message.content.trim() != '' && message.attachments.size > 0 ? '\n\n' : ''
     }${(transformToPermenant
-      ? await this.transformToPermenantImage(Array.from(message.attachments.values()))
+      ? await this.transformToPermenantImage(Array.from(message.attachments.values()), message)
       : Array.from(message.attachments.values())
     )
       .map((attachment, index) => `[| Attachment ${index + 1} | ${attachment.name} |](${attachment.proxyURL})`)
       .join('\n')}`;
   }
 
-  public async transformToPermenantImage(attachment: Attachment[]): Promise<Attachment[]> {
+  public async transformToPermenantImage(attachment: Attachment[], originMessage?: Message): Promise<Attachment[]> {
     if (attachment.length === 0) return attachment;
     if (!this.imageStorageChannel) return attachment;
 
     const message = await this.imageStorageChannel.send({
+      content: originMessage ? `For <${originMessage.url}>` : undefined,
       files: attachment.map(
         (attachment) =>
           new AttachmentBuilder(attachment.attachment, {
