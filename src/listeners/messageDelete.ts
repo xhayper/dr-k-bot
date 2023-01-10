@@ -11,7 +11,7 @@ export class UserEvent extends Listener {
       message.channel.id === config.channel.auditLog ||
       message.channel.id === config.channel['image-storage'] ||
       !message.guild ||
-      message.guild.id != config.guildId
+      message.guild.id !== config.guildId
     )
       return;
 

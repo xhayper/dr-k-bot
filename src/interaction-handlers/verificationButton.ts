@@ -37,7 +37,7 @@ async function handleQuestion(
   const response = message.first();
   if (!response) return;
   if (response.content.toLowerCase().trim() === 'cancel') {
-    if (cancelMessage != null && cancelMessage) {
+    if (cancelMessage !== null && cancelMessage) {
       const opt: { allowedMentions: MessageMentionOptions } = {
         allowedMentions: {
           repliedUser: false

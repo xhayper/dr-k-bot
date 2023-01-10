@@ -5,7 +5,7 @@ import config from '../config';
 
 export class UserEvent extends Listener {
   public async run(member: GuildMember | PartialGuildMember) {
-    if (member.partial || member.user.bot || member.guild.id != config.guildId) return;
+    if (member.partial || member.user.bot || member.guild.id !== config.guildId) return;
 
     const VerificationTicketList = await VerificationUtility.getTicketsFromUserId(member.user.id);
     if (!VerificationTicketList) return;

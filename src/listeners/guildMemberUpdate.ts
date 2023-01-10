@@ -5,7 +5,7 @@ import config from '../config';
 
 export class UserEvent extends Listener {
   public async run(oldMember: GuildMember | PartialGuildMember, newMember: GuildMember) {
-    if (oldMember.partial || oldMember.user.bot || oldMember.guild.id != config.guildId) return;
+    if (oldMember.partial || oldMember.user.bot || oldMember.guild.id !== config.guildId) return;
     if (oldMember.roles.cache.equals(newMember.roles.cache)) return;
 
     if (

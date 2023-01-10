@@ -42,13 +42,19 @@ const client = new SapphireClient({
 });
 
 const verificationUtility = new VerificationUtility();
-const embedUtility = new EmbedUtility(client);
 const userUtility = new UserUtility();
 
-client.login();
+let messageUtility: MessageUtility;
+let embedUtility: EmbedUtility;
+let guildUtility: GuildUtility;
 
-const messageUtility = new MessageUtility(client);
-const guildUtility = new GuildUtility(client);
+client.once('ready', () => {
+  messageUtility = new MessageUtility(client);
+  embedUtility = new EmbedUtility(client);
+  guildUtility = new GuildUtility(client);
+});
+
+client.login();
 
 export {
   verificationUtility as VerificationUtility,

@@ -27,7 +27,7 @@ export class VerificationUtility {
     }
   ): Promise<void> {
     await VerificationTicket.delete({ where: { id: ticket.id } });
-    if (ticket.messageId != 'undefinded' && GuildUtility.verificationLogChannel) {
+    if (ticket.messageId !== 'undefinded' && GuildUtility.verificationLogChannel) {
       let message = await GuildUtility.verificationLogChannel.messages.fetch(ticket.messageId!).catch(() => undefined);
       if (!message) return;
       message = MessageUtility.disableAllComponent(message) as Message<true>;
@@ -40,7 +40,7 @@ export class VerificationUtility {
 
           builder.setFooter({
             text:
-              deletetionData.deleteType != 'LEAVE'
+              deletetionData.deleteType !== 'LEAVE'
                 ? `Ticket ${deletetionData.deleteType === 'DECLINED' ? 'declined' : 'accepted'} by ${
                     deletetionData.who!.tag
                   }`

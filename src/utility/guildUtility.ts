@@ -2,24 +2,24 @@ import { type SapphireClient } from '@sapphire/framework';
 import { EmbedUtility, UserUtilty } from '..';
 import config from '../config';
 import {
-  ChannelType,
-  EmbedBuilder,
-  MessageCreateOptions,
+  type GuildTextBasedChannel,
   type Guild,
   type GuildMember,
   type Message,
   type MessagePayload,
-  type TextBasedChannel,
   type TextChannel,
-  type UserResolvable
+  type UserResolvable,
+  ChannelType,
+  EmbedBuilder,
+  MessageCreateOptions
 } from 'discord.js';
 
 export class GuildUtility {
   private client: SapphireClient;
 
-  public auditLogChannel: TextBasedChannel | undefined;
-  public verificationLogChannel: TextBasedChannel | undefined;
-  public primaryGeneralChannel: TextBasedChannel | undefined;
+  public auditLogChannel: GuildTextBasedChannel | undefined;
+  public verificationLogChannel: GuildTextBasedChannel | undefined;
+  public primaryGeneralChannel: GuildTextBasedChannel | undefined;
   public verificationThreadChannel: TextChannel | undefined;
 
   public guild: Guild | undefined;
@@ -32,24 +32,27 @@ export class GuildUtility {
         this.guild = guild;
 
         const auditLogChannel = await guild.channels.fetch(config.channel.auditLog).catch(() => undefined);
-        this.auditLogChannel =
-          (auditLogChannel && auditLogChannel.type === ChannelType.GuildText && auditLogChannel) || undefined;
+        this.auditLogChannel = (auditLogChannel && auditLogChannel.isTextBased() && auditLogChannel) || undefined;
 
         const verificationLogChannel = await guild.channels
           .fetch(config.channel.verificationLog)
           .catch(() => undefined);
         this.verificationLogChannel =
-          (verificationLogChannel && verificationLogChannel.type === ChannelType.GuildText && verificationLogChannel) ||
-          undefined;
+          (verificationLogChannel && verificationLogChannel.isTextBased() && verificationLogChannel) || undefined;
 
         const primaryGeneralChannel = await guild.channels.fetch(config.channel['general-1']).catch(() => undefined);
         this.primaryGeneralChannel =
-          (primaryGeneralChannel && primaryGeneralChannel.type === ChannelType.GuildText && primaryGeneralChannel) ||
-          undefined;
+          (primaryGeneralChannel && primaryGeneralChannel.isTextBased() && primaryGeneralChannel) || undefined;
 
         const ticketThreadChannel = await guild.channels.fetch(config.channel.ticketThread).catch(() => undefined);
         this.verificationThreadChannel =
-          (ticketThreadChannel && ticketThreadChannel.type === ChannelType.GuildText && ticketThreadChannel) ||
+          (ticketThreadChannel &&
+            ticketThreadChannel.isTextBased() &&
+            !ticketThreadChannel.isVoiceBased() &&
+            !ticketThreadChannel.isThread() &&
+            !ticketThreadChannel.isDMBased() &&
+            ticketThreadChannel.type !== ChannelType.GuildAnnouncement &&
+            ticketThreadChannel) ||
           undefined;
       })
       .catch(() => null);
