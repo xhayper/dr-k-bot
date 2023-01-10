@@ -19,7 +19,7 @@ export class Handler extends InteractionHandler {
       answer: interaction.fields.getTextInputValue(`question-${index + 1}`)
     }));
 
-    if (transformedAnswer.some((answerData) => !answerData.answer || answerData.answer.length === 0))
+    if (transformedAnswer.some((answerData) => !answerData.answer || 0 >= answerData.answer.length))
       return void (await interaction.editReply({ content: 'One of your answer is empty!' }));
 
     const verificationData = {

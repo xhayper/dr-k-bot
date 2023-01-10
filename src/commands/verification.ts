@@ -259,7 +259,7 @@ export class CommandHandler extends Subcommand {
   public async messageList(message: Message, _: Args) {
     const verificationTickets = await VerificationTicket.findMany();
 
-    if (verificationTickets.length === 0)
+    if (0 >= verificationTickets.length)
       return await reply(message, 'There are no verification tickets as of right now.');
 
     await reply(message, {
@@ -273,7 +273,7 @@ export class CommandHandler extends Subcommand {
 
     const verificationTickets = await VerificationTicket.findMany();
 
-    if (verificationTickets.length === 0)
+    if (0 >= verificationTickets.length)
       return await interaction.editReply('There are no verification tickets as of right now.');
 
     await interaction.editReply({
