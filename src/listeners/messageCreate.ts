@@ -37,7 +37,7 @@ export class UserEvent extends Listener {
       });
     }
 
-    if (message.author.bot || message.channel.type != ChannelType.GuildText) return;
+    if (message.author.bot || message.channel.type !== ChannelType.GuildText) return;
 
     if (message.channel.id === config.channel['art-channel']) {
       if (!(0 < message.attachments.size || urlRegEx.test(message.content))) {
