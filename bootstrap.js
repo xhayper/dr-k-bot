@@ -22,7 +22,7 @@ const prismaVersion = (
   package.dependencies['@prisma/client'] ??
   package.devDependencies['@prisma/client'] ??
   ''
-).replaceAll(/[^\d.]/g, '');
+)
 
 log('START!');
 
