@@ -1,4 +1,11 @@
-import { type GuildTextBasedChannel, type Message, Attachment, AttachmentBuilder } from 'discord.js';
+import {
+  type GuildTextBasedChannel,
+  type Message,
+  Attachment,
+  AttachmentBuilder,
+  MessageCreateOptions,
+  MessagePayload
+} from 'discord.js';
 import { type SapphireClient } from '@sapphire/framework';
 import config from '../config';
 
@@ -16,28 +23,35 @@ export class MessageUtility {
 
   public async transformMessage(
     message: Message,
-    transformToPermenant: boolean = false,
-    exposeOrigin: boolean = false
-  ): Promise<string> {
-    return `${message.content}${
-      message.content.trim() !== '' && message.attachments.size > 0 ? '\n\n' : ''
-    }${(transformToPermenant
-      ? await this.transformToPermenantImage(
-          Array.from(message.attachments.values()),
-          exposeOrigin ? message : undefined
-        )
-      : Array.from(message.attachments.values())
-    )
-      .map((attachment, index) => `[| Attachment ${index + 1} | ${attachment.name} |](${attachment.proxyURL})`)
-      .join('\n')}`;
+    transformToPermenant: boolean = false
+  ): Promise<{ text: string; imageMessage: Message | undefined }> {
+    let imageMessage: Message | undefined;
+    let imageAttachments: Attachment[] = Array.from(message.attachments.values());
+
+    if (transformToPermenant) {
+      const transformResult = await this.transformToPermenantImage(Array.from(message.attachments.values()));
+      imageMessage = transformResult.message;
+      imageAttachments = transformResult.attachments;
+    }
+
+    return {
+      text: `${message.content}${
+        message.content.trim() !== '' && imageAttachments.length > 0 ? '\n\n' : ''
+      }${imageAttachments
+        .map((attachment, index) => `[| Attachment ${index + 1} | ${attachment.name} |](${attachment.proxyURL})`)
+        .join('\n')}}`,
+      imageMessage
+    };
   }
 
-  public async transformToPermenantImage(attachment: Attachment[], originMessage?: Message): Promise<Attachment[]> {
-    if (0 >= attachment.length) return [];
-    if (!this.imageStorageChannel) return attachment;
+  public async transformToPermenantImage(attachment: Attachment[]): Promise<{
+    attachments: Attachment[];
+    message?: Message;
+  }> {
+    if (0 >= attachment.length) return { attachments: [] };
+    if (!this.imageStorageChannel) return { attachments: attachment };
 
     const message = await this.imageStorageChannel.send({
-      content: originMessage ? `For <${originMessage.url}>` : undefined,
       files: attachment.map(
         (attachment) =>
           new AttachmentBuilder(attachment.attachment, {
@@ -47,9 +61,12 @@ export class MessageUtility {
       )
     });
 
-    if (!message) return attachment;
+    if (!message) return { attachments: attachment };
 
-    return Array.from(message.attachments.values());
+    return {
+      attachments: Array.from(message.attachments.values()),
+      message
+    };
   }
 
   public disableAllComponent(message: Message): Message {

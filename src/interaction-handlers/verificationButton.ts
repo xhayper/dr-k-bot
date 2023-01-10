@@ -197,9 +197,9 @@ export class Handler extends InteractionHandler {
                 EmbedUtility.ERROR_COLOR(
                   new EmbedBuilder({
                     title: 'Sorry!',
-                    description: `Your verification request has been declined by ${moderator}\nReason: ${await MessageUtility.transformMessage(
-                      reason
-                    )}`
+                    description: `Your verification request has been declined by ${moderator}\nReason: ${
+                      (await MessageUtility.transformMessage(reason)).text
+                    }`
                   })
                 ).toJSON()
               ]

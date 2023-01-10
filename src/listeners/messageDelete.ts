@@ -15,19 +15,21 @@ export class UserEvent extends Listener {
     )
       return;
 
-    GuildUtility.sendAuditLog({
+    const { text, imageMessage } = await MessageUtility.transformMessage(message, true);
+
+    const auditMessage = await GuildUtility.sendAuditLog({
       embeds: [
         EmbedUtility.ERROR_COLOR(
           EmbedUtility.AUDIT_MESSAGE(
             message.author,
-            `**🗑 Message sent by ${message.author} deleted in ${
-              message.channel
-            }**\n${await MessageUtility.transformMessage(message, true, true)}`
+            `**🗑 Message sent by ${message.author} deleted in ${message.channel}**\n${text}`
           ).setFooter({
             text: `Message ID: ${message.id}`
           })
         ).toJSON()
       ]
     });
+
+    if (auditMessage && imageMessage) imageMessage.edit(`For ${auditMessage.url}`);
   }
 }
