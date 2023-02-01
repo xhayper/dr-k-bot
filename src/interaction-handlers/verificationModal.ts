@@ -19,19 +19,21 @@ export class Handler extends InteractionHandler {
       answer: interaction.fields.getTextInputValue(`question-${index + 1}`)
     }));
 
-    const emptyAnswer = transformedAnswer.filter(
-      (answerData) => !answerData.answer || 0 >= answerData.answer.trim().length
-    );
+    const emptyAnswer = transformedAnswer.reduce((arr, answerData, index) => {
+      if (!answerData.answer || 0 >= answerData.answer.trim().length) arr.push(index);
+      return arr;
+    }, [] as number[]);
 
     if (emptyAnswer.length > 0)
       return void (await interaction.editReply({
         content: `Answer for question ${emptyAnswer.join(', ')} is empty!`
       }));
 
-    const shortAnswer = transformedAnswer.filter((answerData, index) => {
+    const shortAnswer = transformedAnswer.reduce((arr, answerData, index) => {
       const question = config.questions[index];
-      return question.minLength && question.minLength > answerData.answer.trim().length;
-    });
+      if (question.minLength && question.minLength > answerData.answer.trim().length) arr.push(index);
+      return arr;
+    }, [] as number[]);
 
     if (shortAnswer.length > 0)
       return void (await interaction.editReply({
