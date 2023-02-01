@@ -37,7 +37,7 @@ export class Handler extends InteractionHandler {
 
     if (shortAnswer.length > 0)
       return void (await interaction.editReply({
-        content: `Answer for question ${emptyAnswer.join(', ')} is too short!`
+        content: `Answer for question ${shortAnswer.join(', ')} is too short!`
       }));
 
     const verificationData = {
