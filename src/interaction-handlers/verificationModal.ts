@@ -19,8 +19,24 @@ export class Handler extends InteractionHandler {
       answer: interaction.fields.getTextInputValue(`question-${index + 1}`)
     }));
 
-    if (transformedAnswer.some((answerData) => !answerData.answer || 0 >= answerData.answer.length))
-      return void (await interaction.editReply({ content: 'One of your answer is empty!' }));
+    const emptyAnswer = transformedAnswer.filter(
+      (answerData) => !answerData.answer || 0 >= answerData.answer.trim().length
+    );
+
+    if (emptyAnswer.length > 0)
+      return void (await interaction.editReply({
+        content: `Answer for question ${emptyAnswer.join(', ')} is empty!`
+      }));
+
+    const shortAnswer = transformedAnswer.filter((answerData, index) => {
+      const question = config.questions[index];
+      return question.minLength && question.minLength > answerData.answer.trim().length;
+    });
+
+    if (shortAnswer.length > 0)
+      return void (await interaction.editReply({
+        content: `Answer for question ${emptyAnswer.join(', ')} is too short!`
+      }));
 
     const verificationData = {
       id: randomTicketId,
