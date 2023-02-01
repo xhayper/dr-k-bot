@@ -26,7 +26,7 @@ export class Handler extends InteractionHandler {
 
     if (emptyAnswer.length > 0)
       return void (await interaction.editReply({
-        content: `Answer for question ${emptyAnswer.join(', ')} is empty!`
+        content: `Answer for question ${emptyAnswer.map((questionNumber) => questionNumber + 1).join(', ')} is empty!`
       }));
 
     const shortAnswer = transformedAnswer.reduce((arr, answerData, index) => {
@@ -37,7 +37,9 @@ export class Handler extends InteractionHandler {
 
     if (shortAnswer.length > 0)
       return void (await interaction.editReply({
-        content: `Answer for question ${shortAnswer.join(', ')} is too short!`
+        content: `Answer for question ${shortAnswer
+          .map((questionNumber) => questionNumber + 1)
+          .join(', ')} is too short!`
       }));
 
     const verificationData = {
