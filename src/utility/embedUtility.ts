@@ -106,6 +106,6 @@ export class EmbedUtility {
     ]);
     baseEmbed.setThumbnail(targetUser.displayAvatarURL({ size: 4096 }) ?? targetUser.defaultAvatarURL);
 
-    return this.SUCCESS_COLOR(baseEmbed);
+    return baseEmbed;
   }
 }
