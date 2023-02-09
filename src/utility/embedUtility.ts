@@ -89,6 +89,8 @@ export class EmbedUtility {
     const targetUser = await this.client.users.fetch(data.discordId);
 
     const baseEmbed = new EmbedBuilder();
+
+    baseEmbed.setColor(16776960);
     baseEmbed.addFields([
       {
         name: `Ticket Information`,
@@ -102,7 +104,6 @@ export class EmbedUtility {
         inline: true
       }))
     ]);
-
     baseEmbed.setThumbnail(targetUser.displayAvatarURL({ size: 4096 }) ?? targetUser.defaultAvatarURL);
 
     return this.SUCCESS_COLOR(baseEmbed);
