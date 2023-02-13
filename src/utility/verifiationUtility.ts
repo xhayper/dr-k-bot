@@ -61,22 +61,16 @@ export class VerificationUtility {
     }
   }
 
-  public async getTicketFromId(id: string): Promise<void | VerificationTicketType> {
-    const ticket = await VerificationTicket.findUnique({ where: { id } });
-    if (!ticket) return;
-    return ticket;
+  public getTicketFromId(id: string): Promise<null | VerificationTicketType> {
+    return VerificationTicket.findUnique({ where: { id } });
   }
 
-  public async getTicketFromMessageId(messageId: string): Promise<void | VerificationTicketType> {
-    const ticket = await VerificationTicket.findUnique({ where: { messageId } });
-    if (!ticket) return;
-    return ticket;
+  public getTicketFromMessageId(messageId: string): Promise<null | VerificationTicketType> {
+    return VerificationTicket.findUnique({ where: { messageId } });
   }
 
-  public async getTicketsFromUserId(userId: string): Promise<void | VerificationTicketType[]> {
-    const ticket = await VerificationTicket.findMany({ where: { discordId: userId } });
-    if (!ticket) return;
-    return ticket;
+  public getTicketsFromUserId(userId: string): Promise<VerificationTicketType[]> {
+    return VerificationTicket.findMany({ where: { discordId: userId } });
   }
 
   public async getMessageFromTicketId(ticketId: string): Promise<void | Message> {
@@ -99,7 +93,7 @@ export class VerificationUtility {
 
   public async getUniqueTicketId(): Promise<string> {
     const ticketId = randomUUID();
-    if (await VerificationTicket.findUnique({ where: { id: ticketId } })) return this.getUniqueTicketId();
+    if (await VerificationTicket.findUnique({ where: { id: ticketId } })) return await this.getUniqueTicketId();
     return ticketId;
   }
 
