@@ -9,9 +9,8 @@ import { VerificationUtility } from '..';
 })
 export class Handler extends InteractionHandler {
   public async run(interaction: ButtonInteraction) {
-    if (await VerificationUtility.getTicketsFromUserId(interaction.user.id)) {
-      await interaction.deferReply({ ephemeral: true });
-      await interaction.editReply({ content: 'You already have a ticket! Please be patient!' });
+    if ((await VerificationUtility.getTicketsFromUserId(interaction.user.id)) !== null) {
+      await interaction.reply({ ephemeral: true, content: 'You already have a ticket! Please be patient!' });
       return;
     }
 
