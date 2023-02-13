@@ -68,7 +68,7 @@ export class Handler extends InteractionHandler {
     await interaction.deferReply();
 
     let moderator: GuildMember | void;
-    let ticket: VerificationTicketType | void;
+    let ticket: VerificationTicketType | null;
     let verificationMessage: Message | void;
 
     moderator = await GuildUtility.getGuildMember(interaction.user.id);

@@ -9,7 +9,7 @@ import { VerificationUtility } from '..';
 })
 export class Handler extends InteractionHandler {
   public async run(interaction: ButtonInteraction) {
-    if ((await VerificationUtility.getTicketsFromUserId(interaction.user.id)) !== null) {
+    if ((await VerificationUtility.getTicketsFromUserId(interaction.user.id)).length > 0) {
       await interaction.reply({ ephemeral: true, content: 'You already have a ticket! Please be patient!' });
       return;
     }
