@@ -10,7 +10,9 @@ import { VerificationUtility } from '..';
 export class Handler extends InteractionHandler {
   public async run(interaction: ButtonInteraction) {
     if (await VerificationUtility.getTicketsFromUserId(interaction.user.id)) {
-      return void (await interaction.editReply({ content: 'You already have a ticket! Please be patient!' }));
+      await interaction.deferReply({ ephemeral: true });
+      await interaction.editReply({ content: 'You already have a ticket! Please be patient!' });
+      return;
     }
 
     await interaction.showModal(ModalUtility.createApplicationModal());
