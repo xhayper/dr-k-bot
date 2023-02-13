@@ -1,7 +1,7 @@
 {
   "name": "dr-k-bot",
   "version": "2.0.0",
-  "description": "A moderation bot that power Official Changed Discord",
+  "description": "A moderation bot that power official Changed's discord server",
   "main": "dist/index.js",
   "author": "xhayper",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "build": "prisma generate && del-cli -f dist && tsc"
   },
   "dependencies": {
-    "@prisma/client": "^4.10.0",
+    "@prisma/client": "^4.10.1",
     "@sapphire/decorators": "^6.0.0",
     "@sapphire/discord.js-utilities": "^6.0.1",
     "@sapphire/framework": "^4.1.0",
@@ -34,8 +34,8 @@
     "@types/glob": "^8.0.1",
     "@types/node": "^18.13.0",
     "del-cli": "^5.0.0",
-    "discord-api-types": "^0.37.31",
-    "prisma": "^4.10.0",
+    "discord-api-types": "^0.37.33",
+    "prisma": "^4.10.1",
     "typescript": "^4.9.5"
   },
   "engines": {
