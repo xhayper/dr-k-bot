@@ -12,7 +12,7 @@ export class Handler extends InteractionHandler {
   public async run(interaction: ModalSubmitInteraction) {
     await interaction.deferReply({ ephemeral: true });
 
-    if (await VerificationUtility.getTicketsFromUserId(interaction.user.id)) {
+    if ((await VerificationUtility.getTicketsFromUserId(interaction.user.id)).length > 0) {
       return void (await interaction.editReply({ content: 'You already have a ticket! Please be patient!' }));
     }
 
