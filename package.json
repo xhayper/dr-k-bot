@@ -22,6 +22,7 @@
     "discord.js": "14.7.1",
     "dotenv": "^16.0.3",
     "glob": "^8.1.0",
+    "mwn": "^1.11.5",
     "source-map-support": "^0.5.21"
   },
   "optionalDependencies": {
