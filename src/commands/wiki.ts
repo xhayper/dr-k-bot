@@ -3,6 +3,8 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Args, Command } from '@sapphire/framework';
 import { type Message } from 'discord.js';
 import { wikiClient } from '..';
+import config from '../config';
+import { URL } from 'node:url';
 
 @ApplyOptions<Command.Options>({
   description: 'Query the wiki!'
@@ -38,9 +40,8 @@ export class CommandHandler extends Command {
       return interaction.editReply('No results found.');
     }
 
-    // TODO: Add domain to config
     return interaction.editReply(
-      `${'https://changed.fandom.com'}/wiki/${encodeURI(queryResult[0].title.split(' ').join('_'))}`
+      `${new URL(config.wikiApiLink).origin}/wiki/${encodeURI(queryResult[0].title.split(' ').join('_'))}`
     );
   }
 
@@ -61,10 +62,9 @@ export class CommandHandler extends Command {
       return reply(message, 'No results found.');
     }
 
-    // TODO: Add domain to config
     return reply(
       message,
-      `${'https://changed.fandom.com'}/wiki/${encodeURI(queryResult[0].title.split(' ').join('_'))}`
+      `${new URL(config.wikiApiLink).origin}/wiki/${encodeURI(queryResult[0].title.split(' ').join('_'))}`
     );
   }
 }
