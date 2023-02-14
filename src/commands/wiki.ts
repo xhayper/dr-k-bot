@@ -39,7 +39,7 @@ export class CommandHandler extends Command {
     }
 
     // TODO: Add domain to config
-    return interaction.editReply(`${'https://changed.fandom.com'}/wiki/${queryResult[0].title}`);
+    return interaction.editReply(`${'https://changed.fandom.com'}/wiki/${encodeURI(queryResult[0].title)}`);
   }
 
   public override async messageRun(message: Message, args: Args) {
@@ -60,6 +60,6 @@ export class CommandHandler extends Command {
     }
 
     // TODO: Add domain to config
-    return reply(message, `${'https://changed.fandom.com'}/wiki/${queryResult[0].title}`);
+    return reply(message, `${'https://changed.fandom.com'}/wiki/${encodeURI(queryResult[0].title)}`);
   }
 }
