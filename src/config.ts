@@ -6,6 +6,7 @@ const config = JSON.parse(fs.readFileSync(path.join(__dirname, '../config.json')
 
 export default config as {
   guildId: string;
+  wikiApiLink: string;
   user: {
     botOwner: string[];
   };
