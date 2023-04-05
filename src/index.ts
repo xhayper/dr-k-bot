@@ -18,7 +18,7 @@ import { GuildUtility } from './utility/guildUtility';
 import { UserUtility } from './utility/userUtility';
 
 import { LogLevel, SapphireClient } from '@sapphire/framework';
-import config from "./config";
+import config from './config';
 import { mwn } from 'mwn';
 
 const wikiClient = new mwn({
