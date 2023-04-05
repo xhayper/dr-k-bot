@@ -4,19 +4,22 @@ import {
   Attachment,
   AttachmentBuilder,
   MessageCreateOptions,
-  MessagePayload
+  MessagePayload,
+  StageChannel,
+  ChannelType
 } from 'discord.js';
 import { type SapphireClient } from '@sapphire/framework';
 import config from '../config';
 
 export class MessageUtility {
   private client: SapphireClient;
-  private imageStorageChannel: GuildTextBasedChannel | null = null;
+  private imageStorageChannel: Exclude<GuildTextBasedChannel, StageChannel> | null = null;
 
   constructor(client: SapphireClient) {
     this.client = client;
     this.client.channels.fetch(config.channel['image-storage'], { allowUnknownGuild: true }).then((channel) => {
-      if (!channel || !channel.isTextBased() || channel.isDMBased()) return;
+      if (!channel || !channel.isTextBased() || channel.isDMBased() || channel.type === ChannelType.GuildStageVoice)
+        return;
       this.imageStorageChannel = channel;
     });
   }
@@ -54,7 +57,7 @@ export class MessageUtility {
     const message = await this.imageStorageChannel.send({
       files: attachment.map(
         (attachment) =>
-          new AttachmentBuilder(attachment.attachment, {
+          new AttachmentBuilder((attachment as any).attachment, {
             name: attachment.name ?? undefined,
             description: attachment.description ?? ''
           })
