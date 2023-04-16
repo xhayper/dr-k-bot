@@ -37,6 +37,15 @@ export class EmbedUtility {
     );
   }
 
+  public BAN_APPEAL_BUTTON(): EmbedBuilder {
+    return this.SUCCESS_COLOR(
+      new EmbedBuilder()
+        .setDescription(`Please click the button below to start your appeal! The appeal will then be looked at by the main-server staff as quick as possible! 
+
+***Please have your DM's open to know the result!*** 💜`)
+    );
+  }
+
   public TIMESTAMP_NOW(embed: EmbedBuilder): EmbedBuilder {
     return embed.setTimestamp(Date.now());
   }
@@ -105,6 +114,27 @@ export class EmbedUtility {
       }))
     ]);
     baseEmbed.setThumbnail(targetUser.displayAvatarURL({ size: 4096 }) ?? targetUser.defaultAvatarURL);
+
+    return baseEmbed;
+  }
+
+  public BAN_APPEAL_INFO(data: { appealer: User; answers: { question: string; answer: string }[] }): EmbedBuilder {
+    const baseEmbed = new EmbedBuilder();
+
+    baseEmbed.setColor(16776960);
+    baseEmbed.addFields([
+      {
+        name: `Ban Appeal Information`,
+        value: `**User**: ${data.appealer.tag}`
+      },
+      ...Object.values(
+        data.answers.map((answerData) => ({
+          name: answerData.question,
+          value: answerData.answer,
+          inline: true
+        }))
+      )
+    ]);
 
     return baseEmbed;
   }

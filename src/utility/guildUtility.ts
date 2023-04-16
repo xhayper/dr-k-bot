@@ -21,6 +21,7 @@ export class GuildUtility {
   public verificationLogChannel: GuildTextBasedChannel | undefined;
   public primaryGeneralChannel: GuildTextBasedChannel | undefined;
   public verificationThreadChannel: TextChannel | undefined;
+  public banAppealLogChannel: GuildTextBasedChannel | undefined;
 
   public guild: Guild | undefined;
 
@@ -54,6 +55,12 @@ export class GuildUtility {
             ticketThreadChannel.type !== ChannelType.GuildAnnouncement &&
             ticketThreadChannel) ||
           undefined;
+
+        const banAppealLogChannel = await guild.channels
+          .fetch(config.channel['ban-appeal-logs'])
+          .catch(() => undefined);
+        this.banAppealLogChannel =
+          (banAppealLogChannel && banAppealLogChannel.isTextBased() && banAppealLogChannel) || undefined;
       })
       .catch(() => null);
   }
@@ -97,16 +104,21 @@ export class GuildUtility {
 
   public async sendAuditLog(message: string | MessagePayload | MessageCreateOptions): Promise<void | Message> {
     if (!this.auditLogChannel) return;
-    return await this.auditLogChannel.send(message);
+    return this.auditLogChannel.send(message);
   }
 
   public async sendVerificationLog(message: string | MessagePayload | MessageCreateOptions): Promise<void | Message> {
     if (!this.verificationLogChannel) return;
-    return await this.verificationLogChannel.send(message);
+    return this.verificationLogChannel.send(message);
+  }
+
+  public async sendBanAppealLog(message: string | MessagePayload | MessageCreateOptions): Promise<void | Message> {
+    if (!this.banAppealLogChannel) return;
+    return this.banAppealLogChannel.send(message);
   }
 
   public async getGuildMember(user: UserResolvable): Promise<void | GuildMember> {
-    return await this.guild?.members.fetch(user).catch(() => undefined);
+    return this.guild?.members.fetch(user).catch(() => undefined);
   }
 
   public isBotOwner(member: GuildMember): boolean {

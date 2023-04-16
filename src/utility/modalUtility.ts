@@ -18,4 +18,21 @@ export class ModalUtility {
 
     return modal;
   }
+
+  static createBanAppealModal(): ModalBuilder {
+    const modal = new ModalBuilder();
+
+    modal.setCustomId('ban_appeal');
+    modal.setTitle('Ban Appeal');
+
+    config.appealQuestions.forEach((question, index) => {
+      modal.addComponents([
+        new ActionRowBuilder<TextInputBuilder>().addComponents([
+          new TextInputBuilder(question).setCustomId(`question-${index + 1}`)
+        ])
+      ]);
+    });
+
+    return modal;
+  }
 }

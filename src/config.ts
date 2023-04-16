@@ -31,11 +31,13 @@ export default config as {
     'role-selection': string;
     'art-channel': string;
     'image-storage': string;
+    'ban-appeal-logs': string;
   };
   toggleRole: {
     [key: string]: string;
   };
   questions: TextInputComponentData[];
+  appealQuestions: TextInputComponentData[];
   misc: {
     mediaCooldown: number;
     mediaLimit: number;

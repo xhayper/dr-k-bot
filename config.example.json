@@ -24,12 +24,14 @@
     "general-2": "",
     "role-selection": "",
     "art-channel": "",
-    "image-storage": ""
+    "image-storage": "",
+    "ban-appeal-logs": ""
   },
   "toggleRole": {
     "": ""
   },
   "questions": [{}],
+  "appealQuestions": [{}],
   "misc": {
     "mediaCooldown": 0,
     "mediaLimit": 0
