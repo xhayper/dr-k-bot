@@ -125,7 +125,7 @@ export class EmbedUtility {
     baseEmbed.addFields([
       {
         name: `Ban Appeal Information`,
-        value: `**User**: ${data.appealer.tag}`
+        value: `**Appealer**: ${data.appealer.tag}`
       },
       ...Object.values(
         data.answers.map((answerData) => ({
