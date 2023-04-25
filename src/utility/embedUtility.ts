@@ -103,7 +103,7 @@ export class EmbedUtility {
     baseEmbed.addFields([
       {
         name: `Ticket Information`,
-        value: `**User**: ${targetUser.tag}\n**Account creation date**: <t:${Math.round(
+        value: `**User**: ${targetUser.tag}\n**User Id**: ${targetUser.id}\n**Account creation date**: <t:${Math.round(
           targetUser.createdTimestamp / 1000
         )}>\n**Ticket ID**: ${data.id}`
       },
@@ -125,7 +125,7 @@ export class EmbedUtility {
     baseEmbed.addFields([
       {
         name: `Ban Appeal Information`,
-        value: `**Appealer**: ${data.appealer.tag}`
+        value: `**Appealer**: ${data.appealer.tag}\n**User Id**: ${data.appealer.id}`
       },
       ...Object.values(
         data.answers.map((answerData) => ({
@@ -135,6 +135,7 @@ export class EmbedUtility {
         }))
       )
     ]);
+    baseEmbed.setThumbnail(data.appealer.displayAvatarURL({ size: 4096 }) ?? data.appealer.defaultAvatarURL);
 
     return baseEmbed;
   }
