@@ -10,10 +10,10 @@
     "build": "prisma generate && del-cli -f dist && tsc"
   },
   "dependencies": {
-    "@prisma/client": "^4.12.0",
+    "@prisma/client": "^4.13.0",
     "@sapphire/decorators": "^6.0.1",
-    "@sapphire/discord.js-utilities": "^6.0.5",
-    "@sapphire/framework": "^4.4.0",
+    "@sapphire/discord.js-utilities": "^6.0.6",
+    "@sapphire/framework": "^4.4.1",
     "@sapphire/plugin-editable-commands": "^3.0.2",
     "@sapphire/plugin-hmr": "^2.0.1",
     "@sapphire/plugin-logger": "^3.0.3",
@@ -21,7 +21,7 @@
     "@sapphire/utilities": "^3.11.1",
     "discord.js": "14.9.0",
     "dotenv": "^16.0.3",
-    "glob": "^10.1.0",
+    "glob": "^10.2.2",
     "mwn": "^1.11.5",
     "source-map-support": "^0.5.21"
   },
@@ -33,10 +33,10 @@
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
-    "@types/node": "^18.15.11",
+    "@types/node": "^18.16.0",
     "del-cli": "^5.0.0",
-    "discord-api-types": "^0.37.38",
-    "prisma": "^4.12.0",
+    "discord-api-types": "^0.37.40",
+    "prisma": "^4.13.0",
     "typescript": "^5.0.4"
   },
   "engines": {
