@@ -18,11 +18,9 @@ const log = (...message) => void console.log('BOOTSTRAP:', ...message);
 
 const botFolder = path.join(__dirname, 'bot');
 
-const prismaVersion = (
-  package.dependencies['@prisma/client'] ??
-  package.devDependencies['@prisma/client'] ??
-  ''
-)
+const prismaVersion = (package.dependencies['@prisma/client'] ?? package.devDependencies['@prisma/client'] ?? '')
+  .replace('^', '')
+  .replace('@', '');
 
 log('START!');
 
