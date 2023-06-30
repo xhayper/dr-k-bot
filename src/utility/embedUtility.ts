@@ -19,7 +19,7 @@ export class EmbedUtility {
 
   public USER_AUTHOR(embed: EmbedBuilder, user: User): EmbedBuilder {
     return embed.setAuthor({
-      name: `${user.tag}`,
+      name: `${user.username}`,
       iconURL:
         user.avatarURL({
           size: 4096
@@ -103,7 +103,7 @@ export class EmbedUtility {
     baseEmbed.addFields([
       {
         name: `Ticket Information`,
-        value: `**User**: ${targetUser.tag}\n**User Id**: ${targetUser.id}\n**Account creation date**: <t:${Math.round(
+        value: `**User**: ${targetUser.username}\n**User Id**: ${targetUser.id}\n**Account creation date**: <t:${Math.round(
           targetUser.createdTimestamp / 1000
         )}>\n**Ticket ID**: ${data.id}`
       },
@@ -125,7 +125,7 @@ export class EmbedUtility {
     baseEmbed.addFields([
       {
         name: `Ban Appeal Information`,
-        value: `**Appealer**: ${data.appealer.tag}\n**User Id**: ${data.appealer.id}`
+        value: `**Appealer**: ${data.appealer.username}\n**User Id**: ${data.appealer.id}`
       },
       ...Object.values(
         data.answers.map((answerData) => ({

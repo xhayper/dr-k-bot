@@ -72,7 +72,7 @@ export class GuildUtility {
       embeds: [
         EmbedUtility.SUCCESS_COLOR(
           new EmbedBuilder({
-            title: `Everyone give \`${member.user.tag}\` a warm welcome!`,
+            title: `Everyone give \`${member.user.username}\` a warm welcome!`,
             thumbnail: {
               url:
                 member.user.avatarURL({

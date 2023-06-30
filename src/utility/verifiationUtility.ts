@@ -42,7 +42,7 @@ export class VerificationUtility {
             text:
               deletetionData.deleteType !== 'LEAVE'
                 ? `Ticket ${deletetionData.deleteType === 'DECLINED' ? 'declined' : 'accepted'} by ${
-                    deletetionData.who!.tag
+                    deletetionData.who!.username
                   }`
                 : `User left the server, Ticket deleted`
           });
