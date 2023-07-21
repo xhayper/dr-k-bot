@@ -27,7 +27,7 @@ const wikiClient = new mwn({
 });
 
 const client = new SapphireClient({
-  defaultPrefix: 'drk!',
+  defaultPrefix: 'k!',
   loadMessageCommandListeners: true,
   typing: true,
   logger: {
