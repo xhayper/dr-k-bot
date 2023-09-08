@@ -15,7 +15,6 @@
     "@sapphire/discord.js-utilities": "^7.0.2",
     "@sapphire/framework": "^4.6.0",
     "@sapphire/plugin-editable-commands": "^3.0.3",
-    "@sapphire/plugin-hmr": "^2.0.2",
     "@sapphire/plugin-logger": "^3.0.6",
     "@sapphire/plugin-subcommands": "^4.2.1",
     "@sapphire/utilities": "^3.13.0",

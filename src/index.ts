@@ -6,7 +6,6 @@ import 'dotenv/config';
 
 // Load sapphire plugin
 import '@sapphire/plugin-logger/register';
-import '@sapphire/plugin-hmr/register';
 import '@sapphire/plugin-editable-commands/register';
 import '@sapphire/plugin-subcommands/register';
 
@@ -32,9 +31,6 @@ const client = new SapphireClient({
   typing: true,
   logger: {
     level: process.env.NODE_ENV === 'development' ? LogLevel.Debug : LogLevel.Info
-  },
-  hmr: {
-    enabled: process.env.NODE_ENV === 'development'
   },
   intents: [
     'MessageContent',
