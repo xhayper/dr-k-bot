@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "@sapphire/ts-config",
+    "@sapphire/ts-config/extra-strict",
+    "@sapphire/ts-config/decorators"
+  ],
+  "compilerOptions": {
+    "declarationMap": false,
+    "declaration": false,
+    "sourceMap": false,
+    "outDir": "dist"
+  },
+  "include": ["src"]
+}

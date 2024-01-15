@@ -3,7 +3,33 @@
   "version": "3.0.0",
   "description": "Discord moderation bot for the official Changed discord server",
   "main": "dist/index.js",
-  "scripts": {},
+  "scripts": {
+    "dev": "pnpm run build && node dist/dev.js",
+    "format": "prisma format && prettier --write src/**/*.ts",
+    "build": "del-cli dist && tsc"
+  },
   "author": "hayper",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.8.1",
+    "@sapphire/decorators": "^6.0.3",
+    "@sapphire/discord.js-utilities": "^7.1.5",
+    "@sapphire/framework": "^5.0.6",
+    "@sapphire/pieces": "^4.2.1",
+    "@sapphire/plugin-logger": "^4.0.1",
+    "@sapphire/result": "^2.6.5",
+    "@sapphire/shapeshift": "^3.9.5",
+    "@sapphire/utilities": "^3.15.2",
+    "bson": "^6.2.0",
+    "discord.js": "14.x",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@sapphire/ts-config": "^5.0.0",
+    "@types/node": "^20.11.2",
+    "del-cli": "^5.1.0",
+    "prettier": "^3.2.2",
+    "prisma": "^5.8.1",
+    "typescript": "^5.3.3"
+  }
 }
