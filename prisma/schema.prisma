@@ -1,20 +1,25 @@
-generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native"]
-}
-
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-model VerificationTicket {
-  id        String   @id @default(uuid())
-  discordId String
-  messageId String?  @unique
-  // FYI, this is json but stringified, string sqlite doesn't support JSON natively
-  // type: { question: string; answer: string }[]
-  answers   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+generator client {
+  provider = "prisma-client-js"
+}
+
+model VerificationRequest {
+  id      String @id @default(uuid())
+  ownerId String @unique
+
+  verificationAnswer VerificationAnswer[]
+}
+
+model VerificationAnswer {
+  id String @id @default(uuid())
+
+  question String @unique
+  answer   String
+
+  VerificationRequest   VerificationRequest? @relation(fields: [verificationRequestId], references: [id], onDelete: Cascade)
+  verificationRequestId String?
 }

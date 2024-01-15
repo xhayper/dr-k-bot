@@ -16,15 +16,17 @@ const randomStatus: ActivityOptions[] = [
   }
 ];
 
-export class UserEvent extends Listener {
+export class ReadyEvent extends Listener {
   public run() {
     const updateActivity = () => {
-      this.container.client.user!.setActivity(randomStatus[Math.floor(Math.random() * randomStatus.length)]);
+      const { client } = this.container;
+      if (!client.isReady) return;
+      client.user?.setActivity(randomStatus[Math.floor(Math.random() * randomStatus.length)]);
     };
 
     updateActivity();
     setInterval(updateActivity, 60000);
 
-    this.container.logger.info('Alright, Time to do some science.');
+    this.container.logger.info('Alright, time to do some science.');
   }
 }
