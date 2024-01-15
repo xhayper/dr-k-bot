@@ -1,0 +1,26 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model VerificationRequest {
+  id      String @id @default(uuid())
+  ownerId String @unique
+
+  verificationAnswer VerificationAnswer[]
+}
+
+model VerificationAnswer {
+  id String @id @default(uuid())
+
+  question String @unique
+  // THIS FIELD IS BSON
+  answer   Bytes
+
+  VerificationRequest   VerificationRequest? @relation(fields: [verificationRequestId], references: [id], onDelete: Cascade)
+  verificationRequestId String?
+}
