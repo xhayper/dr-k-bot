@@ -18,8 +18,7 @@ model VerificationAnswer {
   id String @id @default(uuid())
 
   question String @unique
-  // THIS FIELD IS BSON
-  answer   Bytes
+  answer   String
 
   VerificationRequest   VerificationRequest? @relation(fields: [verificationRequestId], references: [id], onDelete: Cascade)
   verificationRequestId String?
