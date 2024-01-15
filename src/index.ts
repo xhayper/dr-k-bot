@@ -17,13 +17,6 @@ import { GuildUtility } from './utility/guildUtility';
 import { UserUtility } from './utility/userUtility';
 
 import { LogLevel, SapphireClient } from '@sapphire/framework';
-import config from './config';
-import { mwn } from 'mwn';
-
-const wikiClient = new mwn({
-  apiUrl: config.wikiApiLink,
-  userAgent: 'DrKBot/2.0.0 (https://github.com/xhayper/dr-k-bot) mwn/1.11.5'
-});
 
 const client = new SapphireClient({
   defaultPrefix: 'k!',
@@ -64,6 +57,5 @@ export {
   messageUtility as MessageUtility,
   embedUtility as EmbedUtility,
   guildUtility as GuildUtility,
-  userUtility as UserUtilty,
-  wikiClient
+  userUtility as UserUtilty
 };
