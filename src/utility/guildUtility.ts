@@ -34,11 +34,11 @@ export class GuildUtility {
       Result.fromAsync(async () => await this.client.channels.fetch(channelId));
 
     logger.debug('GuildUtility:', 'Fetching channels...');
-    const welcomeChannelResult = await fetchChannel(config.channels.welcomeChannel);
-    const verificationLogChannelResult = await fetchChannel(config.channels.verificationLogChannel);
-    const ticketThreadChannelResult = await fetchChannel(config.channels.ticketThreadChannel);
-    const imageStorageChannelResult = await fetchChannel(config.channels.imageStorageChannel);
-    const banAppealChannelResult = await fetchChannel(config.channels.banAppealChannel);
+    const welcomeChannelResult = await fetchChannel(config.channels.welcome);
+    const verificationLogChannelResult = await fetchChannel(config.channels.verificationLog);
+    const ticketThreadChannelResult = await fetchChannel(config.channels.ticketThread);
+    const imageStorageChannelResult = await fetchChannel(config.channels.imageStorage);
+    const banAppealChannelResult = await fetchChannel(config.channels.banAppeal);
 
     const handleChannelFetchError = (error: DiscordAPIError) => {
       const { logger } = container;
