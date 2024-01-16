@@ -1,10 +1,10 @@
 {
   "channels": {
-    "welcomeChannel": "",
-    "verificationLogChannel": "",
-    "ticketThreadChannel": "",
-    "imageStorageChannel": "",
-    "banAppealChannel": ""
+    "welcome": "",
+    "verificationLog": "",
+    "ticketThread": "",
+    "imageStorage": "",
+    "banAppeal": ""
   },
   "roles": {
     "headSecurity": "",
