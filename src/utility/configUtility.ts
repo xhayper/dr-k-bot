@@ -2,9 +2,9 @@ import { type TextInputComponentData } from 'discord.js';
 import { type QuestionType } from '../config';
 
 export class ConfigUtility {
-  /*
-   * Converts a QuestionType to a TextInputComponentData
-   * This method will return with a blank customId
+  /**
+   * Converts a QuestionType to a TextInputComponentData,
+   * this method will return TextInputTextInputComponentData with a blank customId
    */
   static toTextInput(question: QuestionType): TextInputComponentData {
     return {
