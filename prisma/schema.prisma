@@ -22,6 +22,6 @@ model VerificationAnswer {
   question String @unique
   answer   String
 
-  VerificationRequest   VerificationRequest? @relation(fields: [verificationRequestId], references: [id], onDelete: Cascade)
-  verificationRequestId String?
+  VerificationRequest   VerificationRequest @relation(fields: [verificationRequestId], references: [id], onDelete: Cascade)
+  verificationRequestId String
 }
