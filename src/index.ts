@@ -1,4 +1,6 @@
+// Import essential packages
 import 'dotenv/config';
+import './database';
 
 // Plugin registration
 import '@sapphire/plugin-logger/register';
