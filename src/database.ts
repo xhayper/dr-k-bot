@@ -28,7 +28,6 @@ database.$on('warn', (warn) => {
 
 container.database = database;
 
-// Declare extra properties on the container
 declare module '@sapphire/pieces' {
   interface Container {
     database: typeof database;

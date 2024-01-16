@@ -1,8 +1,9 @@
 import { SnowflakeRegex } from '@sapphire/discord-utilities';
 import { type InferType, s } from '@sapphire/shapeshift';
+import { container } from '@sapphire/pieces';
+import { TextInputStyle } from 'discord.js';
 import { Result } from '@sapphire/result';
 import * as fs from 'node:fs/promises';
-import { TextInputStyle } from 'discord.js';
 
 const questionScheme = s.object({
   style: s
@@ -50,3 +51,21 @@ export const readConfig = async () =>
     const parsedContent = JSON.parse(fileContent);
     return configScheme.parse(parsedContent);
   });
+
+readConfig().then((readConfigResult) => {
+  if (readConfigResult.isErr()) {
+    const err = readConfigResult.unwrapErr();
+    container.logger.fatal(readConfigResult.unwrapErr());
+
+    // TODO: Find a better way to handle this
+    throw err;
+  } else {
+    container.config = readConfigResult.unwrap();
+  }
+});
+
+declare module '@sapphire/pieces' {
+  interface Container {
+    config: ConfigType;
+  }
+}
