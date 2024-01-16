@@ -9,8 +9,9 @@ datasource db {
 }
 
 model VerificationRequest {
-  id      String @id @default(uuid())
-  ownerId String @unique
+  id           String @id @default(uuid())
+  ownerId      String @unique
+  logMessageId String @unique
 
   verificationAnswer VerificationAnswer[]
 }
