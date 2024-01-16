@@ -1,7 +1,13 @@
-import { PermissionResolvable, type Channel, type DiscordAPIError, type TextBasedChannel } from 'discord.js';
 import { container } from '@sapphire/pieces';
 import { DrKClient } from '../client';
 import { Result } from '@sapphire/result';
+import {
+  type PermissionResolvable,
+  type Channel,
+  type DiscordAPIError,
+  type TextBasedChannel,
+  type GuildMember
+} from 'discord.js';
 
 export class GuildUtility {
   private client: DrKClient;
@@ -100,5 +106,22 @@ export class GuildUtility {
     checkForPermission(this.banAppealChannel, ['SendMessages']);
 
     logger.info('GuildUtility:', 'Initialized!');
+  }
+
+  public isHeadSecurity(guildMember: GuildMember): boolean {
+    return guildMember.roles.cache.has(container.config.roles.headSecurity);
+  }
+
+  public isSeniorSecurity(guildMember: GuildMember): boolean {
+    return guildMember.roles.cache.has(container.config.roles.seniorSecurity);
+  }
+
+  // Every security member have this, except for interns
+  public isSecurity(guildMember: GuildMember): boolean {
+    return guildMember.roles.cache.has(container.config.roles.security);
+  }
+
+  public isInternSecurity(guildMember: GuildMember): boolean {
+    return guildMember.roles.cache.has(container.config.roles.internSecurity);
   }
 }

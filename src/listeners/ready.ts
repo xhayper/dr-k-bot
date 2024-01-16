@@ -1,4 +1,5 @@
 import { type ActivityOptions, ActivityType } from 'discord.js';
+import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 
 const randomStatus: ActivityOptions[] = [
@@ -16,7 +17,10 @@ const randomStatus: ActivityOptions[] = [
   }
 ];
 
-export class ReadyEvent extends Listener {
+@ApplyOptions<Listener.Options>({
+  event: 'ready'
+})
+export class ReadyListener extends Listener {
   public async run() {
     await this.container.utilities.guild.init();
 

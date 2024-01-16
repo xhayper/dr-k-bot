@@ -1,5 +1,5 @@
-import { TextInputComponentData } from 'discord.js';
-import { QuestionType } from '../config';
+import { type TextInputComponentData } from 'discord.js';
+import { type QuestionType } from '../config';
 
 export class ConfigUtility {
   /*
