@@ -1,7 +1,7 @@
 import { LogLevel, SapphireClient, container } from '@sapphire/framework';
 import { type ConfigType, readConfig } from './config';
-import { PrismaClient } from '@prisma/client';
 import { GuildUtility } from './utility/guildUtility';
+import { PrismaClient } from '@prisma/client';
 
 const database = new PrismaClient({
   log: [

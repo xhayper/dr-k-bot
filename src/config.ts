@@ -20,9 +20,18 @@ const configScheme = s.object({
     // Also known as the "general"
     welcomeChannel: s.string.regex(SnowflakeRegex),
     verificationLogChannel: s.string.regex(SnowflakeRegex),
+    // NOTE: This is the channel where user performs verification
+    verificationChannel: s.string.regex(SnowflakeRegex),
     ticketThreadChannel: s.string.regex(SnowflakeRegex),
     imageStorageChannel: s.string.regex(SnowflakeRegex),
     banAppealChannel: s.string.regex(SnowflakeRegex)
+  }),
+  roles: s.object({
+    // The higher, the more power
+    headSecurity: s.string.regex(SnowflakeRegex),
+    seniorSecurity: s.string.regex(SnowflakeRegex),
+    security: s.string.regex(SnowflakeRegex),
+    internSecurity: s.string.regex(SnowflakeRegex)
   }),
   verificationQuestions: s.array(questionScheme)
 });
