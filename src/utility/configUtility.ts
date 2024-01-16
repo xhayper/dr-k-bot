@@ -10,7 +10,7 @@ export class ConfigUtility {
     return {
       type: 4,
       customId: '',
-      style: question.style === 'paragraph' ? 2 : 1,
+      style: question.style,
       label: question.question,
       placeholder: question.placeholder,
       minLength: question.min,
