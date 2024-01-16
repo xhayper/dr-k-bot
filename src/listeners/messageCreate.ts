@@ -9,8 +9,9 @@ import { type Message } from 'discord.js';
 export class MessageCreateListener extends Listener {
   public async run(message: Message<true>) {
     if (message.channelId !== this.container.config.channels.verificationChannel) return;
+    if (!message.member) return;
     if (!HttpUrlRegex.test(message.content)) return;
-    if (this.container.utilities.guild.isSecurity(message.member!)) return;
+    if (this.container.utilities.guild.isSecurity(message.member.roles)) return;
 
     await message.delete();
   }

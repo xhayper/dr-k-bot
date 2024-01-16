@@ -1,12 +1,13 @@
 import { container } from '@sapphire/pieces';
-import { DrKClient } from '../client';
 import { Result } from '@sapphire/result';
+import { DrKClient } from '../client';
 import {
   type PermissionResolvable,
   type Channel,
   type DiscordAPIError,
   type TextBasedChannel,
-  type GuildMember
+  GuildMemberRoleManager,
+  Snowflake
 } from 'discord.js';
 
 export class GuildUtility {
@@ -108,20 +109,28 @@ export class GuildUtility {
     logger.info('GuildUtility:', 'Initialized!');
   }
 
-  public isHeadSecurity(guildMember: GuildMember): boolean {
-    return guildMember.roles.cache.has(container.config.roles.headSecurity);
+  // TODO: Remove repeated code
+  public isHeadSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
+    return data instanceof GuildMemberRoleManager
+      ? data.cache.has(container.config.roles.headSecurity)
+      : data.includes(container.config.roles.headSecurity);
   }
 
-  public isSeniorSecurity(guildMember: GuildMember): boolean {
-    return guildMember.roles.cache.has(container.config.roles.seniorSecurity);
+  public isSeniorSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
+    return data instanceof GuildMemberRoleManager
+      ? data.cache.has(container.config.roles.seniorSecurity)
+      : data.includes(container.config.roles.seniorSecurity);
   }
 
-  // Every security member have this, except for interns
-  public isSecurity(guildMember: GuildMember): boolean {
-    return guildMember.roles.cache.has(container.config.roles.security);
+  public isSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
+    return data instanceof GuildMemberRoleManager
+      ? data.cache.has(container.config.roles.security)
+      : data.includes(container.config.roles.security);
   }
 
-  public isInternSecurity(guildMember: GuildMember): boolean {
-    return guildMember.roles.cache.has(container.config.roles.internSecurity);
+  public isInternSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
+    return data instanceof GuildMemberRoleManager
+      ? data.cache.has(container.config.roles.internSecurity)
+      : data.includes(container.config.roles.internSecurity);
   }
 }
