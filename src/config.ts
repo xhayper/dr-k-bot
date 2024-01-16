@@ -54,11 +54,9 @@ export const readConfig = async () =>
 
 readConfig().then((readConfigResult) => {
   if (readConfigResult.isErr()) {
-    const err = readConfigResult.unwrapErr();
     container.logger.fatal(readConfigResult.unwrapErr());
-
-    // TODO: Find a better way to handle this
-    throw err;
+    container.logger.fatal("Config: Couldn't read config.json!");
+    process.exit(1);
   } else {
     container.config = readConfigResult.unwrap();
   }
