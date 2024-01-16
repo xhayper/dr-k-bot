@@ -20,20 +20,23 @@ const questionScheme = s.object({
 const configScheme = s.object({
   channels: s.object({
     // Also known as the "general"
-    welcomeChannel: s.string.regex(SnowflakeRegex),
-    verificationLogChannel: s.string.regex(SnowflakeRegex),
+    welcome: s.string.regex(SnowflakeRegex),
+    verificationLog: s.string.regex(SnowflakeRegex),
     // NOTE: This is the channel where user performs verification
-    verificationChannel: s.string.regex(SnowflakeRegex),
-    ticketThreadChannel: s.string.regex(SnowflakeRegex),
-    imageStorageChannel: s.string.regex(SnowflakeRegex),
-    banAppealChannel: s.string.regex(SnowflakeRegex)
+    verification: s.string.regex(SnowflakeRegex),
+    ticketThread: s.string.regex(SnowflakeRegex),
+    imageStorage: s.string.regex(SnowflakeRegex),
+    banAppeal: s.string.regex(SnowflakeRegex)
   }),
   roles: s.object({
     // The higher, the more power
     headSecurity: s.string.regex(SnowflakeRegex),
     seniorSecurity: s.string.regex(SnowflakeRegex),
     security: s.string.regex(SnowflakeRegex),
-    internSecurity: s.string.regex(SnowflakeRegex)
+    internSecurity: s.string.regex(SnowflakeRegex),
+
+    // This is purely for pining the role
+    verificationTeam: s.string.regex(SnowflakeRegex)
   }),
   verificationQuestions: s.array(questionScheme)
 });
