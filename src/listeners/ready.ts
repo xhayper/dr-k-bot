@@ -17,7 +17,9 @@ const randomStatus: ActivityOptions[] = [
 ];
 
 export class ReadyEvent extends Listener {
-  public run() {
+  public async run() {
+    await this.container.utilities.guild.init();
+
     const updateActivity = () => {
       const { client } = this.container;
       if (!client.isReady) return;

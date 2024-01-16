@@ -1,0 +1,10 @@
+{
+  "channels": {
+    "welcomeChannel": "",
+    "verificationLogChannel": "",
+    "ticketThreadChannel": "",
+    "imageStorageChannel": "",
+    "banAppealChannel": ""
+  },
+  "verificationQuestions": []
+}
