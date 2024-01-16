@@ -1,0 +1,104 @@
+import { PermissionResolvable, type Channel, type DiscordAPIError, type TextBasedChannel } from 'discord.js';
+import { container } from '@sapphire/pieces';
+import { DrKClient } from '../client';
+import { Result } from '@sapphire/result';
+
+export class GuildUtility {
+  private client: DrKClient;
+
+  public welcomeChannel: TextBasedChannel | null = null;
+  public verificationLogChannel: TextBasedChannel | null = null;
+  public ticketThreadChannel: TextBasedChannel | null = null;
+  public imageStorageChannel: TextBasedChannel | null = null;
+  public banAppealChannel: TextBasedChannel | null = null;
+
+  public constructor(client: DrKClient) {
+    this.client = client;
+  }
+
+  public async init() {
+    if (!this.client.isReady()) {
+      throw new Error('The client is not ready yet!');
+    }
+
+    const { logger, config } = container;
+
+    const fetchChannel = async (channelId: string): Promise<Result<Channel | null, DiscordAPIError>> =>
+      Result.fromAsync(async () => await this.client.channels.fetch(channelId));
+
+    logger.debug('GuildUtility:', 'Fetching channels...');
+    const welcomeChannelResult = await fetchChannel(config.channels.welcomeChannel);
+    const verificationLogChannelResult = await fetchChannel(config.channels.verificationLogChannel);
+    const ticketThreadChannelResult = await fetchChannel(config.channels.ticketThreadChannel);
+    const imageStorageChannelResult = await fetchChannel(config.channels.imageStorageChannel);
+    const banAppealChannelResult = await fetchChannel(config.channels.banAppealChannel);
+
+    const handleChannelFetchError = (error: DiscordAPIError) => {
+      const { logger } = container;
+
+      const warnError = (message: string) => {
+        logger.warn(
+          'GuildUtility:',
+          message,
+          `{ctx: {channelId: ${error.url.replace('https://discord.com/api/v10/channels/', '')}}}`
+        );
+      };
+
+      if (error.code === 10003) {
+        warnError('The channel does not exist!');
+      } else if (error.code === 50001) {
+        warnError('The bot is not in the guild where the channel belongs!');
+      } else if (error.code === 50013) {
+        warnError('The bot does not have the required permissions to view the channel!');
+      } else {
+        logger.warn('GuildUtility:', error.message);
+      }
+    };
+
+    const handleResult = (
+      result: Result<Channel | null, DiscordAPIError>,
+      channelName: string | undefined
+    ): TextBasedChannel | null => {
+      channelName = channelName ?? 'channel';
+
+      if (result.isOk()) {
+        let channel = result.unwrap();
+
+        if (channel !== null) {
+          if (channel.isTextBased()) return channel;
+          else logger.warn('GuildUtility:', `The ${channelName} is not a text channel!`);
+        } else {
+          logger.warn('GuildUtility:', `The ${channelName} is null!`);
+        }
+      } else {
+        handleChannelFetchError(result.unwrapErr());
+      }
+
+      return null;
+    };
+
+    this.welcomeChannel = handleResult(welcomeChannelResult, 'welcome channel');
+    this.verificationLogChannel = handleResult(verificationLogChannelResult, 'verification log channel');
+    this.ticketThreadChannel = handleResult(ticketThreadChannelResult, 'ticket thread channel');
+    this.imageStorageChannel = handleResult(imageStorageChannelResult, 'image storage channel');
+    this.banAppealChannel = handleResult(banAppealChannelResult, 'ban appeal channel');
+
+    const checkForPermission = (channel: TextBasedChannel | null, permissions: PermissionResolvable[]) => {
+      if (channel !== null && 'permissionsFor' in channel) {
+        const missingPermissions = channel.permissionsFor(this.client.user!)?.missing(permissions);
+
+        if (missingPermissions !== undefined && missingPermissions.length > 0) {
+          logger.warn('GuildUtility:', `Missing ${missingPermissions.join(', ')} permission(s) in #${channel.name}!`);
+        }
+      }
+    };
+
+    checkForPermission(this.welcomeChannel, ['SendMessages']);
+    checkForPermission(this.verificationLogChannel, ['SendMessages']);
+    checkForPermission(this.ticketThreadChannel, ['SendMessages']);
+    checkForPermission(this.imageStorageChannel, ['SendMessages', 'AttachFiles']);
+    checkForPermission(this.banAppealChannel, ['SendMessages']);
+
+    logger.info('GuildUtility:', 'Initialized!');
+  }
+}

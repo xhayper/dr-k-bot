@@ -1,5 +1,7 @@
 import { LogLevel, SapphireClient, container } from '@sapphire/framework';
+import { type ConfigType, readConfig } from './config';
 import { PrismaClient } from '@prisma/client';
+import { GuildUtility } from './utility/guildUtility';
 
 const database = new PrismaClient({
   log: [
@@ -46,8 +48,25 @@ export class DrKClient extends SapphireClient {
   }
 
   public override async login(token?: string) {
+    container.utilities = {
+      guild: new GuildUtility(this)
+    };
+
+    const readConfigResult = await readConfig();
+
+    if (readConfigResult.isErr()) {
+      const err = readConfigResult.unwrapErr();
+      container.logger.fatal(readConfigResult.unwrapErr());
+
+      // TODO: Find a better way to handle this
+      throw err;
+    } else {
+      container.config = readConfigResult.unwrap();
+    }
+
     container.database = database;
     await database.$connect();
+
     return super.login(token);
   }
 
@@ -61,5 +80,9 @@ export class DrKClient extends SapphireClient {
 declare module '@sapphire/pieces' {
   interface Container {
     database: typeof database;
+    config: ConfigType;
+    utilities: {
+      guild: GuildUtility;
+    };
   }
 }
