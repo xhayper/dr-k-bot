@@ -2,11 +2,13 @@ import { SnowflakeRegex } from '@sapphire/discord-utilities';
 import { type InferType, s } from '@sapphire/shapeshift';
 import { Result } from '@sapphire/result';
 import * as fs from 'node:fs/promises';
-
-const textInputStyle = s.enum('paragraph', 'short');
+import { TextInputStyle } from 'discord.js';
 
 const questionScheme = s.object({
-  style: textInputStyle.optional,
+  style: s
+    .enum('paragraph', 'short')
+    .transform((cb) => (cb === 'paragraph' ? TextInputStyle.Paragraph : TextInputStyle.Short))
+    .default(TextInputStyle.Short),
   question: s.string.lengthLessThanOrEqual(45),
   min: s.number.greaterThanOrEqual(0).lessThanOrEqual(4000).optional,
   max: s.number.greaterThanOrEqual(1).lessThanOrEqual(4000).optional,
