@@ -47,11 +47,14 @@ const configScheme = s.object({
     internSecurity: s.string.regex(SnowflakeRegex),
 
     // This is purely for pining the role
-    verificationTeam: s.string.regex(SnowflakeRegex)
+    verificationTeam: s.string.regex(SnowflakeRegex),
+
+    // For verification system
+    unverified: s.string.regex(SnowflakeRegex)
   }),
   declineReasonPreset: s.array(preDefinedDeclineScheme).optional,
   verificationQuestions: s.array(textInputScheme).lengthLessThanOrEqual(5)
-});
+}).strict;
 
 export type QuestionType = InferType<typeof textInputScheme>;
 export type ConfigType = InferType<typeof configScheme>;

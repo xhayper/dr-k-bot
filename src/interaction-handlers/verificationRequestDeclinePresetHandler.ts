@@ -23,7 +23,6 @@ export class VerificaationRequestDeclinePresetHandler extends InteractionHandler
       await interaction.editReply({
         content: 'You did not select any option!'
       });
-
       return;
     }
 
@@ -33,7 +32,7 @@ export class VerificaationRequestDeclinePresetHandler extends InteractionHandler
       await interaction.editReply({
         content: 'An error have occured! please report to hayper!'
       });
-
+      this.container.logger.error("Couldn't parse interaction value, interaction =>", interaction);
       return;
     }
 

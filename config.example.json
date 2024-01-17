@@ -11,7 +11,8 @@
     "seniorSecurity": "",
     "security": "",
     "internSecurity": "",
-    "verificationTeam": ""
+    "verificationTeam": "",
+    "unverified": ""
   },
   "declineReasonPreset": [],
   "verificationQuestions": []
