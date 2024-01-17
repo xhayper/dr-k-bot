@@ -12,15 +12,17 @@ export type CreateVerificationRequestError =
     };
 
 export class VerificationUtility {
-    // TODO: Use Result<boolean, UserPendingVerificationError>
+  // TODO: Use Result<boolean, UserPendingVerificationError>
   public static async isUserPendingVerification(userId: string): Promise<boolean> {
     const { database } = container;
 
-    const requestCount = await database.verificationRequest.count({
-      where: {
-        ownerId: userId
-      }
-    }).catch(() => 0);
+    const requestCount = await database.verificationRequest
+      .count({
+        where: {
+          ownerId: userId
+        }
+      })
+      .catch(() => 0);
 
     return requestCount > 0;
   }

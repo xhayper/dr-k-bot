@@ -110,43 +110,65 @@ export class GuildUtility {
     logger.info('GuildUtility:', 'Initialized!');
   }
 
-  // TODO: Remove repeated code
-  public isHeadSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
+  public static isHeadSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
     return data instanceof GuildMemberRoleManager
       ? data.cache.has(container.config.roles.headSecurity)
       : data.includes(container.config.roles.headSecurity);
   }
 
-  public isSeniorSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
+  public static isSeniorSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
     return data instanceof GuildMemberRoleManager
       ? data.cache.has(container.config.roles.seniorSecurity)
       : data.includes(container.config.roles.seniorSecurity);
   }
 
-  public isSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
+  public static isSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
     return data instanceof GuildMemberRoleManager
       ? data.cache.has(container.config.roles.security)
       : data.includes(container.config.roles.security);
   }
 
-  public isInternSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
+  public static isInternSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
     return data instanceof GuildMemberRoleManager
       ? data.cache.has(container.config.roles.internSecurity)
       : data.includes(container.config.roles.internSecurity);
   }
 
-  public async checkForSecurityInInteraction(interaction: MessageComponentInteraction): Promise<boolean> {
+  public isHeadSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
+    return GuildUtility.isHeadSecurity(data);
+  }
+
+  public isSeniorSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
+    return GuildUtility.isSeniorSecurity(data);
+  }
+
+  public isSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
+    return GuildUtility.isSecurity(data);
+  }
+
+  public isInternSecurity(data: GuildMemberRoleManager | Snowflake[]): boolean {
+    return GuildUtility.isInternSecurity(data);
+  }
+
+  public async checkForSecurityInInteraction(
+    interaction: MessageComponentInteraction,
+    noEdit: boolean = false
+  ): Promise<boolean> {
+    // TODO: noEdit ? 'reply' : 'editReply' and ephemeral: noEdit ? true : undefined is too ugly, figure out how to make it looks pretty
+
     if (!interaction.member) {
-      await interaction.editReply({
-        content: 'You are not in a guild!'
+      await interaction[noEdit ? 'reply' : 'editReply']({
+        content: 'You are not in a guild!',
+        ephemeral: noEdit ? true : undefined
       });
 
       return false;
     }
 
     if (!container.utilities.guild.isSecurity(interaction.member.roles)) {
-      await interaction.editReply({
-        content: 'You are not a security!'
+      await interaction[noEdit ? 'reply' : 'editReply']({
+        content: 'You are not a security!',
+        ephemeral: noEdit ? true : undefined
       });
 
       return false;
