@@ -1,6 +1,8 @@
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import { type StringSelectMenuInteraction } from 'discord.js';
+import { VerificationRequest } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
+import { Result } from '@sapphire/result';
 
 // TODO: Use embed
 
@@ -49,8 +51,30 @@ export class VerificaationRequestDeclinePresetHandler extends InteractionHandler
 
     const selectedOption = this.container.config.declineReasonPreset[interactionValue];
 
-    await interaction.editReply({
-      content: `You selected: ${selectedOption.value}`
-    });
+    let verificationId: string | undefined;
+
+    const verificationRequestFindResult = await Result.fromAsync<VerificationRequest | null, unknown>(
+      async () =>
+        await this.container.database.verificationRequest.findUnique({
+          where: {
+            logMessageId: interaction.message.id
+          }
+        })
+    );
+
+    if (verificationRequestFindResult.isOk()) {
+      if (verificationRequestFindResult.unwrap() !== null) {
+        verificationId = verificationRequestFindResult.unwrap()!.id;
+      }
+    }
+
+    if (!verificationId) {
+      await interaction.editReply({
+        content: "Can't seems to find ticket associated with this message!"
+      });
+      return;
+    }
+
+    this.container.utilities.verification.tempCommonDecline(interaction, verificationId, selectedOption.value);
   }
 }

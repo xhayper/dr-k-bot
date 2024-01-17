@@ -8,8 +8,28 @@ import {
   type TextBasedChannel,
   type MessageComponentInteraction,
   type Snowflake,
-  GuildMemberRoleManager
+  type Message,
+  type User,
+  type APIActionRowComponent,
+  type APIMessageActionRowComponent,
+  type ModalSubmitInteraction,
+  GuildMemberRoleManager,
+  EmbedBuilder
 } from 'discord.js';
+
+export type CreateVerificationRequestLogError =
+  | {
+      type: 'verification_log_channel_not_found';
+      err: Error | undefined;
+    }
+  | {
+      type: 'cant_send_message';
+      err: Error | undefined;
+    }
+  | {
+      type: 'user_not_found';
+      err: Error | undefined;
+    };
 
 export class GuildUtility {
   private client: DrKClient;
@@ -151,29 +171,134 @@ export class GuildUtility {
   }
 
   public async checkForSecurityInInteraction(
-    interaction: MessageComponentInteraction,
-    noEdit: boolean = false
+    interaction: MessageComponentInteraction | ModalSubmitInteraction
   ): Promise<boolean> {
-    // TODO: noEdit ? 'reply' : 'editReply' and ephemeral: noEdit ? true : undefined is too ugly, figure out how to make it looks pretty
-
+    // TODO: repated code
     if (!interaction.member) {
-      await interaction[noEdit ? 'reply' : 'editReply']({
-        content: 'You are not in a guild!',
-        ephemeral: noEdit ? true : undefined
-      });
-
+      if (interaction.deferred) {
+        await interaction.editReply({
+          content: 'You are not in a guild!'
+        });
+      } else {
+        await interaction.reply({
+          content: 'You are not in a guild!',
+          ephemeral: true
+        });
+      }
       return false;
     }
 
     if (!container.utilities.guild.isSecurity(interaction.member.roles)) {
-      await interaction[noEdit ? 'reply' : 'editReply']({
-        content: 'You are not a security!',
-        ephemeral: noEdit ? true : undefined
-      });
+      if (interaction.deferred) {
+        await interaction.editReply({
+          content: 'You are not a security member!'
+        });
+      } else {
+        await interaction.reply({
+          content: 'You are not a security member!',
+          ephemeral: true
+        });
+      }
 
       return false;
     }
 
     return true;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+
+  public async createVerificationRequestLog(
+    request: { id: string; ownerId: string },
+    answer: { question: string; answer: string }[]
+  ): Promise<Result<Message<true> | Message<false>, CreateVerificationRequestLogError>> {
+    const { verificationLogChannel } = this;
+
+    if (verificationLogChannel === null) {
+      return Result.err({ type: 'verification_log_channel_not_found', err: undefined });
+    }
+
+    const userResult = await Result.fromAsync<User, Error>(async () => await this.client.users.fetch(request.ownerId));
+    if (userResult.isErr()) {
+      return Result.err({ type: 'user_not_found', err: userResult.unwrapErr() });
+    }
+
+    const user = userResult.unwrap();
+
+    const messageComponentList: APIActionRowComponent<APIMessageActionRowComponent>[] = [];
+
+    if (container.config.declineReasonPreset && container.config.declineReasonPreset.length > 0) {
+      messageComponentList.push({
+        type: 1,
+        components: [
+          {
+            type: 3,
+            custom_id: 'verification_request_decline_preset',
+            placeholder: 'Choose a pre-defined decline reason',
+            options: container.config.declineReasonPreset!.map((data, index) => ({
+              label: data.label,
+              value: index.toString(),
+              description: data.description,
+              emoji: data.emoji
+            }))
+          }
+        ]
+      });
+    }
+
+    messageComponentList.push({
+      type: 1,
+      components: [
+        {
+          type: 2,
+          style: 3,
+          label: 'Accept',
+          custom_id: 'verification_request_accept'
+        },
+        {
+          type: 2,
+          style: 4,
+          label: 'Decline',
+          custom_id: 'verification_request_decline'
+        }
+      ]
+    });
+
+    const embed = new EmbedBuilder()
+      .setTitle('Verification Request')
+      .setDescription(`Verification request created for ${user} (${user.tag})`)
+      .addFields(
+        {
+          name: 'User',
+          value: user.toString(),
+          inline: true
+        },
+        {
+          name: 'User ID',
+          value: user.id,
+          inline: true
+        },
+        {
+          name: 'Verification Ticket ID',
+          value: request.id,
+          inline: true
+        },
+        {
+          name: 'Verification Data',
+          value: answer.map((data) => `**${data.question}**: ${data.answer}`).join('\n')
+        }
+      )
+      .setThumbnail(user.displayAvatarURL())
+      .setTimestamp();
+
+    const messageResult = await Result.fromAsync<Message<true> | Message<false>, Error>(
+      async () => await verificationLogChannel.send({ embeds: [embed], components: messageComponentList })
+    );
+
+    if (messageResult.isErr()) {
+      return Result.err({ type: 'cant_send_message', err: messageResult.unwrapErr() });
+    }
+
+    return Result.ok(messageResult.unwrap());
   }
 }
