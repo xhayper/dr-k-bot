@@ -1,20 +1,30 @@
 import { SnowflakeRegex } from '@sapphire/discord-utilities';
 import { type InferType, s } from '@sapphire/shapeshift';
 import { container } from '@sapphire/pieces';
-import { TextInputStyle } from 'discord.js';
 import { Result } from '@sapphire/result';
 import * as fs from 'node:fs/promises';
 
-const questionScheme = s.object({
-  style: s
-    .enum('paragraph', 'short')
-    .transform((cb) => (cb === 'paragraph' ? TextInputStyle.Paragraph : TextInputStyle.Short))
-    .default(TextInputStyle.Short),
-  question: s.string.lengthLessThanOrEqual(45),
+const emojiScheme = s.object({
+  id: s.string.regex(SnowflakeRegex).optional,
+  name: s.string.optional
+});
+
+// TODO: find a better name
+const preDefinedDeclineScheme = s.object({
+  label: s.string.lengthLessThanOrEqual(100),
+  description: s.string.lengthLessThanOrEqual(100).optional,
+  emoji: emojiScheme.optional,
+
+  value: s.string.lengthLessThanOrEqual(500)
+});
+
+const textInputScheme = s.object({
+  style: s.enum('paragraph', 'short').default('short'),
+  label: s.string.lengthLessThanOrEqual(45),
   min: s.number.greaterThanOrEqual(0).lessThanOrEqual(4000).optional,
   max: s.number.greaterThanOrEqual(1).lessThanOrEqual(4000).optional,
   required: s.boolean.optional,
-  value: s.string.lengthLessThanOrEqual(4000).optional,
+  // value: s.string.lengthLessThanOrEqual(4000).optional,
   placeholder: s.string.lengthLessThanOrEqual(100).optional
 });
 
@@ -39,10 +49,11 @@ const configScheme = s.object({
     // This is purely for pining the role
     verificationTeam: s.string.regex(SnowflakeRegex)
   }),
-  verificationQuestions: s.array(questionScheme)
+  declineReasonPreset: s.array(preDefinedDeclineScheme).optional,
+  verificationQuestions: s.array(textInputScheme).lengthLessThanOrEqual(5)
 });
 
-export type QuestionType = InferType<typeof questionScheme>;
+export type QuestionType = InferType<typeof textInputScheme>;
 export type ConfigType = InferType<typeof configScheme>;
 
 export const readConfig = async () =>
@@ -54,9 +65,8 @@ export const readConfig = async () =>
 
 readConfig().then((readConfigResult) => {
   if (readConfigResult.isErr()) {
-    container.logger.fatal(readConfigResult.unwrapErr());
     container.logger.fatal("Config: Couldn't read config.json!");
-    process.exit(1);
+    throw readConfigResult.unwrapErr();
   } else {
     container.config = readConfigResult.unwrap();
   }

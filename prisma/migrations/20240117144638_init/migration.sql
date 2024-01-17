@@ -2,7 +2,7 @@
 CREATE TABLE "VerificationRequest" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "ownerId" TEXT NOT NULL,
-    "logMessageId" TEXT NOT NULL
+    "logMessageId" TEXT
 );
 
 -- CreateTable
@@ -10,7 +10,7 @@ CREATE TABLE "VerificationAnswer" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "question" TEXT NOT NULL,
     "answer" TEXT NOT NULL,
-    "verificationRequestId" TEXT,
+    "verificationRequestId" TEXT NOT NULL,
     CONSTRAINT "VerificationAnswer_verificationRequestId_fkey" FOREIGN KEY ("verificationRequestId") REFERENCES "VerificationRequest" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
