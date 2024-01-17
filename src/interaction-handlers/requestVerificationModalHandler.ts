@@ -26,13 +26,13 @@ export class RequestVerificationModalHandler extends InteractionHandler {
       answer: interaction.fields.getTextInputValue(index.toString())
     }));
 
-    const verificationTicket = await this.container.utilities.verification.createVerificationRequest(
+    const verificationRequestAndLogResult = await this.container.utilities.verification.createVerificationRequestAndLog(
       interaction.user.id,
       verificationData
     );
 
-    if (verificationTicket.isErr()) {
-      const err = verificationTicket.unwrapErr();
+    if (verificationRequestAndLogResult.isErr()) {
+      const err = verificationRequestAndLogResult.unwrapErr();
 
       if (err.type === 'verification_pending') {
         await interaction.editReply({ content: 'You are already pending verification!' });
@@ -45,7 +45,7 @@ export class RequestVerificationModalHandler extends InteractionHandler {
     }
 
     this.container.logger.info(
-      `Verification request created for ${interaction.user.id}, Ticket id: ${verificationTicket.unwrap().id}`
+      `Verification request created for ${interaction.user.id}, Ticket id: ${verificationRequestAndLogResult.unwrap().request.id}`
     );
 
     await interaction.editReply({ content: 'Your verification request have been submitted!' });

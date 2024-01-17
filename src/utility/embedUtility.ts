@@ -7,7 +7,8 @@ export class EmbedUtility {
       content: payload.content,
       embeds: payload.embeds,
       files: payload.files,
-      allowedMentions: payload.allowedMentions
+      allowedMentions: payload.allowedMentions,
+      components: []
     };
   }
 

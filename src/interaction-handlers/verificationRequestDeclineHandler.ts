@@ -1,6 +1,8 @@
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import { TextInputStyle, type ButtonInteraction } from 'discord.js';
+import { type VerificationRequest } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
+import { Result } from '@sapphire/result';
 
 // TODO: Use embed
 
@@ -14,11 +16,28 @@ export class VerificaationRequestDeclineHandler extends InteractionHandler {
   }
 
   public async run(interaction: ButtonInteraction) {
-    if (!(await this.container.utilities.guild.checkForSecurityInInteraction(interaction, true))) return;
+    if (!(await this.container.utilities.guild.checkForSecurityInInteraction(interaction))) return;
+
+    let verificationId: string | undefined;
+
+    const verificationRequestFindResult = await Result.fromAsync<VerificationRequest | null, unknown>(
+      async () =>
+        await this.container.database.verificationRequest.findUnique({
+          where: {
+            logMessageId: interaction.message.id
+          }
+        })
+    );
+
+    if (verificationRequestFindResult.isOk()) {
+      if (verificationRequestFindResult.unwrap() !== null) {
+        verificationId = verificationRequestFindResult.unwrap()!.id;
+      }
+    }
 
     await interaction.showModal({
       title: 'Decline Verification Request',
-      custom_id: 'verification_decline_modal',
+      custom_id: 'verification_request_decline_modal',
       components: [
         {
           type: 1,
@@ -31,8 +50,7 @@ export class VerificaationRequestDeclineHandler extends InteractionHandler {
               min_length: 36,
               max_length: 36,
               required: true,
-
-              value: '1be84b4b-156a-4973-85fc-03b0bf6e9756'
+              value: verificationId
             }
           ]
         },
@@ -43,8 +61,7 @@ export class VerificaationRequestDeclineHandler extends InteractionHandler {
               type: 4,
               label: 'Reason',
               custom_id: 'decline_verification_request_reason',
-              style: TextInputStyle.Paragraph,
-              required: true
+              style: TextInputStyle.Paragraph
             }
           ]
         }
