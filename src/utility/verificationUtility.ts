@@ -259,8 +259,7 @@ export class VerificationUtility {
 
       if (verificationRequestLogMessage) {
         const newEmbed = EmbedUtility.deleteComponent(verificationRequestLogMessage);
-        // (newEmbed.embeds![0] as APIEmbed).color = 0xff0000;
-
+        (newEmbed.embeds![0] as any).data.color = 0xff0000;
         await verificationRequestLogMessage.edit(newEmbed).catch(() => null);
       }
     }
@@ -310,41 +309,23 @@ export class VerificationUtility {
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  public async tempCommonDecline(
+  public async declineVerificationRequestAndRespond(
     interaction: ModalSubmitInteraction | StringSelectMenuInteraction,
     id: string,
     reason: string
   ) {
-    const verificationRequestFindResult = await Result.fromAsync(
-      async () =>
-        await container.database.verificationRequest.findUnique({
-          where: {
-            id
-          }
-        })
-    );
-
-    if (verificationRequestFindResult.isErr()) {
-      await interaction.editReply({ content: 'Database error! please report to hayper!' });
-      container.logger.error(verificationRequestFindResult.unwrapErr());
-      return;
-    }
-
-    const verificationRequest = verificationRequestFindResult.unwrap();
-    if (!verificationRequest) {
-      await interaction.editReply({ content: 'Verification request not found!' });
-      return;
-    }
-
     const verificationRequestDeclineResult = await container.utilities.verification.declineVerificationRequest(
-      verificationRequest,
+      { id },
       reason
     );
 
     if (verificationRequestDeclineResult.isErr()) {
       const err = verificationRequestDeclineResult.unwrapErr();
 
-      if (err.type === 'cant_send_message') {
+      if (err.type === 'verification_request_not_found') {
+        await interaction.editReply({ content: 'Verification request not found!' });
+        return;
+      } else if (err.type === 'cant_send_message') {
         await interaction.editReply({ content: 'I can not send message to the user!' });
         return;
       } else {

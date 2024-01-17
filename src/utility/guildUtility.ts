@@ -288,6 +288,7 @@ export class GuildUtility {
           value: answer.map((data) => `**${data.question}**: ${data.answer}`).join('\n')
         }
       )
+      .setColor('Blue')
       .setThumbnail(user.displayAvatarURL())
       .setTimestamp();
 

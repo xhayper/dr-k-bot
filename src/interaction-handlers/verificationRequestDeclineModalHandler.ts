@@ -14,13 +14,13 @@ export class VerificaationRequestDeclineModalHandler extends InteractionHandler 
   }
 
   public async run(interaction: ModalSubmitInteraction) {
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
 
     if (!(await this.container.utilities.guild.checkForSecurityInInteraction(interaction))) return;
 
     const id = interaction.fields.getTextInputValue('decline_verification_request_id');
     const reason = interaction.fields.getTextInputValue('decline_verification_request_reason');
 
-    this.container.utilities.verification.tempCommonDecline(interaction, id, reason);
+    this.container.utilities.verification.declineVerificationRequestAndRespond(interaction, id, reason);
   }
 }

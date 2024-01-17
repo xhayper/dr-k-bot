@@ -16,7 +16,8 @@ export class VerificaationRequestDeclinePresetHandler extends InteractionHandler
   }
 
   public async run(interaction: StringSelectMenuInteraction) {
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
+
     if (!(await this.container.utilities.guild.checkForSecurityInInteraction(interaction))) return;
 
     let interactionValue: number;
@@ -75,6 +76,10 @@ export class VerificaationRequestDeclinePresetHandler extends InteractionHandler
       return;
     }
 
-    this.container.utilities.verification.tempCommonDecline(interaction, verificationId, selectedOption.value);
+    this.container.utilities.verification.declineVerificationRequestAndRespond(
+      interaction,
+      verificationId,
+      selectedOption.value
+    );
   }
 }

@@ -44,10 +44,6 @@ export class RequestVerificationModalHandler extends InteractionHandler {
       return;
     }
 
-    this.container.logger.info(
-      `Verification request created for ${interaction.user.id}, Ticket id: ${verificationRequestAndLogResult.unwrap().request.id}`
-    );
-
     await interaction.editReply({ content: 'Your verification request have been submitted!' });
   }
 }
