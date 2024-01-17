@@ -16,7 +16,7 @@ export class VerificaationRequestAcceptHandler extends InteractionHandler {
   public async run(interaction: ButtonInteraction) {
     await interaction.deferReply();
 
-    if (!interaction.member || !this.container.utilities.guild.isSecurity(interaction.member!.roles)) return;
+    if (!(await this.container.utilities.guild.checkForSecurityInInteraction(interaction))) return;
 
     interaction.editReply({
       content: 'Verification accept'
