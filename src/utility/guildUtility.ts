@@ -7,8 +7,8 @@ import {
   type DiscordAPIError,
   type TextBasedChannel,
   type MessageComponentInteraction,
-  GuildMemberRoleManager,
-  Snowflake
+  type Snowflake,
+  GuildMemberRoleManager
 } from 'discord.js';
 
 export class GuildUtility {
