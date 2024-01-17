@@ -1,5 +1,5 @@
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
-import type { StringSelectMenuInteraction } from 'discord.js';
+import { type StringSelectMenuInteraction } from 'discord.js';
 import { ApplyOptions } from '@sapphire/decorators';
 
 // TODO: Use embed
@@ -37,7 +37,10 @@ export class VerificaationRequestDeclinePresetHandler extends InteractionHandler
       return;
     }
 
-    if (interactionValue + 1 > this.container.config.declineReasonPreset!.length) {
+    if (
+      !this.container.config.declineReasonPreset ||
+      interactionValue + 1 > this.container.config.declineReasonPreset.length
+    ) {
       await interaction.editReply({
         content: 'The decline reason preset list on this message is outdated!'
       });
@@ -45,7 +48,7 @@ export class VerificaationRequestDeclinePresetHandler extends InteractionHandler
       return;
     }
 
-    const selectedOption = this.container.config.declineReasonPreset![interactionValue];
+    const selectedOption = this.container.config.declineReasonPreset[interactionValue];
 
     await interaction.editReply({
       content: `You selected: ${selectedOption.value}`

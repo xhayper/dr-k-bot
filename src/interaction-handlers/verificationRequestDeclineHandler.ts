@@ -1,5 +1,5 @@
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
-import { type ButtonInteraction } from 'discord.js';
+import { TextInputStyle, type ButtonInteraction } from 'discord.js';
 import { ApplyOptions } from '@sapphire/decorators';
 
 // TODO: Use embed
@@ -14,12 +14,41 @@ export class VerificaationRequestDeclineHandler extends InteractionHandler {
   }
 
   public async run(interaction: ButtonInteraction) {
-    await interaction.deferReply();
+    if (!(await this.container.utilities.guild.checkForSecurityInInteraction(interaction, true))) return;
 
-    if (!(await this.container.utilities.guild.checkForSecurityInInteraction(interaction))) return;
+    await interaction.showModal({
+      title: 'Decline Verification Request',
+      custom_id: 'verification_decline_modal',
+      components: [
+        {
+          type: 1,
+          components: [
+            {
+              type: 4,
+              label: 'Id',
+              custom_id: 'decline_verification_request_id',
+              style: TextInputStyle.Short,
+              min_length: 36,
+              max_length: 36,
+              required: true,
 
-    interaction.editReply({
-      content: 'Verification decline'
+              value: '1be84b4b-156a-4973-85fc-03b0bf6e9756'
+            }
+          ]
+        },
+        {
+          type: 1,
+          components: [
+            {
+              type: 4,
+              label: 'Reason',
+              custom_id: 'decline_verification_request_reason',
+              style: TextInputStyle.Paragraph,
+              required: true
+            }
+          ]
+        }
+      ]
     });
   }
 }
