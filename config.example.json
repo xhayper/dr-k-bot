@@ -13,5 +13,6 @@
     "internSecurity": "",
     "verificationTeam": ""
   },
+  "declineReasonPreset": [],
   "verificationQuestions": []
 }

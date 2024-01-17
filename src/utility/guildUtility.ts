@@ -6,6 +6,7 @@ import {
   type Channel,
   type DiscordAPIError,
   type TextBasedChannel,
+  type MessageComponentInteraction,
   GuildMemberRoleManager,
   Snowflake
 } from 'discord.js';
@@ -132,5 +133,25 @@ export class GuildUtility {
     return data instanceof GuildMemberRoleManager
       ? data.cache.has(container.config.roles.internSecurity)
       : data.includes(container.config.roles.internSecurity);
+  }
+
+  public async checkForSecurityInInteraction(interaction: MessageComponentInteraction): Promise<boolean> {
+    if (!interaction.member) {
+      await interaction.editReply({
+        content: 'You are not in a guild!'
+      });
+
+      return false;
+    }
+
+    if (!container.utilities.guild.isSecurity(interaction.member.roles)) {
+      await interaction.editReply({
+        content: 'You are not a security!'
+      });
+
+      return false;
+    }
+
+    return true;
   }
 }
