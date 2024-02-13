@@ -1,8 +1,6 @@
 const { execSync, fork } = require('node:child_process'),
   path = require('node:path');
 
-const package = require('./bot/package.json');
-
 /**
  * @param {string} command The command to run.
  * @param {import("node:child_process").ExecSyncOptions} [options]
@@ -18,19 +16,14 @@ const log = (...message) => void console.log('BOOTSTRAP:', ...message);
 
 const botFolder = path.join(__dirname, 'bot');
 
-const prismaVersion = (package.dependencies['@prisma/client'] ?? package.devDependencies['@prisma/client'] ?? '')
-  .replace('^', '')
-  .replace('@', '');
-
 log('START!');
 
 // We install packages
 log('INSTALLING PACKAGES!');
-run('npm install --omit=dev', { cwd: botFolder });
+run('npm install', { cwd: botFolder });
 
 // Then generate prisma files
 log('GENERATING PRISMA FILES!');
-run(`npm install -D prisma${prismaVersion ? '@' + prismaVersion : ''}`, { cwd: botFolder });
 run('npx prisma generate', { cwd: botFolder });
 run('npm remove prisma', { cwd: botFolder });
 
