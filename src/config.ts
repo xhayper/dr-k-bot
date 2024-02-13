@@ -18,7 +18,6 @@ export default config as {
     unverified: string;
     levelZero: string;
     levelRoles: string[];
-    patreonRoles: string[];
   };
   channel: {
     auditLog: string;

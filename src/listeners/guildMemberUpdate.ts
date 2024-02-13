@@ -1,6 +1,5 @@
 import { type GuildMember, type PartialGuildMember } from 'discord.js';
 import { Listener } from '@sapphire/framework';
-import { GuildUtility } from '..';
 import config from '../config';
 
 export class UserEvent extends Listener {
@@ -13,14 +12,6 @@ export class UserEvent extends Listener {
       newMember.roles.cache.some((role) => config.role.levelRoles.includes(role.id))
     ) {
       await newMember.roles.remove(config.role.levelZero, 'autorole');
-    }
-
-    if (
-      newMember.roles.cache.has(config.role.unverified) &&
-      newMember.roles.cache.some((role) => config.role.patreonRoles.includes(role.id))
-    ) {
-      await newMember.roles.remove(config.role.unverified, 'autorole');
-      await GuildUtility.sendWelcomeMessage(newMember);
     }
   }
 }
