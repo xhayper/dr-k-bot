@@ -96,7 +96,7 @@ export class GuildUtility {
     });
 
     await thread.send({
-      content: `<@364966546298372097> | ${moderator} ${member.user}` // ${config.user.botOwner.map((id) => `<@${id}>`).join(' ')} |
+      content: `<@235962374819938304> | ${moderator} ${member.user}` // ${config.user.botOwner.map((id) => `<@${id}>`).join(' ')} |
     });
 
     return;
