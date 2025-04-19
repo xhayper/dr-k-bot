@@ -20,6 +20,7 @@ import { LogLevel, SapphireClient } from '@sapphire/framework';
 
 const client = new SapphireClient({
   defaultPrefix: 'k!',
+  disableMentionPrefix: true,
   loadMessageCommandListeners: true,
   typing: true,
   logger: {
