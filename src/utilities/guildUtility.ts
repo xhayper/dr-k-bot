@@ -1,6 +1,6 @@
-import { type SapphireClient } from '@sapphire/framework';
-import { EmbedUtility, UserUtilty } from '..';
-import config from '../config';
+import { Utility } from "@sapphire/plugin-utilities-store";
+import { ApplyOptions } from "@sapphire/decorators";
+import config from "../config";
 import {
   type GuildTextBasedChannel,
   type Guild,
@@ -12,11 +12,12 @@ import {
   ChannelType,
   EmbedBuilder,
   MessageCreateOptions
-} from 'discord.js';
+} from "discord.js";
 
-export class GuildUtility {
-  private client: SapphireClient;
-
+@ApplyOptions<Utility.Options>({
+  name: "guild"
+})
+export class GuildUtility extends Utility {
   public auditLogChannel: GuildTextBasedChannel | undefined;
   public verificationLogChannel: GuildTextBasedChannel | undefined;
   public primaryGeneralChannel: GuildTextBasedChannel | undefined;
@@ -25,9 +26,8 @@ export class GuildUtility {
 
   public guild: Guild | undefined;
 
-  constructor(client: SapphireClient) {
-    this.client = client;
-    this.client.guilds
+  public async load() {
+    this.container.client.guilds
       .fetch(config.guildId)
       .then(async (guild) => {
         this.guild = guild;
@@ -41,7 +41,7 @@ export class GuildUtility {
         this.verificationLogChannel =
           (verificationLogChannel && verificationLogChannel.isTextBased() && verificationLogChannel) || undefined;
 
-        const primaryGeneralChannel = await guild.channels.fetch(config.channel['general-1']).catch(() => undefined);
+        const primaryGeneralChannel = await guild.channels.fetch(config.channel["general-1"]).catch(() => undefined);
         this.primaryGeneralChannel =
           (primaryGeneralChannel && primaryGeneralChannel.isTextBased() && primaryGeneralChannel) || undefined;
 
@@ -57,7 +57,7 @@ export class GuildUtility {
           undefined;
 
         const banAppealLogChannel = await guild.channels
-          .fetch(config.channel['ban-appeal-logs'])
+          .fetch(config.channel["ban-appeal-logs"])
           .catch(() => undefined);
         this.banAppealLogChannel =
           (banAppealLogChannel && banAppealLogChannel.isTextBased() && banAppealLogChannel) || undefined;
@@ -70,18 +70,20 @@ export class GuildUtility {
     return await this.primaryGeneralChannel.send({
       content: member.toString(),
       embeds: [
-        EmbedUtility.SUCCESS_COLOR(
-          new EmbedBuilder({
-            title: `Everyone give \`${member.user.username}\` a warm welcome!`,
-            thumbnail: {
-              url:
-                member.user.avatarURL({
-                  size: 4096
-                }) ?? member.user.defaultAvatarURL
-            },
-            description: `We're happy to have you here!\nOnce you're level 1, Head over to <#${config.channel['role-selection']}> to get some roles!`
-          })
-        ).toJSON()
+        this.container.utilities.embed
+          .SUCCESS_COLOR(
+            new EmbedBuilder({
+              title: `Everyone give \`${member.user.username}\` a warm welcome!`,
+              thumbnail: {
+                url:
+                  member.user.avatarURL({
+                    size: 4096
+                  }) ?? member.user.defaultAvatarURL
+              },
+              description: `We're happy to have you here!\nOnce you're level 1, Head over to <#${config.channel["role-selection"]}> to get some roles!`
+            })
+          )
+          .toJSON()
       ]
     });
   }
@@ -122,7 +124,7 @@ export class GuildUtility {
   }
 
   public isBotOwner(member: GuildMember): boolean {
-    return UserUtilty.isBotOwner(member.user);
+    return this.container.utilities.user.isBotOwner(member.user);
   }
 
   public isHeadSecurity(member: GuildMember): boolean {
@@ -139,5 +141,11 @@ export class GuildUtility {
 
   public isSecurity(member: GuildMember): boolean {
     return member.roles.cache.has(config.role.security);
+  }
+}
+
+declare module "@sapphire/plugin-utilities-store" {
+  export interface Utilities {
+    guild: GuildUtility;
   }
 }

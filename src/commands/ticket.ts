@@ -1,13 +1,11 @@
-import { type GuildMember, type Message, EmbedBuilder } from 'discord.js';
-import { reply } from '@sapphire/plugin-editable-commands';
-import { type Args, Command } from '@sapphire/framework';
-import { ApplyOptions } from '@sapphire/decorators';
-import { GuildUtility, EmbedUtility } from '..';
-import config from '../config';
+import { type GuildMember, EmbedBuilder } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
+import { Command } from "@sapphire/framework";
+import config from "../config";
 
 @ApplyOptions<Command.Options>({
-  description: 'Open a thread to ask for additional information',
-  preconditions: ['ChangedGuildOnly', ['HeadSecurityOnly', 'SeniorSecurityOnly', 'SecurityOnly', 'InternOnly']]
+  description: "Open a thread to ask for additional information",
+  preconditions: ["ChangedGuildOnly", ["HeadSecurityOnly", "SeniorSecurityOnly", "SecurityOnly", "InternOnly"]]
 })
 export class CommandHandler extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
@@ -16,7 +14,7 @@ export class CommandHandler extends Command {
         builder //
           .setName(this.name)
           .setDescription(this.description)
-          .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true)),
+          .addUserOption((option) => option.setName("member").setDescription("-").setRequired(true)),
       {
         guildIds: [config.guildId]
       }
@@ -26,40 +24,21 @@ export class CommandHandler extends Command {
   public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
-    const targetMember = interaction.options.getMember('member');
-    await GuildUtility.openThread(interaction.member as GuildMember, targetMember as GuildMember);
+    const targetMember = interaction.options.getMember("member");
+    await this.container.utilities.guild.openThread(interaction.member as GuildMember, targetMember as GuildMember);
 
     await interaction.editReply({
       embeds: [
-        EmbedUtility.SUCCESS_COLOR(
-          EmbedUtility.USER_AUTHOR(
-            new EmbedBuilder({
-              description: `Thread opened with ${targetMember}!`
-            }),
-            interaction.user
+        this.container.utilities.embed
+          .SUCCESS_COLOR(
+            this.container.utilities.embed.USER_AUTHOR(
+              new EmbedBuilder({
+                description: `Thread opened with ${targetMember}!`
+              }),
+              interaction.user
+            )
           )
-        ).toJSON()
-      ]
-    });
-  }
-
-  public override async messageRun(message: Message, args: Args) {
-    const targetMember = await args.pick('member').catch(() => null);
-
-    if (!targetMember) return reply(message, 'Please provide a member!');
-
-    await GuildUtility.openThread(message.member!, targetMember);
-
-    reply(message, {
-      embeds: [
-        EmbedUtility.SUCCESS_COLOR(
-          EmbedUtility.USER_AUTHOR(
-            new EmbedBuilder({
-              description: `Thread opened with ${targetMember}!`
-            }),
-            message.author
-          )
-        ).toJSON()
+          .toJSON()
       ]
     });
   }

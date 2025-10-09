@@ -1,14 +1,12 @@
-import { type PartialVerificationData } from './verifiationUtility';
-import { type SapphireClient } from '@sapphire/framework';
-import { type User, EmbedBuilder } from 'discord.js';
+import { type PartialVerificationData } from "./verifiationUtility";
+import { Utility } from "@sapphire/plugin-utilities-store";
+import { type User, EmbedBuilder } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
 
-export class EmbedUtility {
-  private client: SapphireClient;
-
-  constructor(client: SapphireClient) {
-    this.client = client;
-  }
-
+@ApplyOptions<Utility.Options>({
+  name: "embed"
+})
+export class EmbedUtility extends Utility {
   public ERROR_COLOR(embed: EmbedBuilder): EmbedBuilder {
     return embed.setColor(0xed4245);
   }
@@ -72,9 +70,9 @@ export class EmbedUtility {
     return this.ERROR_COLOR(new EmbedBuilder()).setDescription(`You didn't respond in time!`);
   }
 
-  public VERIFICATION_SUCCESS(ticketId: string): EmbedBuilder {
+  public VERIFICATION_SUCCESS(): EmbedBuilder {
     return this.SUCCESS_COLOR(new EmbedBuilder())
-      .setTitle('All done!')
+      .setTitle("All done!")
       .setDescription(`Thank you for your submission!`); //\n Your ticket id is **${ticketId}**!`);
   }
 
@@ -91,11 +89,11 @@ export class EmbedUtility {
   }
 
   public OPERATION_CANCELLED(): EmbedBuilder {
-    return this.ERROR_COLOR(new EmbedBuilder({ description: 'I have cancelled the operation!' }));
+    return this.ERROR_COLOR(new EmbedBuilder({ description: "I have cancelled the operation!" }));
   }
 
   public async VERIFICATION_INFO(data: PartialVerificationData): Promise<EmbedBuilder> {
-    const targetUser = await this.client.users.fetch(data.discordId);
+    const targetUser = await this.container.client.users.fetch(data.discordId);
 
     const baseEmbed = new EmbedBuilder();
 
@@ -138,5 +136,11 @@ export class EmbedUtility {
     baseEmbed.setThumbnail(data.appealer.displayAvatarURL({ size: 4096 }) ?? data.appealer.defaultAvatarURL);
 
     return baseEmbed;
+  }
+}
+
+declare module "@sapphire/plugin-utilities-store" {
+  export interface Utilities {
+    embed: EmbedUtility;
   }
 }

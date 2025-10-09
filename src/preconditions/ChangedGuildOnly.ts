@@ -1,18 +1,18 @@
-import { type CommandInteraction, type ContextMenuCommandInteraction, type Message } from 'discord.js';
-import { AllFlowsPrecondition } from '@sapphire/framework';
-import config from '../config';
+import { type CommandInteraction, type ContextMenuCommandInteraction, type Message } from "discord.js";
+import { AllFlowsPrecondition } from "@sapphire/framework";
+import config from "../config";
 
 export class UserPrecondition extends AllFlowsPrecondition {
   public override async messageRun(message: Message) {
-    return this.checkGuild(message.guildId ?? '');
+    return this.checkGuild(message.guildId ?? "");
   }
 
   public override async chatInputRun(interaction: CommandInteraction) {
-    return this.checkGuild(interaction.guildId ?? '');
+    return this.checkGuild(interaction.guildId ?? "");
   }
 
   public override async contextMenuRun(interaction: ContextMenuCommandInteraction) {
-    return this.checkGuild(interaction.guildId ?? '');
+    return this.checkGuild(interaction.guildId ?? "");
   }
 
   private async checkGuild(id: string) {
@@ -20,7 +20,7 @@ export class UserPrecondition extends AllFlowsPrecondition {
   }
 }
 
-declare module '@sapphire/framework' {
+declare module "@sapphire/framework" {
   interface Preconditions {
     ChangedGuildOnly: never;
   }

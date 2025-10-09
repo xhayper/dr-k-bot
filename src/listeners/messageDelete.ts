@@ -1,7 +1,6 @@
-import { EmbedUtility, GuildUtility, MessageUtility } from '..';
-import { type Message, type PartialMessage } from 'discord.js';
-import { Listener } from '@sapphire/framework';
-import config from '../config';
+import { type Message, type PartialMessage } from "discord.js";
+import { Listener } from "@sapphire/framework";
+import config from "../config";
 
 export class UserEvent extends Listener {
   public async run(message: Message | PartialMessage) {
@@ -9,24 +8,31 @@ export class UserEvent extends Listener {
       message.partial ||
       message.author.bot ||
       message.channel.id === config.channel.auditLog ||
-      message.channel.id === config.channel['image-storage'] ||
+      message.channel.id === config.channel["image-storage"] ||
       !message.guild ||
       message.guild.id !== config.guildId
     )
       return;
 
-    const { text, imageMessage } = await MessageUtility.transformMessage(message, true);
+    const { text, attachmentMessage: imageMessage } = await this.container.utilities.message.transformMessage(
+      message,
+      true
+    );
 
-    const auditMessage = await GuildUtility.sendAuditLog({
+    const auditMessage = await this.container.utilities.guild.sendAuditLog({
       embeds: [
-        EmbedUtility.ERROR_COLOR(
-          EmbedUtility.AUDIT_MESSAGE(
-            message.author,
-            `**🗑 Message sent by ${message.author} deleted in ${message.channel}**\n${text}`
-          ).setFooter({
-            text: `Message ID: ${message.id}`
-          })
-        ).toJSON()
+        this.container.utilities.embed
+          .ERROR_COLOR(
+            this.container.utilities.embed
+              .AUDIT_MESSAGE(
+                message.author,
+                `**🗑 Message sent by ${message.author} deleted in ${message.channel}**\n${text}`
+              )
+              .setFooter({
+                text: `Message ID: ${message.id}`
+              })
+          )
+          .toJSON()
       ]
     });
 

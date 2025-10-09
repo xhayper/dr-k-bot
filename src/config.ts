@@ -1,8 +1,8 @@
-import { type TextInputComponentData } from 'discord.js';
-import path from 'node:path';
-import fs from 'node:fs';
+import { type TextInputComponentData } from "discord.js";
+import path from "node:path";
+import fs from "node:fs";
 
-const config = JSON.parse(fs.readFileSync(path.join(__dirname, '../config.json'), 'utf8'));
+const config = JSON.parse(fs.readFileSync(path.join(__dirname, "../config.json"), "utf8"));
 
 export default config as {
   guildId: string;
@@ -23,13 +23,13 @@ export default config as {
     auditLog: string;
     verificationLog: string;
     ticketThread: string;
-    'user-verification': string;
-    'general-1': string;
-    'general-2': string;
-    'role-selection': string;
-    'art-channel': string;
-    'image-storage': string;
-    'ban-appeal-logs': string;
+    "user-verification": string;
+    "general-1": string;
+    "general-2": string;
+    "role-selection": string;
+    "art-channel": string;
+    "image-storage": string;
+    "ban-appeal-logs": string;
   };
   toggleRole: {
     [key: string]: string;

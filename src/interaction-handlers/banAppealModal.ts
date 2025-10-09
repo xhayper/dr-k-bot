@@ -1,8 +1,7 @@
-import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
-import { type ModalSubmitInteraction } from 'discord.js';
-import { ApplyOptions } from '@sapphire/decorators';
-import { EmbedUtility, GuildUtility } from '..';
-import config from '../config';
+import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
+import { type ModalSubmitInteraction } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
+import config from "../config";
 
 @ApplyOptions<InteractionHandler.Options>({
   interactionHandlerType: InteractionHandlerTypes.ModalSubmit
@@ -23,7 +22,7 @@ export class Handler extends InteractionHandler {
 
     if (emptyAnswer.length > 0)
       return void (await interaction.editReply({
-        content: `Answer for question ${emptyAnswer.map((questionNumber) => questionNumber + 1).join(', ')} is empty!`
+        content: `Answer for question ${emptyAnswer.map((questionNumber) => questionNumber + 1).join(", ")} is empty!`
       }));
 
     const shortAnswer = transformedAnswer.reduce((arr, answerData, index) => {
@@ -36,30 +35,32 @@ export class Handler extends InteractionHandler {
       return void (await interaction.editReply({
         content: `Answer for question ${shortAnswer
           .map((questionNumber) => questionNumber + 1)
-          .join(', ')} is too short!`
+          .join(", ")} is too short!`
       }));
 
-    if (GuildUtility.banAppealLogChannel) {
-      const appealMessage = await GuildUtility.sendBanAppealLog({
+    if (this.container.utilities.guild.banAppealLogChannel) {
+      const appealMessage = await this.container.utilities.guild.sendBanAppealLog({
         embeds: [
-          EmbedUtility.BAN_APPEAL_INFO({
-            appealer: interaction.user,
-            answers: transformedAnswer
-          }).toJSON()
+          this.container.utilities.embed
+            .BAN_APPEAL_INFO({
+              appealer: interaction.user,
+              answers: transformedAnswer
+            })
+            .toJSON()
         ]
       });
 
-      await appealMessage!.react('✅');
-      await appealMessage!.react('❌');
+      await appealMessage!.react("✅");
+      await appealMessage!.react("❌");
 
-      await interaction.editReply({ content: 'Your submission was received successfully!' });
+      await interaction.editReply({ content: "Your submission was received successfully!" });
     } else {
-      await interaction.editReply({ content: 'Something went wrong!' });
+      await interaction.editReply({ content: "Something went wrong!" });
     }
   }
 
   public parse(interaction: ModalSubmitInteraction) {
-    if (interaction.customId !== 'ban_appeal') return this.none();
+    if (interaction.customId !== "ban_appeal") return this.none();
 
     return this.some();
   }

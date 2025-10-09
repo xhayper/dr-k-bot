@@ -1,13 +1,11 @@
-import { type GuildMember, type Message, EmbedBuilder } from 'discord.js';
-import { reply } from '@sapphire/plugin-editable-commands';
-import { type Args, Command } from '@sapphire/framework';
-import { ApplyOptions } from '@sapphire/decorators';
-import { GuildUtility, EmbedUtility } from '..';
-import config from '../config';
+import { type GuildMember, EmbedBuilder } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
+import { Command } from "@sapphire/framework";
+import config from "../config";
 
 @ApplyOptions<Command.Options>({
-  description: 'Give the target user a warm welcome~',
-  preconditions: ['ChangedGuildOnly', ['HeadSecurityOnly', 'SeniorSecurityOnly', 'SecurityOnly', 'InternOnly']]
+  description: "Give the target user a warm welcome~",
+  preconditions: ["ChangedGuildOnly", ["HeadSecurityOnly", "SeniorSecurityOnly", "SecurityOnly", "InternOnly"]]
 })
 export class CommandHandler extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
@@ -16,7 +14,9 @@ export class CommandHandler extends Command {
         builder //
           .setName(this.name)
           .setDescription(this.description)
-          .addUserOption((option) => option.setName('member').setDescription('-').setRequired(true)),
+          .addUserOption((option) =>
+            option.setName("member").setDescription("The member to welcome").setRequired(true)
+          ),
       {
         guildIds: [config.guildId]
       }
@@ -26,35 +26,19 @@ export class CommandHandler extends Command {
   public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
-    const member = interaction.options.getMember('member') as GuildMember;
+    const member = interaction.options.getMember("member") as GuildMember;
 
-    await GuildUtility.sendWelcomeMessage(member);
+    await this.container.utilities.guild.sendWelcomeMessage(member);
     await interaction.editReply({
       embeds: [
-        EmbedUtility.SUCCESS_COLOR(
-          new EmbedBuilder({
-            title: 'All done!',
-            description: `I have send welcome message for ${member}!`
-          })
-        ).toJSON()
-      ]
-    });
-  }
-
-  public override async messageRun(message: Message, args: Args) {
-    const member = await args.pick('member').catch(() => null);
-
-    if (!member) return await reply(message, 'Please specify a member to welcome!');
-
-    await GuildUtility.sendWelcomeMessage(member);
-    await reply(message, {
-      embeds: [
-        EmbedUtility.SUCCESS_COLOR(
-          new EmbedBuilder({
-            title: 'All done!',
-            description: `I have send welcome message for ${member}!`
-          })
-        ).toJSON()
+        this.container.utilities.embed
+          .SUCCESS_COLOR(
+            new EmbedBuilder({
+              title: "All done!",
+              description: `I have send welcome message for ${member}!`
+            })
+          )
+          .toJSON()
       ]
     });
   }

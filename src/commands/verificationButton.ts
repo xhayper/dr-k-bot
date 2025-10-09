@@ -1,11 +1,10 @@
-import { type Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
-import { EmbedUtility } from '..';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
+import { Command } from "@sapphire/framework";
 
 @ApplyOptions<Command.Options>({
-  description: 'Replies with the verification button in current channel',
-  preconditions: ['ChangedGuildOnly', ['HeadSecurityOnly', 'SeniorSecurityOnly', 'SecurityOnly', 'InternOnly']]
+  description: "Replies with the verification button in current channel",
+  preconditions: ["ChangedGuildOnly", ["HeadSecurityOnly", "SeniorSecurityOnly", "SecurityOnly", "InternOnly"]]
 })
 export class CommandHandler extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
@@ -19,15 +18,17 @@ export class CommandHandler extends Command {
   public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
     await interaction.deferReply({ ephemeral: true });
 
+    if (!interaction.channel?.isSendable()) return;
+
     await interaction.channel?.send({
-      embeds: [EmbedUtility.VERIFICATION_BUTTON().toJSON()],
+      embeds: [this.container.utilities.embed.VERIFICATION_BUTTON().toJSON()],
       components: [
         new ActionRowBuilder<ButtonBuilder>({
           components: [
             new ButtonBuilder({
               style: ButtonStyle.Success,
-              label: 'Verify',
-              customId: 'verify'
+              label: "Verify",
+              customId: "verify"
             })
           ]
         })
@@ -35,25 +36,7 @@ export class CommandHandler extends Command {
     });
 
     await interaction.editReply({
-      content: 'Verification button sent!'
-    });
-  }
-
-  public override async messageRun(message: Message) {
-    if (message.deletable) await message.delete();
-    return message.channel?.send({
-      embeds: [EmbedUtility.VERIFICATION_BUTTON().toJSON()],
-      components: [
-        new ActionRowBuilder<ButtonBuilder>({
-          components: [
-            new ButtonBuilder({
-              style: ButtonStyle.Success,
-              label: 'Verify',
-              customId: 'verify'
-            })
-          ]
-        })
-      ]
+      content: "Verification button sent!"
     });
   }
 }

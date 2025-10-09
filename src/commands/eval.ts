@@ -1,22 +1,20 @@
-import { reply } from '@sapphire/plugin-editable-commands';
-import { type Args, Command } from '@sapphire/framework';
-import { ApplyOptions } from '@sapphire/decorators';
-import { type Message } from 'discord.js';
-import { inspect } from 'node:util';
+import { ApplyOptions } from "@sapphire/decorators";
+import { Command } from "@sapphire/framework";
+import { inspect } from "node:util";
 
 const clean = async (text: any): Promise<string> => {
-  if (text && text.constructor.name === 'Promise') text = await text;
+  if (text && text.constructor.name === "Promise") text = await text;
 
-  if (typeof text !== 'string') text = inspect(text, { depth: 1 });
+  if (typeof text !== "string") text = inspect(text, { depth: 1 });
 
-  text = text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203));
+  text = text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
 
   return text;
 };
 
 @ApplyOptions<Command.Options>({
-  description: '-',
-  preconditions: ['BotOwnerOnly']
+  description: "-",
+  preconditions: ["BotOwnerOnly"]
 })
 export class CommandHandler extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
@@ -24,31 +22,20 @@ export class CommandHandler extends Command {
       builder //
         .setName(this.name)
         .setDescription(this.description)
-        .addStringOption((input) => input.setName('code').setDescription('-').setRequired(true))
+        .addStringOption((input) => input.setName("code").setDescription("-").setRequired(true))
     );
   }
 
   public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
     await interaction.deferReply({ ephemeral: true });
 
-    const code = interaction.options.getString('code', true);
+    const code = interaction.options.getString("code", true);
 
     try {
       const result = await clean(eval(code));
-      interaction.editReply(`\`\`\`\n${result}\n\`\`\`` ?? 'No output');
+      interaction.editReply(`\`\`\`\n${result ?? "No output"}\n\`\`\``);
     } catch (e: any) {
       interaction.editReply(`\`\`\`\n${await clean(e)}\n\`\`\``);
-    }
-  }
-
-  public override async messageRun(message: Message, args: Args) {
-    const code = await args.rest('string').catch(() => '');
-
-    try {
-      const result = await clean(eval(code));
-      reply(message, `\`\`\`\n${result}\n\`\`\`` ?? 'No output');
-    } catch (e: any) {
-      reply(message, `\`\`\`\n${await clean(e)}\n\`\`\``);
     }
   }
 }

@@ -1,6 +1,5 @@
-import { type CommandInteraction, type ContextMenuCommandInteraction, type Message } from 'discord.js';
-import { AllFlowsPrecondition } from '@sapphire/framework';
-import { GuildUtility } from '..';
+import { type CommandInteraction, type ContextMenuCommandInteraction, type Message } from "discord.js";
+import { AllFlowsPrecondition } from "@sapphire/framework";
 
 export class UserPrecondition extends AllFlowsPrecondition {
   public override async messageRun(message: Message) {
@@ -16,12 +15,12 @@ export class UserPrecondition extends AllFlowsPrecondition {
   }
 
   private async checkUser(id: string) {
-    const guildMember = await GuildUtility.getGuildMember(id);
-    return guildMember && GuildUtility.isIntern(guildMember) ? this.ok() : this.error();
+    const guildMember = await this.container.utilities.guild.getGuildMember(id);
+    return guildMember && this.container.utilities.guild.isIntern(guildMember) ? this.ok() : this.error();
   }
 }
 
-declare module '@sapphire/framework' {
+declare module "@sapphire/framework" {
   interface Preconditions {
     InternOnly: never;
   }

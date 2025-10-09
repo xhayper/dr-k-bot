@@ -1,9 +1,8 @@
-import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
-import { type ModalSubmitInteraction } from 'discord.js';
-import { GuildUtility, VerificationUtility } from '..';
-import { ApplyOptions } from '@sapphire/decorators';
-import { VerificationTicket } from '../database';
-import config from '../config';
+import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
+import { type ModalSubmitInteraction } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
+import { VerificationTicket } from "../database";
+import config from "../config";
 
 @ApplyOptions<InteractionHandler.Options>({
   interactionHandlerType: InteractionHandlerTypes.ModalSubmit
@@ -12,11 +11,11 @@ export class Handler extends InteractionHandler {
   public async run(interaction: ModalSubmitInteraction) {
     await interaction.deferReply({ ephemeral: true });
 
-    if ((await VerificationUtility.getTicketsFromUserId(interaction.user.id)).length > 0) {
-      return void (await interaction.editReply({ content: 'You already have a ticket! Please be patient!' }));
+    if ((await this.container.utilities.verification.getTicketsFromUserId(interaction.user.id)).length > 0) {
+      return void (await interaction.editReply({ content: "You already have a ticket! Please be patient!" }));
     }
 
-    const randomTicketId = await VerificationUtility.getUniqueTicketId();
+    const randomTicketId = await this.container.utilities.verification.getUniqueTicketId();
 
     const transformedAnswer = config.questions.map((quest, index) => ({
       question: quest.label,
@@ -30,7 +29,7 @@ export class Handler extends InteractionHandler {
 
     if (emptyAnswer.length > 0)
       return void (await interaction.editReply({
-        content: `Answer for question ${emptyAnswer.map((questionNumber) => questionNumber + 1).join(', ')} is empty!`
+        content: `Answer for question ${emptyAnswer.map((questionNumber) => questionNumber + 1).join(", ")} is empty!`
       }));
 
     const shortAnswer = transformedAnswer.reduce((arr, answerData, index) => {
@@ -43,31 +42,31 @@ export class Handler extends InteractionHandler {
       return void (await interaction.editReply({
         content: `Answer for question ${shortAnswer
           .map((questionNumber) => questionNumber + 1)
-          .join(', ')} is too short!`
+          .join(", ")} is too short!`
       }));
 
     const verificationData = {
       id: randomTicketId,
       discordId: interaction.user.id,
-      messageId: 'undefined',
+      messageId: "undefined",
       answers: JSON.stringify(transformedAnswer)
     };
 
-    if (GuildUtility.verificationLogChannel) {
-      const verifyMessage = await VerificationUtility.sendTicketInformation(
-        GuildUtility.verificationLogChannel,
+    if (this.container.utilities.guild.verificationLogChannel) {
+      const verifyMessage = await this.container.utilities.verification.sendTicketInformation(
+        this.container.utilities.guild.verificationLogChannel,
         verificationData
       );
-      verificationData.messageId = verifyMessage ? verifyMessage.id : 'undefined';
+      verificationData.messageId = verifyMessage ? verifyMessage.id : "undefined";
     }
 
     await VerificationTicket.create({ data: verificationData });
 
-    await interaction.editReply({ content: 'Your submission was received successfully!' });
+    await interaction.editReply({ content: "Your submission was received successfully!" });
   }
 
   public parse(interaction: ModalSubmitInteraction) {
-    if (interaction.customId !== 'verification') return this.none();
+    if (interaction.customId !== "verification") return this.none();
 
     return this.some();
   }
