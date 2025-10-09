@@ -1,6 +1,3 @@
-// Import source-map-support
-import "source-map-support/register";
-
 // Load enviroment variable
 import "dotenv/config";
 
