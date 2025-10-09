@@ -2,7 +2,7 @@ import { type GuildMember, type PartialGuildMember } from "discord.js";
 import { Listener } from "@sapphire/framework";
 import config from "../config";
 
-export class UserEvent extends Listener {
+export class GuildMemberRemoveEvent extends Listener {
   public async run(member: GuildMember | PartialGuildMember) {
     if (member.partial || member.user.bot || member.guild.id !== config.guildId) return;
 

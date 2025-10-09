@@ -2,7 +2,7 @@ import { type Message, type PartialMessage } from "discord.js";
 import { Listener } from "@sapphire/framework";
 import config from "../config";
 
-export class UserEvent extends Listener {
+export class MessageDeleteEvent extends Listener {
   public async run(message: Message | PartialMessage) {
     if (
       message.partial ||

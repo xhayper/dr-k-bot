@@ -1,7 +1,7 @@
 import { type MessageReaction, type PartialMessageReaction, type User, type PartialUser } from "discord.js";
 import { Listener } from "@sapphire/framework";
 
-export class UserEvent extends Listener {
+export class MessageReactionRemoveEvent extends Listener {
   public run(reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) {
     if (reaction.partial || user.partial) return;
     this.container.utilities.guild.sendAuditLog({

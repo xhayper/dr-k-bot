@@ -16,7 +16,7 @@ const randomStatus: ActivityOptions[] = [
   }
 ];
 
-export class UserEvent extends Listener {
+export class ClientReadyEvent extends Listener {
   public run() {
     const updateActivity = () => {
       this.container.client.user!.setActivity(randomStatus[Math.floor(Math.random() * randomStatus.length)]);

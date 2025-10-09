@@ -5,7 +5,7 @@ import fs from "node:fs";
 
 const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, "../../insult.json"), "utf8")) as string[];
 
-export class UserEvent extends Listener {
+export class MessageCreateEvent extends Listener {
   public async run(message: Message) {
     const splitText = message.content.split(" ");
     if (
