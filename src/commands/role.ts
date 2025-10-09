@@ -25,6 +25,7 @@ export class CommandHandler extends Command {
               .addChoices(...Object.keys(config.toggleRole).map((roleName) => ({ name: roleName, value: roleName })))
           ),
       {
+        idHints: ["1425880757989146675"],
         guildIds: [config.guildId]
       }
     );

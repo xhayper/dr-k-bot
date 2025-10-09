@@ -13,16 +13,18 @@ const clean = async (text: any): Promise<string> => {
 };
 
 @ApplyOptions<Command.Options>({
-  description: "-",
+  description: "Evaluate code",
   preconditions: ["BotOwnerOnly"]
 })
 export class CommandHandler extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) =>
-      builder //
-        .setName(this.name)
-        .setDescription(this.description)
-        .addStringOption((input) => input.setName("code").setDescription("-").setRequired(true))
+    registry.registerChatInputCommand(
+      (builder) =>
+        builder //
+          .setName(this.name)
+          .setDescription(this.description)
+          .addStringOption((input) => input.setName("code").setDescription("-").setRequired(true)),
+      { idHints: ["1425879632112254989"] }
     );
   }
 

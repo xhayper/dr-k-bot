@@ -16,6 +16,7 @@ export class CommandHandler extends Command {
           .setDescription(this.description)
           .addUserOption((option) => option.setName("member").setDescription("-").setRequired(true)),
       {
+        idHints: ["1425880756408025159"],
         guildIds: [config.guildId]
       }
     );

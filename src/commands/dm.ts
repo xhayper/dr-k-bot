@@ -47,6 +47,7 @@ export class CommandHandler extends Subcommand {
               )
           ),
       {
+        idHints: ["1425880752813510779"],
         guildIds: [config.guildId]
       }
     );

@@ -18,6 +18,7 @@ export class CommandHandler extends Command {
             option.setName("member").setDescription("The member to welcome").setRequired(true)
           ),
       {
+        idHints: ["1425880758450520218"],
         guildIds: [config.guildId]
       }
     );

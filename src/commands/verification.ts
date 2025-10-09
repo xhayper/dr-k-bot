@@ -62,12 +62,12 @@ export class CommandHandler extends Subcommand {
           .setName(this.name)
           .setDescription(this.description)
           .addSubcommand((builder: any) =>
-            builder.setName("accept").setDescription("-").addStringOption(verificationTicketIdOption)
+            builder.setName("accept").setDescription("Accept a ticket").addStringOption(verificationTicketIdOption)
           )
           .addSubcommand((builder: any) =>
             builder
               .setName("decline")
-              .setDescription("-")
+              .setDescription("Decline a ticket")
               .addStringOption(verificationTicketIdOption)
               .addStringOption((option: any) =>
                 option.setName("reason").setDescription("The reason for declining the request").setRequired(true)
@@ -83,6 +83,7 @@ export class CommandHandler extends Subcommand {
             builder.setName("list").setDescription("Show unfinished verification tickets")
           ),
       {
+        idHints: ["1425880754981965884"],
         guildIds: [config.guildId]
       }
     );
