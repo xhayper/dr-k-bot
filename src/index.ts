@@ -3,6 +3,7 @@ import "dotenv/config";
 
 // Load sapphire plugin
 import "@sapphire/plugin-logger/register";
+import "@sapphire/plugin-utilities-store/register";
 import "@sapphire/plugin-subcommands/register";
 
 import { LogLevel, SapphireClient } from "@sapphire/framework";
