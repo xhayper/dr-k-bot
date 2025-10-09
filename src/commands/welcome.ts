@@ -4,7 +4,7 @@ import { Command } from "@sapphire/framework";
 import config from "../config";
 
 @ApplyOptions<Command.Options>({
-  description: "Give the target user a warm welcome~",
+  description: "Give the target meber a warm welcome~",
   preconditions: ["ChangedGuildOnly", ["HeadSecurityOnly", "SeniorSecurityOnly", "SecurityOnly", "InternOnly"]]
 })
 export class CommandHandler extends Command {
