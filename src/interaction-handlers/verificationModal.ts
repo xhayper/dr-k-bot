@@ -1,5 +1,5 @@
 import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
-import { type ModalSubmitInteraction } from "discord.js";
+import { MessageFlags, type ModalSubmitInteraction } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 import { VerificationTicket } from "../database";
 import config from "../config";
@@ -9,7 +9,7 @@ import config from "../config";
 })
 export class Handler extends InteractionHandler {
   public async run(interaction: ModalSubmitInteraction) {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
     if ((await this.container.utilities.verification.getTicketsFromUserId(interaction.user.id)).length > 0) {
       return void (await interaction.editReply({ content: "You already have a ticket! Please be patient!" }));

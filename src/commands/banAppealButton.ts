@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Command } from "@sapphire/framework";
 
@@ -18,7 +18,7 @@ export class CommandHandler extends Command {
   }
 
   public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     if (!interaction.channel?.isSendable()) return;
     await interaction.channel?.send({
       embeds: [this.container.utilities.embed.BAN_APPEAL_BUTTON().toJSON()],

@@ -1,6 +1,6 @@
 import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
+import { MessageFlags, type ButtonInteraction } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
-import { type ButtonInteraction } from "discord.js";
 
 @ApplyOptions<InteractionHandler.Options>({
   interactionHandlerType: InteractionHandlerTypes.Button
@@ -8,7 +8,7 @@ import { type ButtonInteraction } from "discord.js";
 export class Handler extends InteractionHandler {
   public async run(interaction: ButtonInteraction) {
     if ((await this.container.utilities.verification.getTicketsFromUserId(interaction.user.id)).length > 0) {
-      await interaction.reply({ ephemeral: true, content: "You already have a ticket! Please be patient!" });
+      await interaction.reply({ flags: MessageFlags.Ephemeral, content: "You already have a ticket! Please be patient!" });
       return;
     }
 

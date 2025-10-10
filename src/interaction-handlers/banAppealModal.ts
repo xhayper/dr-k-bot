@@ -1,5 +1,5 @@
 import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
-import { type ModalSubmitInteraction } from "discord.js";
+import { MessageFlags, type ModalSubmitInteraction } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 import config from "../config";
 
@@ -8,7 +8,7 @@ import config from "../config";
 })
 export class Handler extends InteractionHandler {
   public async run(interaction: ModalSubmitInteraction) {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
     const transformedAnswer = config.appealQuestions.map((quest, index) => ({
       question: quest.label,

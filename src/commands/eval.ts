@@ -1,5 +1,6 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { Command } from "@sapphire/framework";
+import { MessageFlags } from "discord.js";
 import { inspect } from "node:util";
 
 const clean = async (text: any): Promise<string> => {
@@ -29,7 +30,7 @@ export class CommandHandler extends Command {
   }
 
   public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
     const code = interaction.options.getString("code", true);
 

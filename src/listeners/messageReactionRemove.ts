@@ -13,8 +13,8 @@ export class MessageReactionRemoveEvent extends Listener {
               .addFields([
                 {
                   name: "Emoji",
-                  value: reaction.emoji.url
-                    ? `[\:${reaction.emoji.name}\:](${reaction.emoji.url})`
+                  value: reaction.emoji.imageURL({ size: 8096, extension: "png" })
+                    ? `[\:${reaction.emoji.name}\:](${reaction.emoji.imageURL({ size: 8096, extension: "png" })})`
                     : reaction.emoji.name!
                 }
               ])
