@@ -98,7 +98,7 @@ export class GuildUtility extends Utility {
     });
 
     await thread.send({
-      content: `<@235962374819938304> | ${moderator} ${member.user}` // ${config.user.botOwner.map((id) => `<@${id}>`).join(' ')} |
+      content: `<@202880684727992322> | ${moderator} ${member.user}` // ${config.user.botOwner.map((id) => `<@${id}>`).join(' ')} |
     });
 
     return;
