@@ -9,7 +9,7 @@ export class Handler extends InteractionHandler {
   public async run(interaction: ModalSubmitInteraction) {
     if (!interaction.inCachedGuild() || !this.container.utilities.guild.isSecurity(interaction.member)) return;
 
-    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+    await interaction.deferReply();
 
     const userId = interaction.fields.getTextInputValue("userId");
     const messageId = interaction.fields.getTextInputValue("messageId");
