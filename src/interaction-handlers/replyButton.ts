@@ -22,13 +22,13 @@ export class Handler extends InteractionHandler {
     const userIdInput = new TextInputBuilder()
       .setCustomId("userId")
       .setStyle(TextInputStyle.Short)
-      .setValue(userId)
+      .setValue(userId ?? "")
       .setRequired(true);
 
     const messageIdInput = new TextInputBuilder()
       .setCustomId("messageId")
       .setStyle(TextInputStyle.Short)
-      .setValue(messageId)
+      .setValue(messageId ?? "")
       .setRequired(false);
 
     const messageContentInput = new TextInputBuilder()
@@ -69,7 +69,7 @@ export class Handler extends InteractionHandler {
   }
 
   public parse(interaction: ButtonInteraction) {
-    if (!interaction.customId.startsWith("reply_")) return this.none();
+    if (!interaction.customId.startsWith("reply")) return this.none();
     return this.some();
   }
 }
