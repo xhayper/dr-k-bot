@@ -58,6 +58,22 @@ export class Handler extends InteractionHandler {
           interaction.editReply("Unable to send message");
           console.error(err);
         });
+
+    if (interaction.message)
+      interaction.message.edit({
+        embeds: [
+          {
+            ...message!.embeds[0]!.data,
+            footer: {
+              text: `Last reply by ${interaction.user.username} @ <t:${Math.floor(Date.now() / 1000)}:f>`,
+              icon_url:
+                interaction.user.avatarURL({
+                  size: 4096
+                }) ?? interaction.user.defaultAvatarURL
+            }
+          }
+        ]
+      });
   }
 
   public parse(interaction: ModalSubmitInteraction) {
