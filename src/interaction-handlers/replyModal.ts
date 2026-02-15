@@ -1,6 +1,6 @@
 import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
-import { MessageFlags, ModalSubmitInteraction } from "discord.js";
+import { AttachmentBuilder, MessageFlags, ModalSubmitInteraction } from "discord.js";
 
 @ApplyOptions<InteractionHandler.Options>({
   interactionHandlerType: InteractionHandlerTypes.ModalSubmit
@@ -25,6 +25,14 @@ export class Handler extends InteractionHandler {
     if (!channel) return interaction.editReply("No DM history with that user!");
 
     const message = messageId ? await channel.messages.fetch(messageId).catch(() => undefined) : undefined;
+
+    const files = (optionalFile?.values() ?? []).map(
+            (attachment) =>
+              new AttachmentBuilder((attachment as any).attachment, {
+                name: attachment.name ?? undefined,
+                description: attachment.description ?? ""
+              })
+          )
 
     if (message)
       message
