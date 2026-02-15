@@ -19,17 +19,16 @@ export class Handler extends InteractionHandler {
 
     const modal = new ModalBuilder().setCustomId("replyModal").setTitle("Reply to message");
 
-    const userIdInput = new TextInputBuilder()
-      .setCustomId("userId")
-      .setStyle(TextInputStyle.Short)
-      .setValue(userId ?? "")
-      .setRequired(true);
+    const userIdInput = new TextInputBuilder().setCustomId("userId").setStyle(TextInputStyle.Short).setRequired(true);
+
+    if (userId) userIdInput.setValue(userId);
 
     const messageIdInput = new TextInputBuilder()
       .setCustomId("messageId")
       .setStyle(TextInputStyle.Short)
-      .setValue(messageId ?? "")
       .setRequired(false);
+
+    if (messageId) messageIdInput.setValue(messageId);
 
     const messageContentInput = new TextInputBuilder()
       .setCustomId("messageContent")
