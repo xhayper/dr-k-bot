@@ -1,4 +1,4 @@
-import { AttachmentBuilder, GuildMember, MessageFlags, ModalSubmitInteraction } from "discord.js";
+import { AttachmentBuilder, MessageFlags, ModalSubmitInteraction } from "discord.js";
 import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
 
@@ -9,7 +9,9 @@ export class Handler extends InteractionHandler {
   public async run(interaction: ModalSubmitInteraction) {
     if (!interaction.inCachedGuild() || !this.container.utilities.guild.isSecurity(interaction.member)) return;
 
-    await interaction.deferReply();
+    await interaction.deferReply({
+      flags: MessageFlags.Ephemeral
+    });
 
     const userId = interaction.fields.getTextInputValue("userId");
     const messageId = interaction.fields.getTextInputValue("messageId");
@@ -63,9 +65,9 @@ export class Handler extends InteractionHandler {
       interaction.message.edit({
         embeds: [
           {
-            ...message!.embeds[0]!.data,
+            ...interaction.message!.embeds[0]!.data,
             footer: {
-              text: `Last reply by ${interaction.user.username} @ <t:${Math.floor(Date.now() / 1000)}:f>`,
+              text: `Last reply by ${interaction.user.username}`,
               icon_url:
                 interaction.user.avatarURL({
                   size: 4096
