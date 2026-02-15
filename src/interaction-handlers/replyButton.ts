@@ -4,6 +4,7 @@ import {
   FileUploadBuilder,
   LabelBuilder,
   ModalBuilder,
+  TextDisplayBuilder,
   TextInputBuilder,
   TextInputStyle,
   type ButtonInteraction
@@ -27,7 +28,8 @@ export class Handler extends InteractionHandler {
     const messageIdInput = new TextInputBuilder()
       .setCustomId("messageId")
       .setStyle(TextInputStyle.Short)
-      .setValue(messageId);
+      .setValue(messageId)
+      .setRequired(false);
 
     const messageContentInput = new TextInputBuilder()
       .setCustomId("messageContent")
@@ -42,9 +44,11 @@ export class Handler extends InteractionHandler {
       .setTextInputComponent(userIdInput);
 
     const messageIdLabel = new LabelBuilder()
-      .setLabel("Message ID")
+      .setLabel("Message ID (Optional)")
       .setDescription("The ID of the message to reply to")
       .setTextInputComponent(messageIdInput);
+
+    const messageReplyLabel = new TextDisplayBuilder().setContent("Choose one or both of the below");
 
     const messageContentLabel = new LabelBuilder()
       .setLabel("The content of the message to reply")
@@ -56,7 +60,10 @@ export class Handler extends InteractionHandler {
       .setDescription("If you want to attach any file, put it here")
       .setFileUploadComponent(optionalFileInput);
 
-    modal.addLabelComponents(userIdLabel, messageIdLabel, messageContentLabel, fileInputLabel);
+    modal
+      .addLabelComponents(userIdLabel, messageIdLabel)
+      .addTextDisplayComponents(messageReplyLabel)
+      .addLabelComponents(messageContentLabel, fileInputLabel);
 
     await interaction.showModal(modal);
   }

@@ -42,7 +42,7 @@ export class Handler extends InteractionHandler {
           content: messageContent,
           files: Object.values(optionalFile ?? {})
         })
-        .then(() => interaction.editReply("Reply sent! (Message was not found, so it was send instead)"))
+        .then(() => interaction.editReply("Reply sent!"))
         .catch(() => interaction.editReply("Unable to send message"));
   }
 
