@@ -21,7 +21,7 @@ export class CommandHandler extends Command {
           .setName(this.name)
           .setDescription(this.description),
       {
-        idHints: []
+        idHints: ["1472607272298479706"]
       }
     );
   }
