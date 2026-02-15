@@ -14,8 +14,6 @@ export class Handler extends InteractionHandler {
     const messageContent = interaction.fields.getTextInputValue("messageContent");
     const optionalFile = interaction.fields.getUploadedFiles("optionalFile");
 
-    console.log(userId, messageId, messageContent, optionalFile);
-
     if (!messageContent && !optionalFile) return interaction.editReply("Either a message or file is needed!");
 
     const user = await this.container.client.users.fetch(userId).catch(() => undefined);
@@ -35,7 +33,10 @@ export class Handler extends InteractionHandler {
           files: Object.values(optionalFile ?? {})
         })
         .then(() => interaction.editReply("Reply sent!"))
-        .catch(() => interaction.editReply("Unable to send message!"));
+        .catch((err) => {
+          interaction.editReply("Unable to send message!");
+          console.error(err);
+        });
     else
       user
         .send({
@@ -43,7 +44,10 @@ export class Handler extends InteractionHandler {
           files: Object.values(optionalFile ?? {})
         })
         .then(() => interaction.editReply("Reply sent!"))
-        .catch(() => interaction.editReply("Unable to send message"));
+        .catch((err) => {
+          interaction.editReply("Unable to send message");
+          console.error(err);
+        });
   }
 
   public parse(interaction: ModalSubmitInteraction) {
