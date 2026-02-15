@@ -17,7 +17,7 @@ export class Handler extends InteractionHandler {
   public async run(interaction: ButtonInteraction) {
     const [userId, messageId] = interaction.customId.replace("reply_", "").split("_");
 
-    const modal = new ModalBuilder().setCustomId("replyModal").setTitle("Reply to message");
+    const modal = new ModalBuilder().setCustomId("replyModal").setTitle("Reply to user");
 
     const userIdInput = new TextInputBuilder().setCustomId("userId").setStyle(TextInputStyle.Short).setRequired(true);
 
