@@ -1,6 +1,6 @@
+import { AttachmentBuilder, MessageFlags, ModalSubmitInteraction } from "discord.js";
 import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
-import { AttachmentBuilder, MessageFlags, ModalSubmitInteraction } from "discord.js";
 
 @ApplyOptions<InteractionHandler.Options>({
   interactionHandlerType: InteractionHandlerTypes.ModalSubmit
@@ -14,7 +14,8 @@ export class Handler extends InteractionHandler {
     const messageContent = interaction.fields.getTextInputValue("messageContent");
     const optionalFile = interaction.fields.getUploadedFiles("optionalFile");
 
-    if (!messageContent && !optionalFile) return interaction.editReply("Either a message or file is needed!");
+    if (!messageContent && optionalFile?.size === 0)
+      return interaction.editReply("Either a message or file is needed!");
 
     const user = await this.container.client.users.fetch(userId).catch(() => undefined);
 
@@ -26,19 +27,18 @@ export class Handler extends InteractionHandler {
 
     const message = messageId ? await channel.messages.fetch(messageId).catch(() => undefined) : undefined;
 
-    const files = (optionalFile?.values() ?? []).map(
-            (attachment) =>
-              new AttachmentBuilder((attachment as any).attachment, {
-                name: attachment.name ?? undefined,
-                description: attachment.description ?? ""
-              })
-          )
+    const files = Array.from(optionalFile?.values() ?? []).map((attachment) =>
+      new AttachmentBuilder((attachment as any).attachment, {
+        name: attachment.name ?? undefined,
+        description: attachment.description ?? ""
+      }).setSpoiler(attachment.spoiler)
+    );
 
     if (message)
       message
         ?.reply({
           content: messageContent,
-          files: Object.values(optionalFile ?? {})
+          files: files
         })
         .then(() => interaction.editReply("Reply sent!"))
         .catch((err) => {
@@ -49,7 +49,7 @@ export class Handler extends InteractionHandler {
       user
         .send({
           content: messageContent,
-          files: Object.values(optionalFile ?? {})
+          files: files
         })
         .then(() => interaction.editReply("Reply sent!"))
         .catch((err) => {

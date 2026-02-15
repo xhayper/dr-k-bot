@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.4.0",
+    "@prisma/client": "^7.4.0",
     "@sapphire/decorators": "^6.2.0",
     "@sapphire/framework": "^5.5.0",
     "@sapphire/plugin-logger": "^4.1.0",
