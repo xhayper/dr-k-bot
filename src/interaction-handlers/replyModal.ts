@@ -61,11 +61,11 @@ export class Handler extends InteractionHandler {
           console.error(err);
         });
 
-    if (interaction.message)
+    if (interaction.message && interaction.message.embeds.length > 0)
       interaction.message.edit({
         embeds: [
           {
-            ...interaction.message!.embeds[0]!.data,
+            ...interaction.message.embeds[0]!.data,
             footer: {
               text: `Last reply by ${interaction.user.username}`,
               icon_url:
