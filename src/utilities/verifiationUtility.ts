@@ -119,6 +119,7 @@ export class VerificationUtility extends Utility {
             new ActionRowBuilder<ButtonBuilder>().addComponents([
               new ButtonBuilder().setLabel("Accept").setCustomId("verify_accept").setStyle(ButtonStyle.Success),
               new ButtonBuilder().setLabel("Decline").setCustomId("verify_decline").setStyle(ButtonStyle.Danger),
+              new ButtonBuilder().setLabel("Reply").setCustomId(`reply_${data.discordId}`).setStyle(ButtonStyle.Danger),
               new ButtonBuilder().setLabel("Ticket").setCustomId("verify_ticket").setStyle(ButtonStyle.Secondary)
             ])
           ]
