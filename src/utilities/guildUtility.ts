@@ -23,6 +23,7 @@ export class GuildUtility extends Utility {
   public primaryGeneralChannel: GuildTextBasedChannel | undefined;
   public verificationThreadChannel: TextChannel | undefined;
   public banAppealLogChannel: GuildTextBasedChannel | undefined;
+  public dmLogChannel: GuildTextBasedChannel | undefined;
 
   public guild: Guild | undefined;
 
@@ -61,6 +62,9 @@ export class GuildUtility extends Utility {
           .catch(() => undefined);
         this.banAppealLogChannel =
           (banAppealLogChannel && banAppealLogChannel.isTextBased() && banAppealLogChannel) || undefined;
+
+        const dmLogChannel = await guild.channels.fetch(config.channel["dm"]).catch(() => undefined);
+        this.dmLogChannel = (dmLogChannel && dmLogChannel.isTextBased() && dmLogChannel) || undefined;
       })
       .catch(() => null);
   }

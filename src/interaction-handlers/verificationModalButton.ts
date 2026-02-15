@@ -8,7 +8,10 @@ import { ApplyOptions } from "@sapphire/decorators";
 export class Handler extends InteractionHandler {
   public async run(interaction: ButtonInteraction) {
     if ((await this.container.utilities.verification.getTicketsFromUserId(interaction.user.id)).length > 0) {
-      await interaction.reply({ flags: MessageFlags.Ephemeral, content: "You already have a ticket! Please be patient!" });
+      await interaction.reply({
+        flags: MessageFlags.Ephemeral,
+        content: "You already have a ticket! Please be patient!"
+      });
       return;
     }
 

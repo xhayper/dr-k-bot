@@ -23,7 +23,8 @@
     "role-selection": "",
     "art-channel": "",
     "image-storage": "",
-    "ban-appeal-logs": ""
+    "ban-appeal-logs": "",
+    "dm": ""
   },
   "toggleRole": {
     "": ""

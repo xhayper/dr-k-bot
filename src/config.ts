@@ -30,6 +30,7 @@ export default config as {
     "art-channel": string;
     "image-storage": string;
     "ban-appeal-logs": string;
+    dm: string;
   };
   toggleRole: {
     [key: string]: string;
