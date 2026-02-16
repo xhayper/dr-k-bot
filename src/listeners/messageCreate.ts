@@ -1,6 +1,6 @@
+import { AttachmentBuilder, type Message } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Listener } from "@sapphire/framework";
-import { type Message } from "discord.js";
 import path from "node:path";
 import fs from "node:fs";
 
@@ -15,7 +15,12 @@ export class MessageCreateEvent extends Listener {
 
     if (message.channel.isDMBased()) {
       this.container.utilities.guild.dmLogChannel?.send({
-        content: message.attachments.map((x) => (x.spoiler ? `||${x.url}||` : x.url)).join("\n"),
+        files: Array.from(message.attachments.values()).map((attachment) =>
+          new AttachmentBuilder((attachment as any).attachment, {
+            name: attachment.name ?? undefined,
+            description: attachment.description ?? ""
+          }).setSpoiler(attachment.spoiler)
+        ),
         embeds: [
           {
             author: {

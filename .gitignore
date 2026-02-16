@@ -270,6 +270,7 @@ $RECYCLE.BIN/
 src/generated/
 
 config.json
+dev.db
 
 # Make your own insult smh
 insult.json

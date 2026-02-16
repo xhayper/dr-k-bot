@@ -10,7 +10,7 @@
     "build": "del-cli -f src/generated && prisma generate && del-cli -f dist && tsc"
   },
   "dependencies": {
-    "@prisma/adapter-better-sqlite3": "^7.4.0",
+    "@prisma/adapter-libsql": "^7.4.0",
     "@prisma/client": "^7.4.0",
     "@sapphire/decorators": "^6.2.0",
     "@sapphire/framework": "^5.5.0",
@@ -18,7 +18,6 @@
     "@sapphire/plugin-subcommands": "^7.0.1",
     "@sapphire/plugin-utilities-store": "^2.0.3",
     "@sapphire/ts-config": "^5.0.3",
-    "better-sqlite3": "^12.6.2",
     "discord-api-types": "^0.38.39",
     "discord.js": "^14.25.1",
     "dotenv": "^17.3.1"
