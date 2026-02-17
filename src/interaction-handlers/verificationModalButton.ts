@@ -7,20 +7,20 @@ import { ApplyOptions } from "@sapphire/decorators";
 })
 export class Handler extends InteractionHandler {
   public async run(interaction: ButtonInteraction) {
-    if ((await this.container.utilities.verification.getTicketsFromUserId(interaction.user.id)).length > 0) {
-      await interaction.reply({
+    const hasTicket = await this.container.utilities.ticket.hasUser(interaction.user.id);
+
+    if (hasTicket) {
+      return void (await interaction.reply({
         flags: MessageFlags.Ephemeral,
         content: "You already have a ticket! Please be patient!"
-      });
-      return;
+      }));
     }
 
-    await interaction.showModal(this.container.utilities.modal.createApplicationModal());
+    return void (await interaction.showModal(this.container.utilities.modal.createApplicationModal()));
   }
 
   public parse(interaction: ButtonInteraction) {
     if (interaction.customId !== "verify") return this.none();
-
     return this.some();
   }
 }

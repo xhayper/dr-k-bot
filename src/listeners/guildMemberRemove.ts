@@ -6,13 +6,12 @@ export class GuildMemberRemoveEvent extends Listener {
   public async run(member: GuildMember | PartialGuildMember) {
     if (member.partial || member.user.bot || member.guild.id !== config.guildId) return;
 
-    const VerificationTicketList = await this.container.utilities.verification.getTicketsFromUserId(member.user.id);
-    if (!VerificationTicketList) return;
+    const verificationTicket = await this.container.utilities.verification.getTicketFromUserId(member.user.id);
 
-    for (const ticket of VerificationTicketList) {
-      this.container.utilities.verification.deleteTicket(ticket, {
-        deleteType: "LEAVE"
-      });
-    }
+    if (!verificationTicket) return;
+
+    await this.container.utilities.verification.deleteTicket(verificationTicket.id, {
+      deleteType: "LEAVE"
+    });
   }
 }

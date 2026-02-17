@@ -9,7 +9,7 @@ datasource db {
 
 model VerificationTicket {
   id        String   @id @default(uuid())
-  discordId String
+  discordId String   @unique
   messageId String?  @unique
   // FYI, this is json but stringified, string sqlite doesn't support JSON natively
   // type: { question: string; answer: string }[]

@@ -1,7 +1,7 @@
-import { VerificationTicket, VerificationTicketType } from "../database";
 import { EmbedBuilder, AttachmentBuilder } from "discord.js";
 import { Subcommand } from "@sapphire/plugin-subcommands";
 import { ApplyOptions } from "@sapphire/decorators";
+import { Ticket } from "../utilities/ticketUtility";
 import { container } from "@sapphire/framework";
 import config from "../config";
 
@@ -11,11 +11,11 @@ const verificationTicketIdOption = (option: any) => {
 
 const getTicketFromInteraction = async (
   interaction: Subcommand.ChatInputCommandInteraction
-): Promise<VerificationTicketType | null> => {
+): Promise<Ticket | null> => {
   const ticket = await container.utilities.verification.getTicketFromId(interaction.options.getString("id", true));
 
   if (!ticket) {
-    interaction.editReply({
+    await interaction.editReply({
       embeds: [container.utilities.embed.CANT_FIND_TICKET().toJSON()]
     });
 
@@ -25,22 +25,19 @@ const getTicketFromInteraction = async (
   return ticket;
 };
 
-const createVerificationListAttachment = (verificationTickets: VerificationTicketType[]): AttachmentBuilder => {
+const createVerificationListAttachment = (verificationTickets: Ticket[]): AttachmentBuilder => {
   return new AttachmentBuilder(
     Buffer.from(
       verificationTickets
         .map((ticket) => {
-          return `User ID: ${ticket.discordId}\nTicket ID: ${
-            ticket.id
-          }\n--------------------------------------------------\n${JSON.parse(ticket.answers)
-            .map((answerData: { question: string; answer: string }) => `${answerData.question}: ${answerData.answer}`)
-            .join("\n\n")}`;
+          return `User ID: ${ticket.discordId}
+Ticket ID: ${ticket.id}
+--------------------------------------------------
+${ticket.answers.map((answer) => `${answer.question}: ${answer.answer}`).join("\n\n")}`;
         })
         .join("\n\n\n")
     ),
-    {
-      name: "verification-tickets.txt"
-    }
+    { name: "verification-tickets.txt" }
   );
 };
 
@@ -96,14 +93,15 @@ export class CommandHandler extends Subcommand {
     if (!ticket) return;
 
     const member = await this.container.utilities.guild.getGuildMember(ticket.discordId);
+
     if (!member)
-      return await interaction.editReply({
+      return interaction.editReply({
         embeds: [this.container.utilities.embed.CANT_FIND_USER().toJSON()]
       });
 
     await member.roles.remove(config.role.unverified);
 
-    await this.container.utilities.verification.deleteTicket(ticket!, {
+    await this.container.utilities.verification.deleteTicket(ticket.id, {
       deleteType: "ACCEPTED",
       who: interaction.user
     });
@@ -127,9 +125,10 @@ export class CommandHandler extends Subcommand {
 
     const reason = interaction.options.getString("reason", true);
 
-    const user = await this.container.client.users.fetch(ticket!.discordId).catch(() => undefined);
-    if (user)
-      user
+    const user = await this.container.client.users.fetch(ticket.discordId).catch(() => undefined);
+
+    if (user) {
+      await user
         .send({
           embeds: [
             this.container.utilities.embed
@@ -143,8 +142,9 @@ export class CommandHandler extends Subcommand {
           ]
         })
         .catch(() => undefined);
+    }
 
-    await this.container.utilities.verification.deleteTicket(ticket!, {
+    await this.container.utilities.verification.deleteTicket(ticket.id, {
       deleteType: "DECLINED",
       who: interaction.user
     });
@@ -154,7 +154,7 @@ export class CommandHandler extends Subcommand {
         this.container.utilities.embed
           .SUCCESS_COLOR(
             new EmbedBuilder({
-              description: `${user} has been declined!`
+              description: `${user ?? "User"} has been declined!`
             })
           )
           .toJSON()
@@ -169,21 +169,22 @@ export class CommandHandler extends Subcommand {
     if (!ticket) return;
 
     await interaction.editReply({
-      embeds: [(await this.container.utilities.embed.VERIFICATION_INFO(ticket as VerificationTicketType)).toJSON()]
+      embeds: [(await this.container.utilities.embed.VERIFICATION_INFO(ticket)).toJSON()]
     });
   }
 
   public async chatInputList(interaction: Subcommand.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
-    const verificationTickets = await VerificationTicket.findMany();
+    const tickets = [...this.container.utilities.ticket.tickets.values()];
 
-    if (0 >= verificationTickets.length)
-      return await interaction.editReply("There are no verification tickets as of right now.");
+    if (!tickets.length) {
+      return interaction.editReply("There are no verification tickets as of right now.");
+    }
 
     await interaction.editReply({
-      content: `There's currently ${verificationTickets.length} verification ticket(s)!`,
-      files: [createVerificationListAttachment(verificationTickets)]
+      content: `There's currently ${tickets.length} verification ticket(s)!`,
+      files: [createVerificationListAttachment(tickets)]
     });
   }
 }

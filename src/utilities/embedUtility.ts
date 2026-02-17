@@ -1,7 +1,7 @@
-import { type PartialVerificationData } from "./verifiationUtility";
 import { Utility } from "@sapphire/plugin-utilities-store";
 import { type User, EmbedBuilder } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
+import { Ticket } from "./ticketUtility";
 
 @ApplyOptions<Utility.Options>({
   name: "embed"
@@ -92,7 +92,7 @@ export class EmbedUtility extends Utility {
     return this.ERROR_COLOR(new EmbedBuilder({ description: "I have cancelled the operation!" }));
   }
 
-  public async VERIFICATION_INFO(data: PartialVerificationData): Promise<EmbedBuilder> {
+  public async VERIFICATION_INFO(data: Ticket): Promise<EmbedBuilder> {
     const targetUser = await this.container.client.users.fetch(data.discordId);
 
     const baseEmbed = new EmbedBuilder();
@@ -105,7 +105,7 @@ export class EmbedUtility extends Utility {
           targetUser.createdTimestamp / 1000
         )}>\n**Ticket ID**: ${data.id}`
       },
-      ...(Object.values(JSON.parse(data.answers)) as { question: string; answer: string }[]).map((answerData) => ({
+      ...data.answers.map((answerData) => ({
         name: answerData.question,
         value: answerData.answer,
         inline: true

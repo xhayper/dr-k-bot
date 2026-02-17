@@ -1,5 +1,4 @@
 import { container, InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
-import { VerificationTicketType } from "../database";
 import { ApplyOptions } from "@sapphire/decorators";
 import config from "../config";
 import {
@@ -38,20 +37,12 @@ async function handleQuestion(
   if (response.content.toLowerCase().trim() === "cancel") {
     if (cancelMessage !== null && cancelMessage) {
       const opt: { allowedMentions: MessageMentionOptions } = {
-        allowedMentions: {
-          repliedUser: false
-        }
+        allowedMentions: { repliedUser: false }
       };
       if (typeof cancelMessage === "string") {
-        await response.reply({
-          content: cancelMessage,
-          ...opt
-        });
+        await response.reply({ content: cancelMessage, ...opt });
       } else {
-        await response.reply({
-          ...cancelMessage,
-          ...opt
-        });
+        await response.reply({ ...cancelMessage, ...opt });
       }
     }
     return;
@@ -67,17 +58,17 @@ export class Handler extends InteractionHandler {
     await interaction.deferReply();
 
     let moderator: GuildMember | void;
-    let ticket: VerificationTicketType | null;
     let verificationMessage: Message | void;
 
     moderator = await this.container.utilities.guild.getGuildMember(interaction.user.id);
     if (!moderator) throw new Error("This wasn't suppose to happened");
+
     if (
       !this.container.utilities.guild.isHeadSecurity(moderator) &&
       !this.container.utilities.guild.isSeniorSecurity(moderator) &&
       !this.container.utilities.guild.isSecurity(moderator) &&
       !this.container.utilities.guild.isIntern(moderator)
-    )
+    ) {
       return interaction.editReply({
         embeds: [
           this.container.utilities.embed
@@ -85,9 +76,11 @@ export class Handler extends InteractionHandler {
             .toJSON()
         ]
       });
+    }
 
-    ticket = await this.container.utilities.verification.getTicketFromMessageId(interaction.message.id);
-    if (!ticket)
+    const ticket = await this.container.utilities.ticket.getByMessageId(interaction.message.id);
+
+    if (!ticket) {
       return interaction.editReply({
         embeds: [
           this.container.utilities.embed
@@ -95,29 +88,30 @@ export class Handler extends InteractionHandler {
             .toJSON()
         ]
       });
+    }
 
-    if (ticket) verificationMessage = await this.container.utilities.verification.getMessageFromTicket(ticket);
+    verificationMessage = await this.container.utilities.verification.getMessageFromTicketId(ticket.id);
 
     switch (interaction.customId) {
       case "verify_accept": {
-        const member = await this.container.utilities.guild.getGuildMember(ticket!.discordId);
-        if (!member)
+        const member = await this.container.utilities.guild.getGuildMember(ticket.discordId);
+
+        if (!member) {
           return interaction.editReply({
             embeds: [
               this.container.utilities.embed
                 .USER_AUTHOR(this.container.utilities.embed.CANT_FIND_USER(), interaction.user)
-                .setFooter({
-                  text: ticket!.id
-                })
+                .setFooter({ text: ticket.id })
                 .toJSON()
             ]
           });
+        }
 
         await member.roles.remove(config.role.unverified);
 
-        await this.container.utilities.verification.deleteTicket(ticket!, {
+        await this.container.utilities.verification.deleteTicket(ticket.id, {
           deleteType: "ACCEPTED",
-          who: moderator!.user
+          who: moderator.user
         });
 
         await interaction.editReply({
@@ -126,9 +120,7 @@ export class Handler extends InteractionHandler {
               .SUCCESS_COLOR(
                 this.container.utilities.embed
                   .USER_AUTHOR(new EmbedBuilder().setDescription(`${member.user} has been accepted!`), interaction.user)
-                  .setFooter({
-                    text: ticket!.id
-                  })
+                  .setFooter({ text: ticket.id })
               )
               .toJSON()
           ]
@@ -137,25 +129,27 @@ export class Handler extends InteractionHandler {
         await this.container.utilities.guild.sendWelcomeMessage(member);
         break;
       }
+
       case "verify_decline": {
-        if (questionAskCollection.has(verificationMessage!.id))
+        if (!verificationMessage) return;
+
+        if (questionAskCollection.has(verificationMessage.id)) {
           return interaction.editReply({
             embeds: [
               this.container.utilities.embed
                 .USER_AUTHOR(
                   this.container.utilities.embed.VERIFICATION_ALREADY_TAKEN(
-                    new EmbedBuilder({
-                      footer: { text: ticket!.id }
-                    }),
-                    questionAskCollection.get(verificationMessage!.id)!
+                    new EmbedBuilder({ footer: { text: ticket.id } }),
+                    questionAskCollection.get(verificationMessage.id)!
                   ),
                   interaction.user
                 )
                 .toJSON()
             ]
           });
+        }
 
-        questionAskCollection.set(verificationMessage!.id, interaction.user);
+        questionAskCollection.set(verificationMessage.id, interaction.user);
 
         await interaction.editReply({
           embeds: [
@@ -165,7 +159,7 @@ export class Handler extends InteractionHandler {
                   new EmbedBuilder({
                     description: "What's the reason for declining?",
                     footer: {
-                      text: `Respond within 5 minutes | Say 'cancel' to exit | ${ticket!.id}`
+                      text: `Respond within 5 minutes | Say 'cancel' to exit | ${ticket.id}`
                     }
                   }),
                   interaction.user
@@ -208,12 +202,13 @@ export class Handler extends InteractionHandler {
         });
 
         if (!reason) {
-          questionAskCollection.delete(verificationMessage!.id);
+          questionAskCollection.delete(verificationMessage.id);
           return;
         }
 
-        const user = await this.container.client.users.fetch(ticket!.discordId).catch(() => undefined);
-        if (user)
+        const user = await this.container.client.users.fetch(ticket.discordId).catch(() => undefined);
+
+        if (user) {
           user
             .send({
               embeds: [
@@ -230,10 +225,11 @@ export class Handler extends InteractionHandler {
               ]
             })
             .catch(() => undefined);
+        }
 
-        await this.container.utilities.verification.deleteTicket(ticket!, {
+        await this.container.utilities.verification.deleteTicket(ticket.id, {
           deleteType: "DECLINED",
-          who: moderator!.user
+          who: moderator.user
         });
 
         await reason.reply({
@@ -242,35 +238,36 @@ export class Handler extends InteractionHandler {
               .SUCCESS_COLOR(
                 this.container.utilities.embed.USER_AUTHOR(
                   new EmbedBuilder({
-                    description: `${user} has been declined!`
-                  }).setFooter({ text: ticket!.id }),
-                  moderator!.user
+                    description: `${user ?? "User"} has been declined!`
+                  }).setFooter({ text: ticket.id }),
+                  moderator.user
                 )
               )
               .toJSON()
           ],
-          allowedMentions: {
-            repliedUser: false
-          }
+          allowedMentions: { repliedUser: false }
         });
+
+        questionAskCollection.delete(verificationMessage.id);
 
         break;
       }
+
       case "verify_ticket": {
-        const member = await this.container.utilities.guild.getGuildMember(ticket!.discordId);
-        if (!member)
+        const member = await this.container.utilities.guild.getGuildMember(ticket.discordId);
+
+        if (!member) {
           return interaction.editReply({
             embeds: [
               this.container.utilities.embed
                 .USER_AUTHOR(this.container.utilities.embed.CANT_FIND_USER(), interaction.user)
-                .setFooter({
-                  text: ticket!.id
-                })
+                .setFooter({ text: ticket.id })
                 .toJSON()
             ]
           });
+        }
 
-        await this.container.utilities.guild.openThread(moderator!, member);
+        await this.container.utilities.guild.openThread(moderator, member);
 
         await interaction.editReply({
           embeds: [
@@ -280,12 +277,10 @@ export class Handler extends InteractionHandler {
                   new EmbedBuilder({
                     description: `Thread opened with ${member}!`
                   }),
-                  moderator!.user
+                  moderator.user
                 )
               )
-              .setFooter({
-                text: ticket!.id
-              })
+              .setFooter({ text: ticket.id })
               .toJSON()
           ]
         });
@@ -297,7 +292,6 @@ export class Handler extends InteractionHandler {
 
   public parse(interaction: ButtonInteraction) {
     if (!validCustomId.includes(interaction.customId)) return this.none();
-
     return this.some();
   }
 }
