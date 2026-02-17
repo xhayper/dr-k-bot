@@ -12,7 +12,7 @@ const insultList = JSON.parse(fs.readFileSync(path.join(__dirname, "../../insult
 export class MessageCreateEvent extends Listener {
   public async run(message: Message) {
     if (message.author.id === this.container.client.id) return;
-
+    if (message.type != 0) return;
     if (message.channel.isDMBased()) {
       this.container.utilities.guild.dmLogChannel?.send({
         files: Array.from(message.attachments.values()).map((attachment) =>
