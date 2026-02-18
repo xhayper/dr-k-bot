@@ -34,6 +34,13 @@ export class TicketUtility extends Utility {
   private missingUsers = new Collection<Snowflake, number>();
   private missingMessages = new Collection<Snowflake, number>();
 
+  private sweeper?: NodeJS.Timeout;
+
+  public async load() {
+    if (!this.sweeper) this.sweeper = setInterval(() => this.sweepAll(), this.ttl);
+    return void (await this.getAll());
+  }
+
   private now() {
     return Date.now();
   }
@@ -42,8 +49,20 @@ export class TicketUtility extends Utility {
     return exp <= this.now();
   }
 
-  private setCache<K, V>(map: Collection<K, CacheEntry<V>>, key: K, value: V) {
-    map.set(key, { value, expiresAt: this.now() + this.ttl });
+  private setCache<K, V>(map: Collection<K, CacheEntry<V>>, key: K, value: V, expiresAt?: number) {
+    map.set(key, { value, expiresAt: expiresAt ?? this.now() + this.ttl });
+  }
+
+  private evictTicket(ticket: Ticket) {
+    const userEntry = this.userMap.get(ticket.discordId);
+    if (userEntry?.value === ticket.id) this.userMap.delete(ticket.discordId);
+
+    if (ticket.messageId) {
+      const msgEntry = this.messageIdMap.get(ticket.messageId);
+      if (msgEntry?.value === ticket.id) this.messageIdMap.delete(ticket.messageId);
+    }
+
+    this.tickets.delete(ticket.id);
   }
 
   private getCache<K, V>(map: Collection<K, CacheEntry<V>>, key: K) {
@@ -52,6 +71,7 @@ export class TicketUtility extends Utility {
 
     if (this.isExpired(entry.expiresAt)) {
       map.delete(key);
+      if (map === this.tickets) this.evictTicket(entry.value as unknown as Ticket);
       return;
     }
 
@@ -74,10 +94,6 @@ export class TicketUtility extends Utility {
     return true;
   }
 
-  public async load() {
-    await this.fetchTickets();
-  }
-
   private parseAnswers(raw: string): TicketAnswer[] {
     try {
       const parsed = JSON.parse(raw);
@@ -91,11 +107,6 @@ export class TicketUtility extends Utility {
     return JSON.stringify(data);
   }
 
-  private async fetchTickets() {
-    const rows = await VerificationTicket.findMany();
-    rows.forEach((row) => this.hydrate(row));
-  }
-
   private transform(row: VerificationTicketType): Ticket {
     return {
       id: row.id,
@@ -107,23 +118,17 @@ export class TicketUtility extends Utility {
 
   private hydrate(row: VerificationTicketType) {
     const ticket = this.transform(row);
-    const existing = this.getCache(this.tickets, ticket.id);
+    const existing = this.tickets.get(ticket.id)?.value;
 
-    if (existing) {
-      if (existing.discordId !== ticket.discordId) {
-        this.userMap.delete(existing.discordId);
-      }
+    if (existing) this.evictTicket(existing);
 
-      if (existing.messageId && existing.messageId !== ticket.messageId) {
-        this.messageIdMap.delete(existing.messageId);
-      }
-    }
+    const expiresAt = this.now() + this.ttl;
 
-    this.setCache(this.tickets, ticket.id, ticket);
-    this.setCache(this.userMap, ticket.discordId, ticket.id);
+    this.setCache(this.tickets, ticket.id, ticket, expiresAt);
+    this.setCache(this.userMap, ticket.discordId, ticket.id, expiresAt);
 
     if (ticket.messageId) {
-      this.setCache(this.messageIdMap, ticket.messageId, ticket.id);
+      this.setCache(this.messageIdMap, ticket.messageId, ticket.id, expiresAt);
     }
 
     this.missingTickets.delete(ticket.id);
@@ -133,8 +138,34 @@ export class TicketUtility extends Utility {
     return ticket;
   }
 
-  getTickets(): Ticket[] {
-    return this.tickets.map((t) => t.value);
+  private sweepCollection<K>(map: Collection<K, number>) {
+    map.forEach((exp, key) => {
+      if (this.isExpired(exp)) map.delete(key);
+    });
+  }
+
+  public sweepAll() {
+    this.tickets.forEach((entry) => {
+      if (this.isExpired(entry.expiresAt)) this.evictTicket(entry.value);
+    });
+
+    this.userMap.forEach((entry, key) => {
+      if (this.isExpired(entry.expiresAt)) this.userMap.delete(key);
+    });
+
+    this.messageIdMap.forEach((entry, key) => {
+      if (this.isExpired(entry.expiresAt)) this.messageIdMap.delete(key);
+    });
+
+    this.sweepCollection(this.missingTickets);
+    this.sweepCollection(this.missingUsers);
+    this.sweepCollection(this.missingMessages);
+  }
+
+  public async getTickets(cached = true): Promise<Ticket[]> {
+    if (!cached) return this.getAll();
+    this.sweepAll();
+    return Array.from(this.tickets.values(), (v) => v.value);
   }
 
   async add(id: string, value: Omit<Ticket, "id">) {
@@ -157,16 +188,6 @@ export class TicketUtility extends Utility {
   }
 
   async edit(id: string, value: Omit<Ticket, "id">) {
-    const existing = this.getCache(this.tickets, id);
-
-    if (existing && existing.discordId !== value.discordId) {
-      this.userMap.delete(existing.discordId);
-    }
-
-    if (existing?.messageId && existing.messageId !== value.messageId) {
-      this.messageIdMap.delete(existing.messageId);
-    }
-
     const result = await VerificationTicket.update({
       where: { id },
       data: {
@@ -180,17 +201,25 @@ export class TicketUtility extends Utility {
   }
 
   async remove(id: string) {
-    const ticket = this.getCache(this.tickets, id);
+    const ticket = await VerificationTicket.findUnique({ where: { id } });
     if (!ticket) return;
 
     await VerificationTicket.delete({ where: { id } });
 
-    this.tickets.delete(id);
-    this.userMap.delete(ticket.discordId);
+    this.evictTicket(this.transform(ticket));
+  }
 
-    if (ticket.messageId) {
-      this.messageIdMap.delete(ticket.messageId);
-    }
+  async getAll(cached = false) {
+    if (cached) return this.getTickets();
+    this.tickets.clear();
+    this.userMap.clear();
+    this.messageIdMap.clear();
+    this.missingTickets.clear();
+    this.missingUsers.clear();
+    this.missingMessages.clear();
+    const tickets = await VerificationTicket.findMany();
+    tickets.forEach((t) => this.hydrate(t));
+    return Array.from(this.tickets.values(), (v) => v.value);
   }
 
   async get(id: string) {
@@ -280,10 +309,13 @@ export class TicketUtility extends Utility {
   }
 
   async removeByUser(id: Snowflake) {
-    const ticket = await this.getByUser(id);
+    const ticket = await VerificationTicket.findUnique({
+      where: { discordId: id }
+    });
     if (!ticket) return;
 
-    return this.remove(ticket.id);
+    await VerificationTicket.delete({ where: { id: ticket.id } });
+    this.evictTicket(this.transform(ticket));
   }
 }
 

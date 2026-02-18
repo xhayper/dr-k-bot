@@ -176,7 +176,7 @@ export class CommandHandler extends Subcommand {
   public async chatInputList(interaction: Subcommand.ChatInputCommandInteraction) {
     await interaction.deferReply();
 
-    const tickets = [...this.container.utilities.ticket.getTickets()];
+    const tickets = [...(await this.container.utilities.ticket.getAll())];
 
     if (!tickets.length) {
       return interaction.editReply("There are no verification tickets as of right now.");
