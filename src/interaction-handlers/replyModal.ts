@@ -85,7 +85,7 @@ export class Handler extends InteractionHandler {
               },
               description: messageContent || "(No content)",
               footer: {
-                text: `A reply to ${user.username}`,
+                text: `Replied to ${user.username}`,
                 icon_url:
                   user.avatarURL({
                     size: 4096
