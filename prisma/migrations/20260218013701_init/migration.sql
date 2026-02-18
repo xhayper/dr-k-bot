@@ -9,4 +9,7 @@ CREATE TABLE "VerificationTicket" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "VerificationTicket_discordId_key" ON "VerificationTicket"("discordId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "VerificationTicket_messageId_key" ON "VerificationTicket"("messageId");
