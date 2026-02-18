@@ -24,7 +24,7 @@ interface CacheEntry<T> {
   name: "ticket"
 })
 export class TicketUtility extends Utility {
-  private ttl = 5 * 60 * 1000;
+  private ttl = 1 * 60 * 60 * 1000;
 
   private tickets = new Collection<string, CacheEntry<Ticket>>();
   private userMap = new Collection<Snowflake, CacheEntry<string>>();
