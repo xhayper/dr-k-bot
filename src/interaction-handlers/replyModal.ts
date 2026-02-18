@@ -84,6 +84,13 @@ export class Handler extends InteractionHandler {
                   }) ?? interaction.user.defaultAvatarURL
               },
               description: messageContent || "(No content)",
+              footer: {
+                text: `A reply to ${user.username}`,
+                icon_url:
+                  user.avatarURL({
+                    size: 4096
+                  }) ?? user.defaultAvatarURL
+              },
               timestamp: new Date().toISOString()
             }
           ]
