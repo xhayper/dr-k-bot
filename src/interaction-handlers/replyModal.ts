@@ -71,8 +71,8 @@ export class Handler extends InteractionHandler {
       });
 
     try {
-      await interaction
-        .reply({
+      await interaction.message
+        ?.reply({
           files: Array.from(optionalFile?.values() ?? []),
           embeds: [
             {
