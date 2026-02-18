@@ -1,5 +1,5 @@
-import { AttachmentBuilder, MessageFlags, ModalSubmitInteraction } from "discord.js";
 import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
+import { MessageFlags, ModalSubmitInteraction } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<InteractionHandler.Options>({
@@ -31,18 +31,11 @@ export class Handler extends InteractionHandler {
 
     const message = messageId ? await channel.messages.fetch(messageId).catch(() => undefined) : undefined;
 
-    const files = Array.from(optionalFile?.values() ?? []).map((attachment) =>
-      new AttachmentBuilder((attachment as any).attachment, {
-        name: attachment.name ?? undefined,
-        description: attachment.description ?? ""
-      }).setSpoiler(attachment.spoiler)
-    );
-
     if (message)
       message
         ?.reply({
           content: messageContent,
-          files: files
+          files: Array.from(optionalFile?.values() ?? [])
         })
         .then(() => interaction.editReply("Reply sent!"))
         .catch((err) => {
@@ -53,7 +46,7 @@ export class Handler extends InteractionHandler {
       user
         .send({
           content: messageContent,
-          files: files
+          files: Array.from(optionalFile?.values() ?? [])
         })
         .then(() => interaction.editReply("Reply sent!"))
         .catch((err) => {
@@ -76,6 +69,27 @@ export class Handler extends InteractionHandler {
           }
         ]
       });
+
+    try {
+      await interaction
+        .reply({
+          files: Array.from(optionalFile?.values() ?? []),
+          embeds: [
+            {
+              author: {
+                name: interaction.user.username,
+                icon_url:
+                  interaction.user.avatarURL({
+                    size: 4096
+                  }) ?? interaction.user.defaultAvatarURL
+              },
+              description: messageContent || "(No content)",
+              timestamp: new Date().toISOString()
+            }
+          ]
+        })
+        .catch(() => undefined);
+    } catch (_) {}
   }
 
   public parse(interaction: ModalSubmitInteraction) {
