@@ -91,6 +91,7 @@ export class Handler extends InteractionHandler {
                     size: 4096
                   }) ?? user.defaultAvatarURL
               },
+              color: 5793266,
               timestamp: new Date().toISOString()
             }
           ]

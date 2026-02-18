@@ -31,6 +31,7 @@ export class MessageCreateEvent extends Listener {
                 }) ?? message.author.defaultAvatarURL
             },
             description: message.content || "(No content)",
+            color: 5793266,
             timestamp: new Date().toISOString()
           }
         ],
